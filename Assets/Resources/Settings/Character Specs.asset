@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 850e0a0bbd74d494ba08535867a9378d, type: 3}
+  m_Name: Character Specs
+  m_EditorClassIdentifier: 
+  <MovementSpeed>k__BackingField: 3
+  <Reach>k__BackingField: 1.25
+  <ThrowForce>k__BackingField: 6
+  <ThrowArc>k__BackingField: 35

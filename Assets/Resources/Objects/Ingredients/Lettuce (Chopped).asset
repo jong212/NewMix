@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 262259c2cd5d34f45bc1e5b3f9b768e4, type: 3}
+  m_Name: Lettuce (Chopped)
+  m_EditorClassIdentifier: 
+  _displayName: Chopped Lettuce
+  _icon: {fileID: 21300000, guid: 479c54a92ff721b419a3248e0340c2a4, type: 3}
+  _visual: {fileID: 3516672284767561514, guid: bd394f75e5f901e489ab63db6f17b2e5, type: 3}

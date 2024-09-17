@@ -67,9 +67,20 @@ public class InterfaceManager : MonoBehaviour
             UIScreen.activeScreen.BackTo(gameplayHUD);
         }
     }
-
     public void ConfirmleaveSessionHook()
     {
-        Matchmaker.Instance.Runner.Shutdown();
+        StartCoroutine(LeaveAndJoinNewSession());
     }
+    private IEnumerator LeaveAndJoinNewSession()
+    {
+        Matchmaker.Instance.Runner.Shutdown();
+
+        // 잠시 대기하여 Runner가 완전히 정리될 시간을 준다
+        yield return new WaitForSeconds(1);
+
+
+        Matchmaker.Instance.SetRoomCode("A");
+        Matchmaker.Instance.TryConnectShared();
+    }
+
 }

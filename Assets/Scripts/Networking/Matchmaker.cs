@@ -44,55 +44,56 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 			});
 	}
 
-	public void TryConnectSharedSession(string sessionCode, System.Action successCallback = null)
-	{
-		StartCoroutine(ConnectSharedSessionRoutine(sessionCode, successCallback));
-	}
+    public void TryConnectSharedSession(string sessionCode, System.Action successCallback = null)
+    {
+        StartCoroutine(ConnectSharedSessionRoutine(sessionCode, successCallback));
+    }
 
-	IEnumerator ConnectSharedSessionRoutine(string sessionCode, System.Action successCallback)
-	{
-		if (Runner) Runner.Shutdown();
-		Runner = Instantiate(runnerPrefab);
+    IEnumerator ConnectSharedSessionRoutine(string sessionCode, System.Action successCallback)
+    {
+        if (Runner) Runner.Shutdown();
+        Runner = Instantiate(runnerPrefab);
 
-		NetworkEvents networkEvents = Runner.GetComponent<NetworkEvents>();
+        NetworkEvents networkEvents = Runner.GetComponent<NetworkEvents>();
 
-		void SpawnManager(NetworkRunner runner)
-		{
-			if (Runner.IsSharedModeMasterClient) runner.Spawn(managerPrefab);
-			networkEvents.OnSceneLoadDone.RemoveListener(SpawnManager);
-		}
+        void SpawnManager(NetworkRunner runner)
+        {
+            if (Runner.IsSharedModeMasterClient) runner.Spawn(managerPrefab);
+            networkEvents.OnSceneLoadDone.RemoveListener(SpawnManager);
+        }
 
-		networkEvents.OnSceneLoadDone.AddListener(SpawnManager);
+        networkEvents.OnSceneLoadDone.AddListener(SpawnManager);
 
-		Runner.AddCallbacks(this);
+        Runner.AddCallbacks(this);
 
-		Task<StartGameResult> task = Runner.StartGame(new StartGameArgs()
-		{
-			GameMode = GameMode.Shared,
-			SessionName = sessionCode,
-			SceneManager = Runner.GetComponent<INetworkSceneManager>(),
-			ObjectProvider = Runner.GetComponent<INetworkObjectProvider>(),
-		});
+        Task<StartGameResult> task = Runner.StartGame(new StartGameArgs()
+        {
+            GameMode = GameMode.Shared,
+            SessionName = sessionCode,
+            SceneManager = Runner.GetComponent<INetworkSceneManager>(),
+            ObjectProvider = Runner.GetComponent<INetworkObjectProvider>(),
+        });
 
-		while (!task.IsCompleted) yield return null;
+        while (!task.IsCompleted) yield return null;
 
-		StartGameResult result = task.Result;
+        StartGameResult result = task.Result;
 
-		if (result.Ok)
-		{
-			successCallback?.Invoke();
-			if (Runner.IsSharedModeMasterClient) Runner.LoadScene(gameScene);
-		}
-		else
-		{
-			Debug.LogWarning(result.ShutdownReason);
-			DisconnectUI.OnShutdown(result.ShutdownReason);
-		}
-	}
+        if (result.Ok)
+        {
+            successCallback?.Invoke();
+            if (Runner.IsSharedModeMasterClient) Runner.LoadScene(sessionCode); // 세션 이름을 그대로 씬 이름으로 사용
+        }
+        else
+        {
+            Debug.LogWarning(result.ShutdownReason);
+            DisconnectUI.OnShutdown(result.ShutdownReason);
+        }
+    }
 
-	// -------
 
-	public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+    // -------
+
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
 	{
 		Runner = null;
 		if (shutdownReason == ShutdownReason.Ok)

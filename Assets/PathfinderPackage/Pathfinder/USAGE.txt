@@ -1,0 +1,41 @@
+Hello dear sir, madam or thing!
+
+Thank you for downloading my pathfinder. I hope it will be of much use to you!
+Before that though, i figured it would be nice of me to actually explain how you can use it.
+
+
+If you want to have an object move to a path, you need to do 4 things!
+
+1: Create some object with a pathfinder component. (You can use one shared object with a Pathfinder, or have multiple objects have their own pathfinder, whatever you find easier!)
+2: Set the tile size in PathfindConstants! This will define the width and length of a tile in your game world.
+3: Create ONE (not more than one!) object containing the CellSpawner script! This object will manage the tiles, and you can just drop it in and forget about it.
+4: Either in-game, or in the editor, make something that defines cells. You do this by using CellSpawner.Instance.DefineCell(gridX, gridY, Passable/Inpassable).
+5: Let your object call Pathfinder.FindPath(); to calculate a path to a destination. For more expensive paths, you can use FindLongPath, which will calculate in a coroutine so you won't get lagspikes for the longer paths.
+   LongPath also allows for a speed parameter; the default is 50, a higher number means it will seek faster, but it can also have a larger impact on performance!
+
+(For LongPath, you will need to call the function, but this will not immediately return a new path. Instead, wait untill Pathfinder.LongCalculationDone is true, and then use the path in Pathfinder.CalculatedLongPath)
+(step 4 example: you want to open up a tile at gridPos(10, 15). You call CellSpawner.Instance.DefineCell(10, 15, Passable.)
+Then, later, you want to close it again. You call the same function, but now replace Passable with Impassable!)
+
+Done! Now you have a happy object navigating trough your path!
+
+Some further explanation:
+
+- The pathfinder, when finding a path, will treat undefined cells as impassable cells. You really only need to use defineCell(x, y, Impassable)
+  to block a tile that was previously passable.
+
+- The pathfinder has a maximum range, so it doesn't explode when it can't find a path and melt your CPU. You can increase and decrease this range in the PathFinder script.
+
+- The pathfinder works by basically sending a node to each possible direction, which means that it will be slower in large open areas.
+  It works best when used in a grid exising of tight hallways. Not saying it will be unusable in large open areas, but depending on your world, finding a path will have a larger impact on performance.
+  
+How it really works:
+  
+  You have a thing. It tells its pathfinder to find a path somewhere. How does it actually do that?
+  
+  First, the pathfinder creates a "Node" object at the start position. This node contains the history of all the nodes that went before it. Since this is the first, it only has one position.
+  The node then creates other nodes in each possible direction. (it does checked if another node already went over that tile, ignoring it if it did.), passing along its history.
+  
+  Eventually, one of the many nodes arrives at the destination you set. All other nodes are destroyed, and the history is passed back to the pathFinder. The pathfinder then returns that to your thingy.
+  
+This is really all you need to know to start using the pathfinder. If you have any questions or difficulties, send a mail to assetstore@timfalken.com, and i'll do my best to help you!

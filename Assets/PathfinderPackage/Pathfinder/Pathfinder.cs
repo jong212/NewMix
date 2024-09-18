@@ -1,273 +1,205 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Pathfinder : MonoBehaviour
 {
-    // 최대 시도 횟수 (경로 탐색 시 무한 루프 방지용)
-    public int MaxTries = 1000;
-    // 대각선 이동 허용 여부
-    public bool AllowDiagonalMovement;
+    // 경로 탐색에 사용할 타일맵 (유니티 에디터에서 할당)
+    public Tilemap tilemap;
 
-    // 긴 경로 탐색 결과를 저장하는 리스트
-    public List<Vector2> CalculatedLongPath { get; private set; }
-    // 긴 경로 탐색 완료 여부
-    public bool LongCalculationDone { get; private set; }
-
-    // 주어진 시작 좌표에서 목표 좌표로 가는 경로를 찾는 함수
-    public List<Vector2> FindPathToGridPoint(Vector2 gridStart, Vector2 gridEnd)
+    // A* 알고리즘을 사용하여 경로를 찾는 함수
+    public void FindPath(Vector3 startPos, Vector3 targetPos)
     {
-        return FindPath(gridStart, gridEnd); // 내부에서 경로 탐색 함수 호출
-    }
+        // 시작 위치와 목표 위치를 타일맵의 셀 좌표로 변환
+        Vector3Int startCell = tilemap.WorldToCell(startPos);
+        Vector3Int targetCell = tilemap.WorldToCell(targetPos);
 
-    // 긴 경로를 찾는 함수, 코루틴으로 비동기 처리하여 일정 시간 동안 실행되도록 함
-    public void FindLongPathToGridPoint(Vector2 gridStart, Vector2 gridEnd, int speed = 50)
-    {
-        LongCalculationDone = false; // 긴 경로 탐색 완료 여부 초기화
-        CalculatedLongPath = new List<Vector2>(); // 경로 리스트 초기화
+        // Z축 좌표를 0으로 설정하여 2D 평면에서 계산되도록 함
+        startCell.z = 0;
+        targetCell.z = 0;
 
-        StartCoroutine(FindLongPathCoroutine(gridStart, gridEnd, PathfindConstants.Directions.None, speed)); // 코루틴 시작
-    }
+        // 시작 셀과 목표 셀 정보를 로그로 출력
+        Debug.Log($"Start Cell: {startCell}, Target Cell: {targetCell}");
 
-    // 경로 탐색 함수, 시작 지점에서 목표 지점까지 경로를 찾음
-    private List<Vector2> FindPath(Vector2 origin, Vector2 target, PathfindConstants.Directions fromDir = PathfindConstants.Directions.None)
-    {
-        List<pathNode> nodes = new List<pathNode>(); // 경로 탐색 노드 리스트
-        List<Vector2> checkedPositions = new List<Vector2>(); // 이미 체크한 좌표 리스트
-        nodes.Add(new pathNode(Mathf.RoundToInt(origin.x), Mathf.RoundToInt(origin.y), new List<int>(), new List<int>(), fromDir)); // 시작 노드 추가
-
-        bool foundPath = false; // 경로를 찾았는지 여부
-        List<Vector2> resultPath = null; // 결과 경로 저장
-        int tries = 0; // 시도 횟수
-
-        // 경로를 찾았거나 시도 횟수를 초과할 때까지 반복
-        while (!foundPath && tries < MaxTries)
+        // 목표 셀에 타일이 없거나, 이동 불가능한 타일이면 경로 탐색 중지
+        if (!tilemap.HasTile(targetCell) || !IsTilePassable(tilemap.GetTile(targetCell)))
         {
-            tries++; // 시도 횟수 증가
-            List<pathNode> newNodes = new List<pathNode>(); // 새로 추가될 노드 리스트
-
-            // 현재 탐색 중인 노드를 순회
-            foreach (pathNode node in nodes)
-            {
-                // 현재 노드 좌표가 체크되지 않았을 경우
-                if (!checkedPositions.Contains(new Vector2(node.GridPosX, node.GridPosY)))
-                {
-                    checkedPositions.Add(new Vector2(node.GridPosX, node.GridPosY)); // 체크한 좌표로 추가
-
-                    // 목표 좌표에 거의 도착한 경우 경로를 찾았다고 판단
-                    if (Vector2.Distance(new Vector2(node.GridPosX, node.GridPosY), target) < 1)
-                    {
-                        Vector2[] path = new Vector2[node.GridPathX.Count]; // 경로를 저장할 배열
-
-                        // 경로 배열에 현재까지의 경로를 저장
-                        for (int i = 0; i < path.Length; i++)
-                        {
-                            path[i].x = node.GridPathX[i];
-                            path[i].y = node.GridPathY[i];
-                        }
-
-                        resultPath = new List<Vector2>();
-                        resultPath.AddRange(path); // 경로 리스트로 변환하여 저장
-                        foundPath = true; // 경로 탐색 완료
-                        print("Found path, " + resultPath.Count + " steps."); // 경로 단계 출력
-
-                        break;
-                    }
-
-                    // 현재 노드가 위치한 RoomData 가져오기 (현재 위치의 방 정보)
-                    RoomData room = CellSpawner.Instance.GetRoomAtGridPosition(node.GridPosX, node.GridPosY);
-
-                    if (room != null)
-                    {
-                        // 각 방향으로 이동 가능한지 체크하고, 가능한 경우 새로운 노드 추가
-                        if (room.NPossible && node.FromDir != PathfindConstants.Directions.North) // 북쪽으로 이동 가능
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX, node.GridPosY + 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.South));
-                        }
-                        if (room.EPossible && node.FromDir != PathfindConstants.Directions.East) // 동쪽으로 이동 가능
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX + 1, node.GridPosY, node.GridPathX, node.GridPathY, PathfindConstants.Directions.West));
-                        }
-                        if (room.SPossible && node.FromDir != PathfindConstants.Directions.South) // 남쪽으로 이동 가능
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX, node.GridPosY - 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.North));
-                        }
-                        if (room.WPossible && node.FromDir != PathfindConstants.Directions.West) // 서쪽으로 이동 가능
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX - 1, node.GridPosY, node.GridPathX, node.GridPathY, PathfindConstants.Directions.East));
-                        }
-
-                        // 대각선 이동 허용 시, 대각선 방향으로도 이동 가능 여부 확인
-                        if (AllowDiagonalMovement)
-                        {
-                            if (room.NEPossible && node.FromDir != PathfindConstants.Directions.NorthEast)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX + 1, node.GridPosY + 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.SouthWest));
-                            }
-                            if (room.NWPossible && node.FromDir != PathfindConstants.Directions.NorthWest)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX - 1, node.GridPosY + 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.SouthEast));
-                            }
-                            if (room.SEPossible && node.FromDir != PathfindConstants.Directions.SouthEast)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX + 1, node.GridPosY - 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.NorthWest));
-                            }
-                            if (room.SWPossible && node.FromDir != PathfindConstants.Directions.SouthWest)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX - 1, node.GridPosY - 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.NorthEast));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("null room"); // 방 정보가 없을 경우 에러 출력
-                    }
-                }
-            }
-
-            nodes = new List<pathNode>(newNodes); // 다음 탐색을 위해 새로운 노드 리스트로 갱신
-
-            // 시도 횟수가 최대치를 넘으면 경로 탐색 실패로 간주
-            if (tries == MaxTries)
-                Debug.LogError("Pathfind unsuccessful, " + tries);
+            Debug.Log("No tile found at target cell or tile is impassable, stopping pathfinding.");
+            return;
         }
 
-        return resultPath; // 탐색된 경로 반환
-    }
+        // A* 알고리즘에 필요한 데이터 구조 초기화
+        List<Vector3Int> openList = new List<Vector3Int>(); // 탐색할 셀 목록
+        HashSet<Vector3Int> closedList = new HashSet<Vector3Int>(); // 이미 탐색한 셀 목록
+        Dictionary<Vector3Int, Vector3Int> cameFrom = new Dictionary<Vector3Int, Vector3Int>(); // 각 셀에 도달하기 직전의 셀
+        Dictionary<Vector3Int, float> gScore = new Dictionary<Vector3Int, float>(); // 시작 지점부터 해당 셀까지의 실제 비용
+        Dictionary<Vector3Int, float> fScore = new Dictionary<Vector3Int, float>(); // gScore + 휴리스틱 추정 비용
 
-    // 긴 경로를 비동기로 탐색하는 코루틴
-    private IEnumerator FindLongPathCoroutine(Vector2 origin, Vector2 target, PathfindConstants.Directions fromDir = PathfindConstants.Directions.None, int speed = 50)
-    {
-        int timer = 0; // 경과 시간 측정용
+        // 시작 셀을 openList에 추가하고, gScore와 fScore 초기화
+        openList.Add(startCell);
+        gScore[startCell] = 0; // 시작 지점의 gScore는 0
+        fScore[startCell] = HeuristicCostEstimate(startCell, targetCell); // fScore는 휴리스틱 추정값으로 초기화
 
-        List<pathNode> nodes = new List<pathNode>(); // 탐색 중인 노드 리스트
-        List<Vector2> checkedPositions = new List<Vector2>(); // 이미 체크한 좌표 리스트
-        nodes.Add(new pathNode(Mathf.RoundToInt(origin.x), Mathf.RoundToInt(origin.y), new List<int>(), new List<int>(), fromDir)); // 시작 노드 추가
-
-        bool foundPath = false; // 경로 탐색 여부
-        List<Vector2> resultPath = null; // 결과 경로
-        int tries = 0; // 시도 횟수
-
-        // 경로를 찾았거나 시도 횟수를 초과할 때까지 반복
-        while (!foundPath && tries < MaxTries)
+        // openList에 탐색할 셀이 남아있는 동안 반복
+        while (openList.Count > 0)
         {
-            tries++;
-            List<pathNode> newNodes = new List<pathNode>();
+            // fScore가 가장 낮은 셀을 선택하여 현재 셀로 설정
+            Vector3Int current = GetLowestFScore(openList, fScore);
 
-            // 경로 탐색과 타일 이동은 이전과 동일하게 동작
-            foreach (pathNode node in nodes)
+            // 현재 셀이 목표 셀과 동일한지 확인
+            if (current.x == targetCell.x && current.y == targetCell.y)
             {
-                if (!checkedPositions.Contains(new Vector2(node.GridPosX, node.GridPosY)))
-                {
-                    checkedPositions.Add(new Vector2(node.GridPosX, node.GridPosY));
-
-                    if (Vector2.Distance(new Vector2(node.GridPosX, node.GridPosY), target) < 1)
-                    {
-                        Vector2[] path = new Vector2[node.GridPathX.Count];
-                        for (int i = 0; i < path.Length; i++)
-                        {
-                            path[i].x = node.GridPathX[i];
-                            path[i].y = node.GridPathY[i];
-                        }
-
-                        resultPath = new List<Vector2>();
-                        resultPath.AddRange(path);
-                        foundPath = true;
-                        print("Found path, " + resultPath.Count + " steps.");
-                        break;
-                    }
-
-                    RoomData room = CellSpawner.Instance.GetRoomAtGridPosition(node.GridPosX, node.GridPosY);
-
-                    if (room != null)
-                    {
-                        // 방이 존재할 경우 위에서 설명한 방향으로 노드 추가
-                        if (room.NPossible && node.FromDir != PathfindConstants.Directions.North)
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX, node.GridPosY + 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.South));
-                        }
-                        if (room.EPossible && node.FromDir != PathfindConstants.Directions.East)
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX + 1, node.GridPosY, node.GridPathX, node.GridPathY, PathfindConstants.Directions.West));
-                        }
-                        if (room.SPossible && node.FromDir != PathfindConstants.Directions.South)
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX, node.GridPosY - 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.North));
-                        }
-                        if (room.WPossible && node.FromDir != PathfindConstants.Directions.West)
-                        {
-                            newNodes.Add(new pathNode(node.GridPosX - 1, node.GridPosY, node.GridPathX, node.GridPathY, PathfindConstants.Directions.East));
-                        }
-
-                        // 대각선 이동 허용 여부 처리
-                        if (AllowDiagonalMovement)
-                        {
-                            if (room.NEPossible && node.FromDir != PathfindConstants.Directions.NorthEast)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX + 1, node.GridPosY + 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.SouthWest));
-                            }
-                            if (room.NWPossible && node.FromDir != PathfindConstants.Directions.NorthWest)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX - 1, node.GridPosY + 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.SouthEast));
-                            }
-                            if (room.SEPossible && node.FromDir != PathfindConstants.Directions.SouthEast)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX + 1, node.GridPosY - 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.NorthWest));
-                            }
-                            if (room.SWPossible && node.FromDir != PathfindConstants.Directions.SouthWest)
-                            {
-                                newNodes.Add(new pathNode(node.GridPosX - 1, node.GridPosY - 1, node.GridPathX, node.GridPathY, PathfindConstants.Directions.NorthEast));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("null room");
-                    }
-                }
-
-                timer++; // 시간 증가
-
-                // 일정 시간 동안 탐색했으면 다음 프레임으로 넘김
-                if (timer > speed)
-                {
-                    timer = 0;
-                    yield return null;
-                }
+                Debug.Log("Retracing path to move to target.");
+                // 경로를 복원하고 이동 시작
+                RetracePath(cameFrom, current);
+                return;
             }
 
-            nodes = new List<pathNode>(newNodes); // 새로운 노드로 갱신
+            // 현재 셀을 openList에서 제거하고 closedList에 추가
+            openList.Remove(current);
+            closedList.Add(current);
 
-            if (tries == MaxTries)
-                Debug.LogError("Pathfind unsuccessful, " + tries);
+            // 현재 셀의 이웃 셀들을 검사
+            foreach (Vector3Int neighbor in GetNeighbors(current))
+            {
+                // 이미 탐색한 셀은 무시
+                if (closedList.Contains(neighbor))
+                    continue;
 
-            yield return null;
+                // 이웃 셀의 타일 가져오기
+                TileBase tile = tilemap.GetTile(neighbor);
+
+                // 타일이 없거나, 이동 불가능한 타일이면 무시
+                if (tile == null || !IsTilePassable(tile))
+                {
+                    Debug.Log($"Skipping neighbor: {neighbor}, tile is impassable.");
+                    continue;
+                }
+
+                // 현재 셀을 통해 이웃 셀로 가는 비용 계산 (여기서는 가중치를 모두 1로 설정)
+                float tentativeGScore = gScore[current] + 1;
+
+                // 이웃 셀이 openList에 없거나, 더 짧은 경로를 발견한 경우
+                if (!openList.Contains(neighbor) || tentativeGScore < gScore.GetValueOrDefault(neighbor, Mathf.Infinity))
+                {
+                    // 이웃 셀로 가는 최단 경로 갱신
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeGScore;
+                    fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, targetCell);
+
+                    // openList에 없으면 추가
+                    if (!openList.Contains(neighbor))
+                        openList.Add(neighbor);
+                }
+            }
         }
 
-        CalculatedLongPath = resultPath; // 탐색된 긴 경로 저장
-        LongCalculationDone = true; // 경로 탐색 완료
+        // 경로를 찾지 못한 경우
+        Debug.Log("No valid path found.");
     }
-}
 
-// 경로 탐색에 사용되는 노드 구조체
-public struct pathNode
-{
-    public pathNode(int x, int y, List<int> xHist, List<int> yHist, PathfindConstants.Directions fromDir = PathfindConstants.Directions.None)
+    // 휴리스틱 함수: 현재 셀에서 목표 셀까지의 추정 비용 계산 (맨해튼 거리 사용)
+    private float HeuristicCostEstimate(Vector3Int start, Vector3Int goal)
     {
-        FromDir = fromDir; // 현재 노드에 들어온 방향
-        GridPosX = x; // 노드의 x 좌표
-        GridPosY = y; // 노드의 y 좌표
-
-        GridPathX = new List<int>(xHist); // 경로의 x 좌표 기록
-        GridPathY = new List<int>(yHist); // 경로의 y 좌표 기록
-
-        GridPathX.Add(x); // 현재 노드의 좌표 추가
-        GridPathY.Add(y);
+        return Mathf.Abs(goal.x - start.x) + Mathf.Abs(goal.y - start.y);
     }
 
-    public PathfindConstants.Directions FromDir; // 방향 (경로 탐색에 필요한 정보)
-    public int GridPosX; // 노드의 x 좌표
-    public int GridPosY; // 노드의 y 좌표
-    public List<int> GridPathX; // 경로상의 x 좌표 리스트
-    public List<int> GridPathY; // 경로상의 y 좌표 리스트
+    // fScore가 가장 낮은 셀을 openList에서 선택하는 함수
+    private Vector3Int GetLowestFScore(List<Vector3Int> openList, Dictionary<Vector3Int, float> fScore)
+    {
+        Vector3Int lowest = openList[0];
+        float lowestScore = fScore[lowest];
+
+        // openList의 각 셀에 대해 fScore를 비교하여 최소값 찾기
+        foreach (Vector3Int cell in openList)
+        {
+            if (fScore.ContainsKey(cell) && fScore[cell] < lowestScore)
+            {
+                lowest = cell;
+                lowestScore = fScore[cell];
+            }
+        }
+
+        return lowest;
+    }
+
+    // 현재 셀의 인접한 이웃 셀들의 리스트를 반환하는 함수
+    private List<Vector3Int> GetNeighbors(Vector3Int cell)
+    {
+        List<Vector3Int> neighbors = new List<Vector3Int>();
+
+        // 상하좌우 이웃 추가
+        neighbors.Add(new Vector3Int(cell.x + 1, cell.y, cell.z)); // 오른쪽
+        neighbors.Add(new Vector3Int(cell.x - 1, cell.y, cell.z)); // 왼쪽
+        neighbors.Add(new Vector3Int(cell.x, cell.y + 1, cell.z)); // 위쪽
+        neighbors.Add(new Vector3Int(cell.x, cell.y - 1, cell.z)); // 아래쪽
+
+        // 대각선 이웃 추가 (필요한 경우)
+        neighbors.Add(new Vector3Int(cell.x + 1, cell.y + 1, cell.z)); // 오른쪽 위
+        neighbors.Add(new Vector3Int(cell.x - 1, cell.y + 1, cell.z)); // 왼쪽 위
+        neighbors.Add(new Vector3Int(cell.x + 1, cell.y - 1, cell.z)); // 오른쪽 아래
+        neighbors.Add(new Vector3Int(cell.x - 1, cell.y - 1, cell.z)); // 왼쪽 아래
+
+        return neighbors;
+    }
+
+    // 타일의 이동 가능 여부를 확인하는 함수
+    private bool IsTilePassable(TileBase tile)
+    {
+        // 타일을 CustomTile로 캐스팅하여 isPassable 속성 확인
+        CustomTile customTile = tile as CustomTile;
+        if (customTile != null)
+        {
+            return customTile.isPassable; // 이동 가능 여부 반환
+        }
+        else
+        {
+            // CustomTile이 아닌 경우 기본적으로 이동 가능하다고 간주
+            return true;
+        }
+    }
+
+    // 경로를 복원하고, 플레이어를 이동시키는 함수
+    private void RetracePath(Dictionary<Vector3Int, Vector3Int> cameFrom, Vector3Int current)
+    {
+        List<Vector3Int> path = new List<Vector3Int>();
+
+        // 목표 지점부터 시작 지점까지 역추적하여 경로 생성
+        while (cameFrom.ContainsKey(current))
+        {
+            path.Add(current);
+            current = cameFrom[current];
+        }
+
+        // 경로를 반전시켜 시작 지점부터 목표 지점 순서로 변경
+        path.Reverse();
+
+        // 경로의 길이를 출력
+        Debug.Log($"Path found with {path.Count} steps.");
+
+        // 경로가 존재하면 이동 코루틴 실행
+        if (path.Count > 0)
+        {
+            StartCoroutine(MoveAlongPath(path));
+        }
+    }
+
+    // 플레이어가 경로를 따라 이동하는 코루틴
+    private IEnumerator MoveAlongPath(List<Vector3Int> path)
+    {
+        foreach (Vector3Int cell in path)
+        {
+            // 셀의 중심 월드 좌표를 목표 지점으로 설정
+            Vector3 worldPos = tilemap.GetCellCenterWorld(cell);
+
+            // 현재 위치에서 목표 지점까지 이동
+            while (Vector3.Distance(transform.position, worldPos) > 0.1f)
+            {
+                // 이동 속도에 따라 위치를 보간하여 이동
+                transform.position = Vector3.MoveTowards(transform.position, worldPos, 5f * Time.deltaTime);
+                yield return null; // 다음 프레임까지 대기
+            }
+        }
+    }
 }

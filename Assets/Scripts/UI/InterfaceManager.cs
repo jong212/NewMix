@@ -62,10 +62,10 @@ public class InterfaceManager : MonoBehaviour
 
     public void ConfirmPlayerSettings()
     {
-        if (GameManager.instance.IsPlayerVisualAvailable(LocalData.model))
+       /* if (GameManager.instance.IsPlayerVisualAvailable(LocalData.model))
         {
             UIScreen.activeScreen.BackTo(gameplayHUD);
-        }
+        }*/
     }
     public void ConfirmleaveSessionHook()
     {

@@ -21,15 +21,15 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
 		IEnumerator SpawnRoutine()
 		{
-			yield return new WaitUntil(() => SpawnpointManager.Instance != null);
+			//yield return new WaitUntil(() => SpawnpointManager.Instance != null);
 			yield return new WaitUntil(() => GameManager.instance != null);
 
-			UIScreen.Focus(InterfaceManager.instance.playerSettingScreen);
+			//UIScreen.Focus(InterfaceManager.instance.playerSettingScreen);
 
 			yield return new WaitForEndOfFrame();
 
 			// force color availability to be evaluated
-			GameManager.instance.ReservedPlayerVisualsChanged();
+			//GameManager.instance.ReservedPlayerVisualsChanged();
 
 			// Wait until the client has selected their nickname/visual before giving them an avatar
 			yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD);
@@ -55,6 +55,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 	public void PlayerLeft(PlayerRef player)
 	{
 		InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
-		GameManager.instance.ReservedPlayerVisualsChanged();
+		//GameManager.instance.ReservedPlayerVisualsChanged();
 	}
 }

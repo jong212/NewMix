@@ -3,10 +3,13 @@ using System.Linq;
 using UnityEngine;
 using Fusion;
 using Fusion.Addons.SimpleKCC;
+using UnityEngine.InputSystem;
 
 public class Character : NetworkBehaviour
 {
-	[field: SerializeField] public CharacterSpecs Specs { get; private set; }
+    private VariableJoystick joystick; // Joystick 참조
+
+    [field: SerializeField] public CharacterSpecs Specs { get; private set; }
 	[SerializeField] private SimpleKCC kcc;
 	[SerializeField] private CharacterVisual[] visuals;
 	[SerializeField] private Transform uiPoint;
@@ -22,66 +25,79 @@ public class Character : NetworkBehaviour
 	private PlayerInput prevInput;
 	private WorldNickname nicknameUI = null;
 
-	public override void Spawned()
-	{
-		if (Object.HasInputAuthority && Object.HasStateAuthority)
-		{
-			Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
-			Visual = LocalData.model;
-		}
+    public override void Spawned()
+    {
+        joystick = FindObjectOfType<VariableJoystick>();
 
-		nicknameUI = Instantiate(
-			ResourcesManager.instance.worldNicknamePrefab,
-			InterfaceManager.instance.worldCanvas.transform);
+        if (Object.HasInputAuthority && Object.HasStateAuthority)
+        {
+            Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
+            Visual = LocalData.model;
+        }
 
-		NicknameChanged();
-		VisualChanged();
-	}
+        nicknameUI = Instantiate(
+            ResourcesManager.instance.worldNicknamePrefab,
+            InterfaceManager.instance.worldCanvas.transform);
 
-	public override void Render()
-	{
-		Animator anim = visuals[Visual].animator;
-		anim.SetFloat("Movement", kcc.RealSpeed / Specs.MovementSpeed);
-		anim.SetLayerWeight(1, Mathf.MoveTowards(anim.GetLayerWeight(1), HeldItem ? 1 : 0, 5 * Runner.DeltaTime));
+        NicknameChanged();
+        VisualChanged();
+    }
 
-		// compensate for positional desync while waiting for authority transfer
-		if (HeldItem != null && HeldItem.Object.StateAuthority != Object.InputAuthority)
-		{
-			HeldItem.transform.SetPositionAndRotation(HoldPoint.position, HoldPoint.rotation);
-		}
-	}
+    public override void Render()
+    {
+        Animator anim = visuals[Visual].animator;
 
-	public override void FixedUpdateNetwork()
-	{
-		if (GetInput(out PlayerInput input))
-		{
-			kcc.Move(input.GetMoveVector() * Specs.MovementSpeed);
+        // kcc.RealSpeed를 사용하여 Movement 애니메이션 파라미터 설정
+        // 캐릭터의 실제 이동 속도에 따라 애니메이션 설정
+        anim.SetFloat("Movement", kcc.RealSpeed > 0 ? kcc.RealSpeed / Specs.MovementSpeed : 0);
+        anim.SetLayerWeight(1, Mathf.MoveTowards(anim.GetLayerWeight(1), HeldItem ? 1 : 0, 5 * Runner.DeltaTime));
 
-			if (input.MoveAmount > 0) kcc.SetLookRotation(0, (float)input.MoveDirection);
+        // 위치 보정: 권한 전송 대기 중일 때 heldItem의 위치 조정
+        if (HeldItem != null && HeldItem.Object.StateAuthority != Object.InputAuthority)
+        {
+            HeldItem.transform.SetPositionAndRotation(HoldPoint.position, HoldPoint.rotation);
+        }
+    }
 
-			if (!WaitingForAuthority && input.GrabPressed(prevInput))
-			{
-				IEnumerable<Interactable> interactables = GetNearbyInteractables();
-				GrabInteractWith(interactables);
-			}
+    public override void FixedUpdateNetwork()
+    {
+        // 입력 권한이 있는 클라이언트만 이동 처리
+        if (!Object.HasInputAuthority)
+        {
+            return;
+        }
 
-			if (input.UsePressed(prevInput))
-			{
-				IEnumerable<Interactable> interactables = GetNearbyInteractables();
-				UseInteractWith(interactables);
-			}
+        // 조이스틱 입력 값 받아오기
+        if (joystick != null)
+        {
+            Vector2 joystickInput = new Vector2(joystick.Horizontal, joystick.Vertical);
 
-			prevInput = input;
-		}
-		else
-		{
-			Debug.LogWarning(Nickname + " missed input " + Runner.Tick, gameObject);
-		}
-	}
+            // 조이스틱 입력이 있을 경우 캐릭터 이동 처리
+            if (joystickInput.magnitude > 0)
+            {
+                Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y).normalized;
+                kcc.Move(moveDirection * Specs.MovementSpeed); // kcc.Move를 사용하여 실제 이동 처리
 
-	#region Change Detection
+                // 조이스틱 방향으로 캐릭터의 회전 설정
+                float moveAngle = Mathf.Atan2(joystickInput.x, joystickInput.y) * Mathf.Rad2Deg;
+                kcc.SetLookRotation(0, moveAngle);
+            }
+            else
+            {
+                // 조이스틱 입력이 없으면 이동 정지
+                kcc.Move(Vector3.zero); // 이동을 멈추도록 빈 벡터 전달
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Joystick not found in the scene.", gameObject);
+        }
+    }
 
-	private void NicknameChanged()
+
+    #region Change Detection
+
+    private void NicknameChanged()
 	{
 		nicknameUI.SetTarget(uiPoint, Nickname.Value);
 	}
@@ -92,7 +108,7 @@ public class Character : NetworkBehaviour
 		{
 			visuals[i].gameObject.SetActive(i == Visual);
 		}
-		GameManager.instance.ReservedPlayerVisualsChanged();
+		//GameManager.instance.ReservedPlayerVisualsChanged();
 	}
 
 	#endregion

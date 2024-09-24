@@ -14,7 +14,7 @@ public class DeliverOrderInteraction : Interaction
 
 		Debug.Log(string.Join(", ", playerContainer.Ingredients.Select(i => i.Data.DisplayName)));
 
-		GameManager.instance.Rpc_SubmitOrder(playerContainer);
+		//GameManager.instance.Rpc_SubmitOrder(playerContainer);
 		return true;
 	}
 }

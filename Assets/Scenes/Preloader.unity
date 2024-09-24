@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -659,6 +659,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4895594266446355075, guid: 266139aa946cb964db684b456d4698f4, type: 3}
+      propertyPath: monsterManagerPrefab
+      value: 
+      objectReference: {fileID: 8156149855584822206, guid: 9cfb03ff224875641b4143a9a9d36a62, type: 3}
     - target: {fileID: 5204862510637021295, guid: 266139aa946cb964db684b456d4698f4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

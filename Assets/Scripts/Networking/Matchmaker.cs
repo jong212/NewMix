@@ -10,10 +10,11 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 	public static Matchmaker Instance { get; private set; }
 
 	[SerializeField, ScenePath] string gameScene;
-	public NetworkRunner runnerPrefab;
-	public NetworkObject managerPrefab;
+	public NetworkRunner runnerPrefab;			// 플레이어 스포너
+	public NetworkObject managerPrefab;			// 게임매니저생성
+    public NetworkObject monsterManagerPrefab;  // MonsterManager 프리팹 추가
 
-	public NetworkRunner Runner { get; private set; }
+    public NetworkRunner Runner { get; private set; }
 
 	string _roomCode = null;
 
@@ -58,7 +59,10 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 
         void SpawnManager(NetworkRunner runner)
         {
-            if (Runner.IsSharedModeMasterClient) runner.Spawn(managerPrefab);
+			if (Runner.IsSharedModeMasterClient) {
+                runner.Spawn(managerPrefab);
+                runner.Spawn(monsterManagerPrefab); // MonsterManager 스폰
+            }            
             networkEvents.OnSceneLoadDone.RemoveListener(SpawnManager);
         }
 

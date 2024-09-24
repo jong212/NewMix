@@ -28,10 +28,8 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
 			yield return new WaitForEndOfFrame();
 
-			// force color availability to be evaluated
 			//GameManager.instance.ReservedPlayerVisualsChanged();
 
-			// Wait until the client has selected their nickname/visual before giving them an avatar
 			yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD);
 
 			if (SpawnpointManager.GetSpawnpoint(out Vector3 location, out Quaternion orientation))

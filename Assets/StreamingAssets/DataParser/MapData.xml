@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MapData>
+  <dataCategory>
+    <data stageID="0" stageName="A" x="5" y="5" />
+    <data stageID="1" stageName="B" x="3" y="3" />
+    <data stageID="2" stageName="C" x="6" y="3" />
+  </dataCategory>
+</MapData>

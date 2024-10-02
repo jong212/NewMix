@@ -11,14 +11,24 @@ public class LobbyDataManager : MonoBehaviour
     public Dictionary<int, MapData> LoadedCharacterList { get; private set; }
     private string _dataRootPath;
 
+   
 
 
     private void Awake()
     {
-        Inst = this;
+        if (Inst)
+        {
+            Debug.LogWarning("Instance already exists!");
+            Destroy(gameObject);
+        }
+        else
+        {
+            Inst = this;
+            DontDestroyOnLoad(gameObject);
+        }
         _dataRootPath = System.IO.Path.Combine(Application.streamingAssetsPath, "DataParser");
         ReadAllDataOnAwake();
-
+    
     }
 
     public void ReadAllDataOnAwake()
@@ -51,28 +61,7 @@ public class LobbyDataManager : MonoBehaviour
             tempCharacter.stageName = data.Attribute(nameof(tempCharacter.stageName)).Value;
             tempCharacter.x = int.Parse(data.Attribute(nameof(tempCharacter.x)).Value);
             tempCharacter.y = int.Parse(data.Attribute(nameof(tempCharacter.y)).Value);
-            //tempCharacter.PrefabName = data.Attribute(nameof(tempCharacter.PrefabName)).Value;
-
-            /*
-                        string skillNameListStr = data.Attribute("SkillNameList").Value;
-                        if (!string.IsNullOrEmpty(skillNameListStr))
-                        {
-                            skillNameListStr = skillNameListStr.Replace("{", string.Empty);
-                            skillNameListStr = skillNameListStr.Replace("}", string.Empty);
-
-                            var skillNames = skillNameListStr.Split(',');
-
-                            var list = new List<string>();
-                            if (skillNames.Length > 0)
-                            {
-                                foreach (var name in skillNames)
-                                {
-                                    list.Add(name);
-                                }
-                            }
-                            tempCharacter.SkillClassNameList = list;
-                        }*/
-
+            
             LoadedCharacterList.Add(tempCharacter.stageID, tempCharacter);
             Debug.Log(data.ToString());
         }

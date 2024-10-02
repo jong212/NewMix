@@ -9,10 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 473026759639642658}
+  - component: {fileID: 7259496203936178910}
   - component: {fileID: 2767164099283403364}
   - component: {fileID: 6316515867825467202}
   - component: {fileID: 3901600442813068076}
   - component: {fileID: -7809176092279137244}
+  - component: {fileID: -3630243333851463070}
   m_Layer: 0
   m_Name: MonsterAi
   m_TagString: Untagged
@@ -35,6 +37,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7259496203936178910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b80282a46e7404d94f99fd374b2409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  knockbackPower: {x: 7, y: 12}
+  knockbackOffset: {x: 0.5, y: 2}
+  knockbackDuration: 0.07
+  attackCheck: {fileID: 0}
+  attackCheckRadius: 1.2
+  groundCheck: {fileID: 0}
+  groundCheckDistance: 1
+  wallCheck: {fileID: 0}
+  wallCheckDistance: 0.8
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 0
+  stunDuration: 1
+  stunDirection: {x: 10, y: 12}
+  counterImage: {fileID: 0}
+  moveSpeed: 1.5
+  idleTime: 2
+  battleTime: 7
+  agroDistance: 2
+  attackDistance: 2
+  attackCooldown: 0
+  minAttackCooldown: 1
+  maxAttackCooldown: 2
+  lastTimeAttacked: 0
+  arrowPrefab: {fileID: 0}
+  arrowSpeed: 0
+  arrowDamage: 0
+  jumpVelocity: {x: 0, y: 0}
+  jumpCooldown: 0
+  safeDistance: 0
+  lastTimeJumped: 0
+  groundBehindCheck: {fileID: 0}
+  groundBehindCheckSize: {x: 0, y: 0}
 --- !u!33 &2767164099283403364
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -100,7 +151,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -123,3 +174,30 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours: []
+--- !u!54 &-3630243333851463070
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

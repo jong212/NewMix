@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -60,17 +61,10 @@ public class EnemyAi : Enemy
         return false;
     }
 
-    public override void Die()
+    public override void DealDamageRpc(float damage)
     {
-        base.Die();
-        //stateMachine.ChangeState(deadState);
-
-    }
-
-    public override void AnimationSpecialAttackTrigger()
-    {
-        GameObject newArrow = Instantiate(arrowPrefab, attackCheck.position, Quaternion.identity);
-        //newArrow.GetComponent<Arrow_Controller>().SetupArrow(arrowSpeed * facingDir, stats);
+        base.DealDamageRpc(damage);
+        Debug.Log("overrideTest");
     }
     public override void OnTriggerEnter(Collider col)
     {
@@ -83,6 +77,19 @@ public class EnemyAi : Enemy
             // EnemyAI 고유의 추가 행동 작성
         }
     }
+    public override void Die()
+    {
+        base.Die();
+        //stateMachine.ChangeState(deadState);
+
+    }
+
+    public override void AnimationSpecialAttackTrigger()
+    {
+        GameObject newArrow = Instantiate(arrowPrefab, attackCheck.position, Quaternion.identity);
+        //newArrow.GetComponent<Arrow_Controller>().SetupArrow(arrowSpeed * facingDir, stats);
+    }
+
     public bool GroundBehind() => Physics2D.BoxCast(groundBehindCheck.position, groundBehindCheckSize, 0, Vector2.zero, 0, whatIsGround);
     public bool WallBehind() => Physics2D.Raycast(wallCheck.position, Vector2.right * -facingDir, wallCheckDistance + 2, whatIsGround);
 

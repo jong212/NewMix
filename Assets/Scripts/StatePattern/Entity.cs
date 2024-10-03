@@ -6,14 +6,11 @@ using UnityEngine;
 public class Entity : NetworkBehaviour
 {
 
-    #region Components
-    public Transform target = null;
     public Animator anim { get; private set; }
     public Rigidbody rb { get; private set; }
 
     public SpriteRenderer sr { get; private set; }
     public CapsuleCollider cd { get; private set; }
-    #endregion
 
     [Header("Knockback info")]
     [SerializeField] protected Vector2 knockbackPower = new Vector2(7, 12);
@@ -32,10 +29,14 @@ public class Entity : NetworkBehaviour
 
     public int knockbackDir { get; private set; }
     public int facingDir { get; private set; } = 1;
-    protected bool facingRight = true;
-
+    protected bool facingRight = true; 
     public System.Action onFlipped;
 
+    #region MyNetwork
+    // 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
+    [Networked, OnChangedRender(nameof(HealthChanged))]
+    public float NetworkedHealth { get; set; } = 100;
+    public Transform target = null;
     protected virtual void Awake()
     {
 
@@ -56,6 +57,65 @@ public class Entity : NetworkBehaviour
 
     }
 
+    
+
+    // 체력이 변경되면 호출됨
+    void HealthChanged()
+    {
+        Debug.Log($"Health changed to: {NetworkedHealth}");
+        // 체력이 변경될 때 체력바나 UI 업데이트 등의 후속 작업 수행
+        UpdateHealthBar();
+    }
+
+    // 체력바를 업데이트하는 함수 (예시)
+    void UpdateHealthBar()
+    {
+        // 체력바 UI 업데이트 로직
+        Debug.Log($"Updating health bar to: {NetworkedHealth}");
+    }
+
+    // RPC를 통해 State Authority 클라이언트에서 체력을 감소시키는 함수
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public virtual void DealDamageRpc(float damage)
+    {
+        // 이 코드는 State Authority 클라이언트에서만 실행됨
+        if (Object.HasStateAuthority)
+        {
+            // 체력을 감소시킴
+            NetworkedHealth -= damage;
+            Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
+
+            // 체력이 0 이하가 되면 몬스터를 죽임
+            if (NetworkedHealth <= 0)
+            {
+                Die();
+            }
+        }
+    }
+    public virtual void OnTriggerEnter(Collider col)
+    {
+        // 충돌한 객체의 상위(루트) 객체에서 태그 확인
+        Debug.Log("test");
+        NetworkObject networkObject = col.GetComponentInParent<NetworkObject>();
+        if (networkObject != null)
+        {
+            // NetworkObject를 찾았습니다.
+            // 이 객체가 플레이어인지 확인합니다.
+            Character player = networkObject.GetComponent<Character>();
+            if (player != null)
+            {
+                Debug.Log("플레이어를 감지하였습니다.");
+                // 필요한 로직을 처리합니다.                
+            }
+        }
+    }
+    public virtual void Die()
+    {
+        Debug.Log("Monster died.");
+        // 사망 처리 로직 (예: 몬스터 제거)
+        Destroy(gameObject);
+    }
+    #endregion
     public virtual void SlowEntityBy(float _slowPercentage, float _slowDuration)
     {
 
@@ -74,10 +134,7 @@ public class Entity : NetworkBehaviour
             knockbackDir = -1;
         else if (_damageDirection.position.x < transform.position.x)
             knockbackDir = 1;
-
-
     }
-
     public void SetupKnockbackPower(Vector2 _knockbackpower) => knockbackPower = _knockbackpower;
     protected virtual IEnumerator HitKnockback()
     {
@@ -117,37 +174,6 @@ public class Entity : NetworkBehaviour
         FlipController(_xVelocity);
     }
     #endregion
-    public virtual void OnTriggerEnter(Collider col)
-    {
-        // 충돌한 객체의 상위(루트) 객체에서 태그 확인
-        Debug.Log("test");
-        NetworkObject networkObject = col.GetComponentInParent<NetworkObject>();
-        if (networkObject != null)
-        {
-            // NetworkObject를 찾았습니다.
-            // 이 객체가 플레이어인지 확인합니다.
-            Character player = networkObject.GetComponent<Character>();
-            if (player != null)
-            {
-                Debug.Log("플레이어를 감지하였습니다.");
-                // 필요한 로직을 처리합니다.                
-            }
-        }
-
-
-        /*     Transform rootTransform = col.transform.root;
-
-             if (rootTransform.GetComponent<NetworkObject>() != null)
-             {
-
-             }
-             if (rootTransform.CompareTag("Player"))
-             {
-                 // 플레이어 감지
-                 target = rootTransform; // 타겟으로 플레이어 설정
-                 Debug.Log("Player detected");
-             }*/
-    }
 
     public virtual void OnTriggerExit(Collider col)
     {
@@ -158,19 +184,9 @@ public class Entity : NetworkBehaviour
             Debug.Log("Player lost");
         }
     }
-
-    #region Collision
     public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
     public virtual bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, whatIsGround);
 
-    /*protected virtual void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
-        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance * facingDir, wallCheck.position.y));
-        Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
-    }*/
-    #endregion
-    #region Flip
     public virtual void Flip()
     {
         facingDir = facingDir * -1;
@@ -188,7 +204,6 @@ public class Entity : NetworkBehaviour
         else if (_x < 0 && facingRight)
             Flip();
     }
-
     public virtual void SetupDefailtFacingDir(int _direction)
     {
         facingDir = _direction;
@@ -196,12 +211,5 @@ public class Entity : NetworkBehaviour
         if (facingDir == -1)
             facingRight = false;
     }
-    #endregion
-
-
-
-    public virtual void Die()
-    {
-
-    }
+   
 }

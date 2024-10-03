@@ -31,10 +31,13 @@ public class Character : NetworkBehaviour
 
         if (Object.HasInputAuthority && Object.HasStateAuthority)
         {
+            IsometricCameraFollow cameraFollow = FindObjectOfType<IsometricCameraFollow>();
+            cameraFollow.target = this.transform;
+
             Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
             Visual = LocalData.model;
         }
-
+       
         nicknameUI = Instantiate(
             ResourcesManager.instance.worldNicknamePrefab,
             InterfaceManager.instance.worldCanvas.transform);
@@ -75,34 +78,56 @@ public class Character : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-		
-        
-            
-        // 입력 권한이 있는 클라이언트만 이동 처리
+
+
         if (!Object.HasInputAuthority)
         {
             return;
         }
-    
+
         // 조이스틱 입력 값 받아오기
         if (joystick != null)
         {
             Vector2 joystickInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+            Debug.Log($"Joystick Input: {joystickInput}");
 
             // 조이스틱 입력이 있을 경우 캐릭터 이동 처리
             if (joystickInput.magnitude > 0)
             {
-                Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y).normalized;
-                kcc.Move(moveDirection * Specs.MovementSpeed); // kcc.Move를 사용하여 실제 이동 처리
+                // 카메라의 회전을 반영한 이동 처리
+                Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y);
+                Debug.Log($"Move Direction: {moveDirection}");
 
-                // 조이스틱 방향으로 캐릭터의 회전 설정
-                float moveAngle = Mathf.Atan2(joystickInput.x, joystickInput.y) * Mathf.Rad2Deg;
-                kcc.SetLookRotation(0, moveAngle);
+                // 카메라의 회전 행렬을 가져와서 이동 방향을 변환
+                Vector3 cameraForward = Camera.main.transform.forward;
+                Vector3 cameraRight = Camera.main.transform.right;
+
+                // 카메라의 높이를 무시하고 평면상에서만 이동
+                cameraForward.y = 0;
+                cameraRight.y = 0;
+                cameraForward.Normalize();
+                cameraRight.Normalize();
+
+                // 카메라 기준으로 조이스틱 방향을 변환
+                Vector3 finalMoveDirection = cameraForward * moveDirection.z + cameraRight * moveDirection.x;
+                Debug.Log($"Final Move Direction: {finalMoveDirection}");
+
+                // KCC로 캐릭터 이동 처리
+                kcc.Move(finalMoveDirection * Specs.MovementSpeed);
+                Debug.Log("Character is moving");
+
+                // 캐릭터의 회전 설정 (움직이는 방향을 바라보게)
+                if (finalMoveDirection.magnitude > 0)
+                {
+                    kcc.SetLookRotation(0, Mathf.Atan2(finalMoveDirection.x, finalMoveDirection.z) * Mathf.Rad2Deg);
+                    Debug.Log("Character Look Rotation Set");
+                }
             }
             else
             {
                 // 조이스틱 입력이 없으면 이동 정지
                 kcc.Move(Vector3.zero); // 이동을 멈추도록 빈 벡터 전달
+                Debug.Log("Character Stopped");
             }
         }
         else
@@ -118,7 +143,7 @@ public class Character : NetworkBehaviour
         if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
         {
             // 몬스터가 있는지 확인
-            if (hit.transform.TryGetComponent<EnemyNetwork>(out var targetMonster))
+            if (hit.transform.TryGetComponent<Entity>(out var targetMonster))
             {
                 // 몬스터가 맞으면 RPC 호출로 State Authority에게 체력 감소 요청
                 targetMonster.DealDamageRpc(10);

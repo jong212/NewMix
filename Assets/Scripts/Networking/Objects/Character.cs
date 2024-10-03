@@ -42,9 +42,23 @@ public class Character : NetworkBehaviour
         NicknameChanged();
         VisualChanged();
     }
+    private void Update()
+    {
+        // 입력 권한이 있는 클라이언트에서만 입력 처리
+        if (Object.HasInputAuthority)
+        {
+			Debug.Log("..");
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                Debug.Log("Space bar pressed");
+                TryAttack();
+            }
+        }
+    }
 
     public override void Render()
     {
+     
         Animator anim = visuals[Visual].animator;
 
         // kcc.RealSpeed를 사용하여 Movement 애니메이션 파라미터 설정
@@ -61,12 +75,15 @@ public class Character : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+		
+        
+            
         // 입력 권한이 있는 클라이언트만 이동 처리
         if (!Object.HasInputAuthority)
         {
             return;
         }
-
+    
         // 조이스틱 입력 값 받아오기
         if (joystick != null)
         {
@@ -94,7 +111,20 @@ public class Character : NetworkBehaviour
         }
     }
 
-
+    void TryAttack()
+    {
+        // 레이캐스트로 공격 대상(몬스터)을 찾음
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
+        {
+            // 몬스터가 있는지 확인
+            if (hit.transform.TryGetComponent<EnemyNetwork>(out var targetMonster))
+            {
+                // 몬스터가 맞으면 RPC 호출로 State Authority에게 체력 감소 요청
+                targetMonster.DealDamageRpc(10);
+            }
+        }
+    }
     #region Change Detection
 
     private void NicknameChanged()

@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 7563667420301727312}
   - component: {fileID: 6934442192306028961}
   - component: {fileID: 4044871258828981338}
-  - component: {fileID: -1624112283137998660}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -143,7 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _settings:
     Shape: 1
-    IsTrigger: 0
+    IsTrigger: 1
     Radius: 0.35
     Height: 1.8
     Extent: 0.035
@@ -196,29 +195,6 @@ MonoBehaviour:
   - {fileID: 3195247357856794338}
   - {fileID: 7563667420301727312}
   - {fileID: 6934442192306028961}
---- !u!136 &-1624112283137998660
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5496097370047470657}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2188087224261725793
 PrefabInstance:
   m_ObjectHideFlags: 0

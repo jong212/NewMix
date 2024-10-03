@@ -1,9 +1,9 @@
+using Fusion;
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 
-public class Entity : MonoBehaviour
+public class Entity : NetworkBehaviour
 {
 
     #region Components
@@ -119,12 +119,34 @@ public class Entity : MonoBehaviour
     #endregion
     public virtual void OnTriggerEnter(Collider col)
     {
-        if (col.CompareTag("Player"))
+        // 충돌한 객체의 상위(루트) 객체에서 태그 확인
+        Debug.Log("test");
+        NetworkObject networkObject = col.GetComponentInParent<NetworkObject>();
+        if (networkObject != null)
         {
-            // 플레이어 감지
-            target = col.transform; // 타겟으로 플레이어 설정
-            Debug.Log("Player detected");
+            // NetworkObject를 찾았습니다.
+            // 이 객체가 플레이어인지 확인합니다.
+            Character player = networkObject.GetComponent<Character>();
+            if (player != null)
+            {
+                Debug.Log("플레이어를 감지하였습니다.");
+                // 필요한 로직을 처리합니다.                
+            }
         }
+
+
+        /*     Transform rootTransform = col.transform.root;
+
+             if (rootTransform.GetComponent<NetworkObject>() != null)
+             {
+
+             }
+             if (rootTransform.CompareTag("Player"))
+             {
+                 // 플레이어 감지
+                 target = rootTransform; // 타겟으로 플레이어 설정
+                 Debug.Log("Player detected");
+             }*/
     }
 
     public virtual void OnTriggerExit(Collider col)

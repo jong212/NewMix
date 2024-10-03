@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -20,7 +20,7 @@ public class EnemyAi : Enemy
     [SerializeField] private Transform groundBehindCheck;
     [SerializeField] private Vector2 groundBehindCheckSize;
 
-
+    //í…ŒìŠ¤íŠ¸
     #region States
 
     public EnemyIdleState idleState { get; private set; }
@@ -74,13 +74,13 @@ public class EnemyAi : Enemy
     }
     public override void OnTriggerEnter(Collider col)
     {
-        base.OnTriggerEnter(col); // ºÎ¸ð Å¬·¡½º¿¡¼­ ÀÌ¹Ì ÇÃ·¹ÀÌ¾î °¨Áö Ã³¸®¸¦ ÇßÀ½
+        base.OnTriggerEnter(col); // ë¶€ëª¨ í´ëž˜ìŠ¤ì—ì„œ ì´ë¯¸ í”Œë ˆì´ì–´ ê°ì§€ ì²˜ë¦¬ë¥¼ í–ˆìŒ
 
-        // Ãß°¡ÀûÀÎ µ¿ÀÛ¸¸ ¼öÇà (Áßº¹ Á¦°Å)
+        // ì¶”ê°€ì ì¸ ë™ìž‘ë§Œ ìˆ˜í–‰ (ì¤‘ë³µ ì œê±°)
         if (target != null)
         {
             Debug.Log(col.tag.ToString());
-            // EnemyAI °íÀ¯ÀÇ Ãß°¡ Çàµ¿ ÀÛ¼º
+            // EnemyAI ê³ ìœ ì˜ ì¶”ê°€ í–‰ë™ ìž‘ì„±
         }
     }
     public bool GroundBehind() => Physics2D.BoxCast(groundBehindCheck.position, groundBehindCheckSize, 0, Vector2.zero, 0, whatIsGround);

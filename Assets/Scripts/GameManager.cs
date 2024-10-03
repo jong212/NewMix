@@ -324,13 +324,20 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
 
     private void AssignMasterClientAuthority()
     {
-        // 새로운 마스터 클라이언트에게 플랫포머 오브젝트의 권한을 할당
+        // 방에서 마스터 클라이언트가 나가면 담에 남은 클라에게 새로운 마스터 클라이언트로 자동 임명되고 아래 코드를 통해 새로 임명된 클라에게 StateAuthority 권한 주는 코드
         if (Runner.IsSharedModeMasterClient)
         {
+            // 움직이는 Plane
             var platforms = FindObjectsOfType<NetworkMovingPlatform>()
                 .Where(p => !p.Object.HasStateAuthority);
-
             foreach (var platform in platforms)
+            {
+                platform.Object.RequestStateAuthority();
+            }
+
+            var Enemys = FindObjectsOfType<EnemyNetwork>()
+                .Where(e => !e.Object.HasStateAuthority);
+            foreach (var platform in Enemys)
             {
                 platform.Object.RequestStateAuthority();
             }

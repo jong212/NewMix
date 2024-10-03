@@ -15,6 +15,9 @@ GameObject:
   - component: {fileID: 3901600442813068076}
   - component: {fileID: -7809176092279137244}
   - component: {fileID: -3630243333851463070}
+  - component: {fileID: 1898924008767367897}
+  - component: {fileID: -6880436890373463894}
+  - component: {fileID: 6715843726876892681}
   m_Layer: 0
   m_Name: MonsterAi
   m_TagString: Untagged
@@ -171,9 +174,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 1738411153
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 524289
   NestedObjects: []
-  NetworkedBehaviours: []
+  NetworkedBehaviours:
+  - {fileID: 7259496203936178910}
+  - {fileID: 1898924008767367897}
+  - {fileID: -6880436890373463894}
+  - {fileID: 6715843726876892681}
 --- !u!54 &-3630243333851463070
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -201,3 +208,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1898924008767367897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f503522eeeb46499d76b836449e315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NetworkedHealth: 100
+--- !u!114 &-6880436890373463894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
+--- !u!114 &6715843726876892681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 284864d5b0a1f1e4aad0c0822c1565f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

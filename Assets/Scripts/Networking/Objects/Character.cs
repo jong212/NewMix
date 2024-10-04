@@ -10,20 +10,20 @@ public class Character : NetworkBehaviour
     private VariableJoystick joystick; // Joystick 참조
 
     [field: SerializeField] public CharacterSpecs Specs { get; private set; }
-	[SerializeField] private SimpleKCC kcc;
-	[SerializeField] private CharacterVisual[] visuals;
-	[SerializeField] private Transform uiPoint;
+    [SerializeField] private SimpleKCC kcc;
+    [SerializeField] private CharacterVisual[] visuals;
+    [SerializeField] private Transform uiPoint;
 
-	[Networked, OnChangedRender(nameof(NicknameChanged))] public NetworkString<_16> Nickname { get; set; }
-	[Networked, OnChangedRender(nameof(VisualChanged))] public byte Visual { get; set; }
-	[Networked] public Item HeldItem { get; set; }
-	[Networked] public bool WaitingForAuthority { get; set; }
+    [Networked, OnChangedRender(nameof(NicknameChanged))] public NetworkString<_16> Nickname { get; set; }
+    [Networked, OnChangedRender(nameof(VisualChanged))] public byte Visual { get; set; }
+    [Networked] public Item HeldItem { get; set; }
+    [Networked] public bool WaitingForAuthority { get; set; }
 
-	public Transform HoldPoint => visuals[Visual].holdPoint;
-	public CharacterVisual CharacterVisual => visuals[Visual];
+    public Transform HoldPoint => visuals[Visual].holdPoint;
+    public CharacterVisual CharacterVisual => visuals[Visual];
 
-	private PlayerInput prevInput;
-	private WorldNickname nicknameUI = null;
+    private PlayerInput prevInput;
+    private WorldNickname nicknameUI = null;
 
     public override void Spawned()
     {
@@ -37,20 +37,50 @@ public class Character : NetworkBehaviour
             Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
             Visual = LocalData.model;
         }
-       
+
         nicknameUI = Instantiate(
             ResourcesManager.instance.worldNicknamePrefab,
             InterfaceManager.instance.worldCanvas.transform);
 
         NicknameChanged();
         VisualChanged();
+        ModifyKCCCollider();
+    }
+    private void ModifyKCCCollider()
+    {
+        // KCCCollider 오브젝트를 자식 오브젝트에서 찾습니다.
+        Transform kccColliderTransform = transform.Find("KCCCollider");
+        if (kccColliderTransform != null)
+        {
+            CapsuleCollider kccCollider = kccColliderTransform.GetComponent<CapsuleCollider>();
+
+            if (kccCollider != null)
+            {
+                // 필요한 Collider 설정 변경
+                // 예: isTrigger를 해제하여 물리적 충돌이 가능하도록 설정
+                kccCollider.isTrigger = false;
+
+                // Collider의 크기 등 다른 속성 변경
+                //kccCollider.radius = 0.97f; // 원하는 값으로 설정
+                //kccCollider.height = 0.37f;    // 원하는 값으로 설정
+
+                // 추가로 필요한 설정이 있다면 여기에 추가
+            }
+            else
+            {
+                Debug.LogWarning("KCCCollider에 CapsuleCollider가 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("KCCCollider 오브젝트를 찾을 수 없습니다.");
+        }
     }
     private void Update()
     {
         // 입력 권한이 있는 클라이언트에서만 입력 처리
         if (Object.HasInputAuthority)
         {
-			Debug.Log("..");
             if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
                 Debug.Log("Space bar pressed");
@@ -61,7 +91,6 @@ public class Character : NetworkBehaviour
 
     public override void Render()
     {
-     
         Animator anim = visuals[Visual].animator;
 
         // kcc.RealSpeed를 사용하여 Movement 애니메이션 파라미터 설정
@@ -78,8 +107,6 @@ public class Character : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-
-
         if (!Object.HasInputAuthority)
         {
             return;
@@ -145,118 +172,141 @@ public class Character : NetworkBehaviour
             // 몬스터가 있는지 확인
             if (hit.transform.TryGetComponent<Entity>(out var targetMonster))
             {
-                // 몬스터가 맞으면 RPC 호출로 State Authority에게 체력 감소 요청
-                targetMonster.DealDamageRpc(10);
+                // 몬스터가 맞으면 밀기 로직 실행
+                PushMonster(targetMonster);
             }
         }
     }
+
+    void PushMonster(Entity monster)
+    {
+        // 몬스터의 Rigidbody를 가져옴
+        Rigidbody monsterRb = monster.GetComponent<Rigidbody>();
+
+        if (monsterRb != null)
+        {
+            // 플레이어와 몬스터의 위치 차이를 기반으로 방향을 설정
+            Vector3 pushDirection = (monster.transform.position - transform.position).normalized;
+
+            // 뒤로 미는 힘을 적용 (ForceMode.Impulse로 즉시 힘 적용)
+            float pushForce = 50f; // 힘의 크기를 조절
+            monsterRb.isKinematic = false;
+            monsterRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
+        }
+        else
+        {
+            // Rigidbody가 없으면 위치를 직접 조정
+            Vector3 pushDirection = (monster.transform.position - transform.position).normalized;
+            monster.transform.position += pushDirection * 0.5f; // 밀리는 정도를 조절
+        }
+    }
+
     #region Change Detection
 
     private void NicknameChanged()
-	{
-		nicknameUI.SetTarget(uiPoint, Nickname.Value);
-	}
+    {
+        nicknameUI.SetTarget(uiPoint, Nickname.Value);
+    }
 
-	private void VisualChanged()
-	{
-		for (int i = 0; i < visuals.Length; i++)
-		{
-			visuals[i].gameObject.SetActive(i == Visual);
-		}
-		//GameManager.instance.ReservedPlayerVisualsChanged();
-	}
+    private void VisualChanged()
+    {
+        for (int i = 0; i < visuals.Length; i++)
+        {
+            visuals[i].gameObject.SetActive(i == Visual);
+        }
+    }
 
-	#endregion
+    #endregion
 
-	public void SetHeldItem(Item item)
-	{
-		if (item == null)
-		{
-			HeldItem = null;
-			kcc.RefreshChildColliders();
-		}
-		else
-		{
-			AuthorityHandler authHandler = item.GetComponentTopmost<AuthorityHandler>();
-			if (authHandler.TryGetComponent(out Character _)) return;
+    public void SetHeldItem(Item item)
+    {
+        if (item == null)
+        {
+            HeldItem = null;
+            kcc.RefreshChildColliders();
+        }
+        else
+        {
+            AuthorityHandler authHandler = item.GetComponentTopmost<AuthorityHandler>();
+            if (authHandler.TryGetComponent(out Character _)) return;
 
-			WaitingForAuthority = true;
+            WaitingForAuthority = true;
 
-			authHandler.RequestAuthority(
-				onAuthorized: () =>
-				{
-					if (item.TryGetComponent(out Rigidbody rb))
-					{
-						rb.isKinematic = true;
-					}
+            authHandler.RequestAuthority(
+                onAuthorized: () =>
+                {
+                    if (item.TryGetComponent(out Rigidbody rb))
+                    {
+                        rb.isKinematic = true;
+                    }
 
-					if (item.TryGetComponent(out ColliderGroup cg))
-					{
-						cg.CollidersEnabled = false;
-					}
+                    if (item.TryGetComponent(out ColliderGroup cg))
+                    {
+                        cg.CollidersEnabled = false;
+                    }
 
-					if (authHandler.TryGetComponent(out WorkSurface surf)) surf.ItemOnTop = null;
+                    if (authHandler.TryGetComponent(out WorkSurface surf)) surf.ItemOnTop = null;
 
-					WaitingForAuthority = false;
-					HeldItem = item;
-					HeldItem.transform.SetParent(Object.transform);
-					HeldItem.transform.SetPositionAndRotation(HoldPoint.position, HoldPoint.rotation);
-					kcc.RefreshChildColliders();
-				},
-				onUnauthorized: () => WaitingForAuthority = false
-			);
-		}
-	}
+                    WaitingForAuthority = false;
+                    HeldItem = item;
+                    HeldItem.transform.SetParent(Object.transform);
+                    HeldItem.transform.SetPositionAndRotation(HoldPoint.position, HoldPoint.rotation);
+                    kcc.RefreshChildColliders();
+                },
+                onUnauthorized: () => WaitingForAuthority = false
+            );
+        }
+    }
 
-	private void GrabInteractWith(IEnumerable<Interactable> interactables)
-	{
-		foreach (var interactable in interactables)
-		{
-			if (interactable.GrabInteract(this)) return;
-		}
+    private void GrabInteractWith(IEnumerable<Interactable> interactables)
+    {
+        foreach (var interactable in interactables)
+        {
+            if (interactable.GrabInteract(this)) return;
+        }
 
-		// Drop held object if it is physical
-		if (HeldItem && HeldItem.TryGetBehaviour(out Throwable throwable))
-		{
-			Vector3 throwDirection = Quaternion.AngleAxis(-Specs.ThrowArc, HoldPoint.right) * HoldPoint.forward;
+        // Drop held object if it is physical
+        if (HeldItem && HeldItem.TryGetBehaviour(out Throwable throwable))
+        {
+            Vector3 throwDirection = Quaternion.AngleAxis(-Specs.ThrowArc, HoldPoint.right) * HoldPoint.forward;
 
-			throwable.Throw(throwDirection * Specs.ThrowForce);
-			SetHeldItem(null);
-		}
-	}
+            throwable.Throw(throwDirection * Specs.ThrowForce);
+            SetHeldItem(null);
+        }
+    }
 
-	private void UseInteractWith(IEnumerable<Interactable> interactables)
-	{
-		if (interactables.Count() != 0)
-		{
-			foreach (var interactable in interactables)
-			{
-				if (interactable.UseInteract(this)) return;
-			}
-		}
-	}
+    private void UseInteractWith(IEnumerable<Interactable> interactables)
+    {
+        if (interactables.Count() != 0)
+        {
+            foreach (var interactable in interactables)
+            {
+                if (interactable.UseInteract(this)) return;
+            }
+        }
+    }
 
-	private IEnumerable<Interactable> GetNearbyInteractables()
-	{
-		Vector3 p0 = transform.position + transform.forward * Specs.Reach / 2;
-		return Physics.OverlapCapsule(p0, p0 + Vector3.up * 2, Specs.Reach / 2)
-			.Select(c => c.GetComponentInParent<Interactable>())
-			.Where(a => a != null)
-			.OrderBy(h => Vector3.Distance(p0, h.transform.position));
-	}
+    private IEnumerable<Interactable> GetNearbyInteractables()
+    {
+        Vector3 p0 = transform.position + transform.forward * Specs.Reach / 2;
+        return Physics.OverlapCapsule(p0, p0 + Vector3.up * 2, Specs.Reach / 2)
+            .Select(c => c.GetComponentInParent<Interactable>())
+            .Where(a => a != null)
+            .OrderBy(h => Vector3.Distance(p0, h.transform.position));
+    }
 
-	private void OnDrawGizmos()
-	{
-		if (visuals == null || visuals.Length == 0) return;
-		if (Specs == null) return;
+    private void OnDrawGizmos()
+    {
+        if (visuals == null || visuals.Length == 0) return;
+        if (Specs == null) return;
 
-		Transform hp = (Runner != null && Runner.IsRunning == true)
-			? HoldPoint
-			: visuals[0].holdPoint;
+        Transform hp = (Runner != null && Runner.IsRunning == true)
+            ? HoldPoint
+            : visuals[0].holdPoint;
 
-		Gizmos.color = Color.green;
-		Gizmos.DrawWireCube(hp.position, new Vector3(0.25f, 2f, 0.25f));
-		Gizmos.DrawWireSphere(transform.position + transform.forward * Specs.Reach / 2, Specs.Reach / 2);
-		Gizmos.DrawWireSphere(transform.position + Vector3.up * 2 + transform.forward * Specs.Reach / 2, Specs.Reach / 2);
-	}
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(hp.position, new Vector3(0.25f, 2f, 0.25f));
+        Gizmos.DrawWireSphere(transform.position + transform.forward * Specs.Reach / 2, Specs.Reach / 2);
+        Gizmos.DrawWireSphere(transform.position + Vector3.up * 2 + transform.forward * Specs.Reach / 2, Specs.Reach / 2);
+    }
 }

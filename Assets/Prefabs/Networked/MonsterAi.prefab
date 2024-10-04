@@ -52,7 +52,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b80282a46e7404d94f99fd374b2409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   knockbackPower: {x: 7, y: 12}
   knockbackOffset: {x: 0.5, y: 2}
   knockbackDuration: 0.07
@@ -65,6 +64,8 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 0
+  _NetworkedHealth: 100
+  target: {fileID: 0}
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 0
@@ -154,7 +155,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -205,9 +206,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Interpolate: 2
+  m_Constraints: 116
+  m_CollisionDetection: 2
 --- !u!114 &1898924008767367897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,7 +221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5f503522eeeb46499d76b836449e315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _NetworkedHealth: 100
 --- !u!114 &-6880436890373463894
 MonoBehaviour:
   m_ObjectHideFlags: 0

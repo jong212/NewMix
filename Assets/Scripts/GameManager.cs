@@ -15,6 +15,7 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
     [Networked, Capacity(6), UnitySerializeField] public NetworkLinkedList<Order> OrderList => default;
     [Networked] public int OrdersSpawned { get; set; }
     [Networked] public TickTimer OrderTimer { get; set; }
+    [Networked] public NetworkLinkedList<PlayerRef> PlayerRefs { get; } = new NetworkLinkedList<PlayerRef>();
 
     // 주문 생성 간격 및 주문 유효 시간을 설정하는 변수들
     [SerializeField] private float orderInterval = 20;
@@ -86,6 +87,7 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
 
     public override void FixedUpdateNetwork()
     {
+        Debug.Log(PlayerRefs.Count > 0) ;
         // 주문 타이머가 만료되면 새로운 주문 생성 또는 타이머 재설정
       /*  if (OrderTimer.Expired(Runner))
         {

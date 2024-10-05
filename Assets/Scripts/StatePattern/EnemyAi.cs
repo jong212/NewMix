@@ -25,6 +25,7 @@ public class EnemyAi : Enemy
     #region States
 
     public EnemyIdleState idleState { get; private set; }
+    public EnemyMoveState moveState { get; private set; }
 
     #endregion
 
@@ -34,6 +35,7 @@ public class EnemyAi : Enemy
         base.Awake();
 
         idleState = new EnemyIdleState(this, stateMachine, "Idle", this);
+        moveState = new EnemyMoveState(this, stateMachine, "Move", this);
 
     }
 

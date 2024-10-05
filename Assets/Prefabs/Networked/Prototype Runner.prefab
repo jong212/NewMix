@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1103655588006811386}
   - component: {fileID: 2740596322902086122}
   - component: {fileID: 5690162266082376348}
+  - component: {fileID: -7943318643177397399}
   m_Layer: 0
   m_Name: Prototype Runner
   m_TagString: Untagged
@@ -188,3 +189,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DelayIfSceneManagerIsBusy: 1
+--- !u!114 &-7943318643177397399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740596322902086123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8edbe7108d8a43ab838cf8b8d9453df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

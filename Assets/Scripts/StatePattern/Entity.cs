@@ -1,14 +1,16 @@
 using Fusion;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 
 public class Entity : NetworkBehaviour
 {
+    [Networked, Capacity(12)] public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
 
     public Animator anim { get; private set; }
     public Rigidbody rb { get; private set; }
-
+ 
     public SpriteRenderer sr { get; private set; }
     public CapsuleCollider cd { get; private set; }
 
@@ -26,7 +28,7 @@ public class Entity : NetworkBehaviour
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected float wallCheckDistance = .8f;
     [SerializeField] protected LayerMask whatIsGround;
-
+    PlayerSpawner playerSpawner;
     public int knockbackDir { get; private set; }
     public int facingDir { get; private set; } = 1;
     protected bool facingRight = true; 
@@ -37,8 +39,16 @@ public class Entity : NetworkBehaviour
     [Networked, OnChangedRender(nameof(HealthChanged))]
     public float NetworkedHealth { get; set; } = 100;
     public Transform target = null;
+
+    
     protected virtual void Awake()
     {
+        playerSpawner = FindObjectOfType<PlayerSpawner>();
+        if (playerSpawner != null)
+        {
+            playerSpawner.OnPlayerJoined += AddPlayerToList;
+            playerSpawner.OnPlayerLeft += RemovePlayerFromList;
+        }
 
     }
 
@@ -47,18 +57,53 @@ public class Entity : NetworkBehaviour
         sr = GetComponentInChildren<SpriteRenderer>();
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
-
        // stats = GetComponent<CharacterStats>();
         cd = GetComponent<CapsuleCollider>();
+        if (Object.HasStateAuthority)
+        {
+            // Matchmaker에서 ActivePlayers 가져오기
+            if (Matchmaker.Instance != null && Matchmaker.Instance.Runner != null)
+            {
+                // ActivePlayers 리스트를 가져와 nearbyPlayers에 추가
+                foreach (var player in Matchmaker.Instance.Runner.ActivePlayers)
+                {
+                    if (!nearbyPlayers.Contains(player))
+                    {
+                        nearbyPlayers.Add(player);
+                    }
+                }
+            }
+        }
+    }
+    private void AddPlayerToList(PlayerRef player)
+    {
+        if (!nearbyPlayers.Contains(player))
+        {
+            nearbyPlayers.Add(player);
+        }
     }
 
+    // 플레이어 리스트에서 제거
+    private void RemovePlayerFromList(PlayerRef player)
+    {
+        if (nearbyPlayers.Contains(player))
+        {
+            nearbyPlayers.Remove(player);
+            Debug.Log($"Player {player.PlayerId} removed from nearbyPlayers.");
+        }
+    }
     protected virtual void Update()
     {
-
+   foreach(var a in nearbyPlayers)
+        {
+            Debug.Log(a);
+        }
     }
-
-    
-
+    private void OnEnable()
+    {
+    }
+ 
+  
     // 체력이 변경되면 호출됨
     void HealthChanged()
     {
@@ -109,6 +154,7 @@ public class Entity : NetworkBehaviour
             }
         }
     }
+   
     public virtual void Die()
     {
         Debug.Log("Monster died.");

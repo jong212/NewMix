@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyIdleState : EnemyGroundedState
+public class EnemyMoveState : EnemyState
 {
-    public EnemyIdleState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, EnemyAi _enemy) : base(_enemyBase, _stateMachine, _animBoolName,_enemy)
+    private EnemyAi enemy;
+    public EnemyMoveState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, EnemyAi _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
     {
+        this.enemy = _enemy;
     }
 
 
@@ -25,11 +27,11 @@ public class EnemyIdleState : EnemyGroundedState
     {
         base.Update();
 
-     /*   if(stateTimer < 0)
+        if(stateTimer < 0)
         {
             stateMachine.ChangeState(enemy.idleState);
         }
-*/
+
        // enemy.SetZeroVelocity();
      
     }

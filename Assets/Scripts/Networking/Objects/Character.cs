@@ -172,6 +172,7 @@ public class Character : NetworkBehaviour
             // 몬스터가 있는지 확인
             if (hit.transform.TryGetComponent<Entity>(out var targetMonster))
             {
+                targetMonster.DealDamageRpc(10);
                 // 몬스터가 맞으면 밀기 로직 실행
                 PushMonster(targetMonster);
             }

@@ -1,20 +1,26 @@
 using Fusion;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 {
-	[field: SerializeField] public GameObject PlayerPrefab { get; private set; }
+    public event Action<PlayerRef> OnPlayerJoined;
+    public event Action<PlayerRef> OnPlayerLeft;
+    [field: SerializeField] public GameObject PlayerPrefab { get; private set; }
 
-	public void PlayerJoined(PlayerRef player)
+    public void PlayerJoined(PlayerRef player)
 	{
 		InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
 
 		if (player == Runner.LocalPlayer)
 		{
 			StartCoroutine(SpawnRoutine());
-		}
-		else
+            OnPlayerJoined?.Invoke(player);
+
+        }
+        else
 		{
 			InterfaceManager.instance.ChefIconShake();
 		}
@@ -53,6 +59,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 	public void PlayerLeft(PlayerRef player)
 	{
 		InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
-		//GameManager.instance.ReservedPlayerVisualsChanged();
-	}
+        //GameManager.instance.ReservedPlayerVisualsChanged();
+    }
 }

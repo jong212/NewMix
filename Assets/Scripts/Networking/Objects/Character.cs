@@ -116,14 +116,14 @@ public class Character : NetworkBehaviour
         if (joystick != null)
         {
             Vector2 joystickInput = new Vector2(joystick.Horizontal, joystick.Vertical);
-            Debug.Log($"Joystick Input: {joystickInput}");
+            //Debug.Log($"Joystick Input: {joystickInput}");
 
             // 조이스틱 입력이 있을 경우 캐릭터 이동 처리
             if (joystickInput.magnitude > 0)
             {
                 // 카메라의 회전을 반영한 이동 처리
                 Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y);
-                Debug.Log($"Move Direction: {moveDirection}");
+               // Debug.Log($"Move Direction: {moveDirection}");
 
                 // 카메라의 회전 행렬을 가져와서 이동 방향을 변환
                 Vector3 cameraForward = Camera.main.transform.forward;
@@ -137,17 +137,17 @@ public class Character : NetworkBehaviour
 
                 // 카메라 기준으로 조이스틱 방향을 변환
                 Vector3 finalMoveDirection = cameraForward * moveDirection.z + cameraRight * moveDirection.x;
-                Debug.Log($"Final Move Direction: {finalMoveDirection}");
+                //Debug.Log($"Final Move Direction: {finalMoveDirection}");
 
                 // KCC로 캐릭터 이동 처리
                 kcc.Move(finalMoveDirection * Specs.MovementSpeed);
-                Debug.Log("Character is moving");
+                //Debug.Log("Character is moving");
 
                 // 캐릭터의 회전 설정 (움직이는 방향을 바라보게)
                 if (finalMoveDirection.magnitude > 0)
                 {
                     kcc.SetLookRotation(0, Mathf.Atan2(finalMoveDirection.x, finalMoveDirection.z) * Mathf.Rad2Deg);
-                    Debug.Log("Character Look Rotation Set");
+                   // Debug.Log("Character Look Rotation Set");
                 }
             }
             else

@@ -6,8 +6,35 @@ using UnityEngine;
 
 public class Entity : NetworkBehaviour
 {
-    [Networked, Capacity(12)] public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
+    public List<GameObject> nearbyPlayerObjects = new List<GameObject>();
 
+    [Networked, Capacity(12), OnChangedRender(nameof(Nearby))] public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
+    void Nearby()
+    {
+        nearbyPlayerObjects.Clear();
+
+        // nearbyPlayers 리스트에 있는 각 PlayerRef를 처리
+        foreach (var playerRef in nearbyPlayers)
+        {
+            // 코루틴을 사용하여 null이 아닐 때까지 대기 후 리스트에 추가
+            StartCoroutine(AddPlayerObjectToList(playerRef));
+        }
+    }
+    private IEnumerator AddPlayerObjectToList(PlayerRef playerRef)
+    {
+        NetworkObject playerNetworkObject = null;
+
+        // NetworkObject가 null이 아닐 때까지 대기
+        while (playerNetworkObject == null)
+        {
+            playerNetworkObject = Runner.GetPlayerObject(playerRef);
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        // GameObject를 리스트에 추가
+        nearbyPlayerObjects.Add(playerNetworkObject.gameObject);
+        Debug.Log($"Player {playerRef.PlayerId} added to the list.");
+    }
     public Animator anim { get; private set; }
     public Rigidbody rb { get; private set; }
  
@@ -46,8 +73,18 @@ public class Entity : NetworkBehaviour
         playerSpawner = FindObjectOfType<PlayerSpawner>();
         if (playerSpawner != null)
         {
+            Debug.Log("PlayerSpawner found");
+
+            // 이벤트 등록 시 디버그 로그 출력
             playerSpawner.OnPlayerJoined += AddPlayerToList;
+            Debug.Log("OnPlayerJoined event registered");
+
             playerSpawner.OnPlayerLeft += RemovePlayerFromList;
+            Debug.Log("OnPlayerLeft event registered");
+        }
+        else
+        {
+            Debug.LogWarning("PlayerSpawner not found");
         }
 
     }
@@ -61,18 +98,7 @@ public class Entity : NetworkBehaviour
         cd = GetComponent<CapsuleCollider>();
         if (Object.HasStateAuthority)
         {
-            // Matchmaker에서 ActivePlayers 가져오기
-            if (Matchmaker.Instance != null && Matchmaker.Instance.Runner != null)
-            {
-                // ActivePlayers 리스트를 가져와 nearbyPlayers에 추가
-                foreach (var player in Matchmaker.Instance.Runner.ActivePlayers)
-                {
-                    if (!nearbyPlayers.Contains(player))
-                    {
-                        nearbyPlayers.Add(player);
-                    }
-                }
-            }
+          
         }
     }
     private void AddPlayerToList(PlayerRef player)
@@ -94,9 +120,9 @@ public class Entity : NetworkBehaviour
     }
     protected virtual void Update()
     {
-   foreach(var a in nearbyPlayers)
+   foreach(var a in nearbyPlayerObjects)
         {
-            Debug.Log(a);
+            Debug.Log(a.GetInstanceID().ToString());            
         }
     }
     private void OnEnable()

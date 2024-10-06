@@ -17,7 +17,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 		if (player == Runner.LocalPlayer)
 		{
 			StartCoroutine(SpawnRoutine());
-            OnPlayerJoined?.Invoke(player);
 
         }
         else
@@ -46,8 +45,11 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 					position: location,
 					rotation: orientation,
 					inputAuthority: player,
-					onCompleted: (res) => { if (res.IsSpawned) Runner.SetPlayerObject(Runner.LocalPlayer, res.Object); }
-				);
+					onCompleted: (res) => { if (res.IsSpawned) Runner.SetPlayerObject(Runner.LocalPlayer, res.Object);
+                        OnPlayerJoined?.Invoke(player);
+
+                    }
+                );
 			}
 			else
 			{
@@ -60,5 +62,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 	{
 		InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
         //GameManager.instance.ReservedPlayerVisualsChanged();
+        OnPlayerLeft?.Invoke(player);
     }
 }

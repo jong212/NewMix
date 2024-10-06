@@ -51,7 +51,7 @@ public class Enemy : Entity
     {
         base.Update();
 
-
+        Debug.Log(stateMachine.currentState.ToString());
         stateMachine.currentState.Update();
 
 
@@ -116,7 +116,21 @@ public class Enemy : Entity
     public virtual void AnimationSpecialAttackTrigger()
     {
     }
-
+    public virtual bool IsPlayerWithinRange()
+    {
+        foreach (var player in nearbyPlayerObjects)
+        {
+            if (player != null) // 플레이어 오브젝트가 존재할 때만 거리 계산
+            {
+                float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+                if (distanceToPlayer <= agroDistance)
+                {
+                    return true; // 플레이어가 특정 거리 내에 있을 때 true 반환
+                }
+            }
+        }
+        return false; // 특정 거리 내에 플레이어가 없을 때 false 반환
+    }
     public virtual RaycastHit2D IsPlayerDetected()
     {
         RaycastHit2D playerDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);

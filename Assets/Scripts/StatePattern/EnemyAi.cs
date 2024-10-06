@@ -26,6 +26,7 @@ public class EnemyAi : Enemy
 
     public EnemyIdleState idleState { get; private set; }
     public EnemyMoveState moveState { get; private set; }
+    public EnemyBattleState battleState { get; private set; }
 
     #endregion
 
@@ -36,6 +37,7 @@ public class EnemyAi : Enemy
 
         idleState = new EnemyIdleState(this, stateMachine, "Idle", this);
         moveState = new EnemyMoveState(this, stateMachine, "Move", this);
+        battleState = new EnemyBattleState(this, stateMachine, "battleState", this);
 
     }
 

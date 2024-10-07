@@ -12,6 +12,7 @@ public class EnemyAi : Enemy
     [SerializeField] private float arrowSpeed;
     [SerializeField] private float arrowDamage;
 
+    
     public Vector2 jumpVelocity;
     public float jumpCooldown;
     public float safeDistance; // how close palyer should be to trigger jump on battle state
@@ -34,7 +35,6 @@ public class EnemyAi : Enemy
     protected override void Awake()
     {
         base.Awake();
-
         idleState = new EnemyIdleState(this, stateMachine, "Idle", this);
         moveState = new EnemyMoveState(this, stateMachine, "Move", this);
         battleState = new EnemyBattleState(this, stateMachine, "battleState", this);
@@ -94,8 +94,8 @@ public class EnemyAi : Enemy
         //newArrow.GetComponent<Arrow_Controller>().SetupArrow(arrowSpeed * facingDir, stats);
     }
 
-    public bool GroundBehind() => Physics2D.BoxCast(groundBehindCheck.position, groundBehindCheckSize, 0, Vector2.zero, 0, whatIsGround);
-    public bool WallBehind() => Physics2D.Raycast(wallCheck.position, Vector2.right * -facingDir, wallCheckDistance + 2, whatIsGround);
+/*    public bool GroundBehind() => Physics2D.BoxCast(groundBehindCheck.position, groundBehindCheckSize, 0, Vector2.zero, 0, whatIsGround);
+    public bool WallBehind() => Physics2D.Raycast(wallCheck.position, Vector2.right * -facingDir, wallCheckDistance + 2, whatIsGround);*/
 
  /*   protected override void OnDrawGizmos()
     {

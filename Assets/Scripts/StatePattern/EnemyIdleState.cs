@@ -12,6 +12,7 @@ public class EnemyIdleState : EnemyGroundedState
     {
         base.Enter();
         stateTimer = enemy.idleTime;
+        enemyBase.SetZeroVelocity();
     }
 
     public override void Exit()
@@ -25,11 +26,10 @@ public class EnemyIdleState : EnemyGroundedState
     {
         base.Update();
 
-     /*   if(stateTimer < 0)
+    if(stateTimer < 0)
         {
-            stateMachine.ChangeState(enemy.idleState);
+            stateMachine.ChangeState(enemy.moveState);
         }
-*/
        // enemy.SetZeroVelocity();
      
     }

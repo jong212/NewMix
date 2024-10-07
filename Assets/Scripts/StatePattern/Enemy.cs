@@ -17,6 +17,7 @@ public class Enemy : Entity
     [Header("Move info")]
     public float moveSpeed = 1.5f;
     public float idleTime = 2;
+    public float moveTime = 15;
     public float battleTime = 7;
     private float defaultMoveSpeed;
 
@@ -27,6 +28,23 @@ public class Enemy : Entity
     public float minAttackCooldown = 1;
     public float maxAttackCooldown = 2;
     [HideInInspector] public float lastTimeAttacked;
+
+    // 이동 메서드
+    public virtual void Move()
+    {
+        rb.velocity = moveDirection * moveSpeed;
+        RotateTowardsMoveDirection();
+    }
+
+    // 회전 메서드
+    public virtual void RotateTowardsMoveDirection()
+    {
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = targetRotation;
+        }
+    }
 
     public EnemyStateMachine stateMachine { get; private set; }
     //public EntityFX fx { get; private set; }
@@ -131,7 +149,7 @@ public class Enemy : Entity
         }
         return false; // 특정 거리 내에 플레이어가 없을 때 false 반환
     }
-    public virtual RaycastHit2D IsPlayerDetected()
+  /*  public virtual RaycastHit2D IsPlayerDetected()
     {
         RaycastHit2D playerDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);
         RaycastHit2D wallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsGround);
@@ -143,7 +161,7 @@ public class Enemy : Entity
         }
 
         return playerDetected;
-    }
+    }*/
   /*  protected override void OnDrawGizmos()
     {
         base.OnDrawGizmos();

@@ -12,7 +12,50 @@ public class Entity : NetworkBehaviour
     [Networked, Capacity(12), OnChangedRender(nameof(OnNearbyPlayersChanged))]
     public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
   
-    private void OnNearbyPlayersChanged()
+ 
+
+    public Animator anim { get; private set; }
+    public Rigidbody rb { get; private set; }
+ 
+    public SpriteRenderer sr { get; private set; }
+    public CapsuleCollider cd { get; private set; }
+
+    [Header("Knockback info")]
+    [SerializeField] protected Vector2 knockbackPower = new Vector2(7, 12);
+    [SerializeField] protected Vector2 knockbackOffset = new Vector2(.5f, 2);
+    [SerializeField] protected float knockbackDuration = .07f;
+    protected bool isKnocked;
+
+    [Header("Collision info")]
+    public Transform attackCheck;
+    public float attackCheckRadius = 1.2f;
+    [SerializeField] protected Transform groundCheck;
+    [SerializeField] protected float groundCheckDistance = 1;
+    [SerializeField] protected Transform wallCheck;
+    [SerializeField] protected float wallCheckDistance = .8f;
+    [SerializeField] protected LayerMask whatIsWall;
+    PlayerSpawner playerSpawner;
+    public int knockbackDir { get; private set; }
+    public int facingDir { get; private set; } = 1;
+    protected bool facingRight = true; 
+    public System.Action onFlipped;
+
+    #region MyNetwork
+    // 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
+    [Networked, OnChangedRender(nameof(HealthChanged))]
+    public float NetworkedHealth { get; set; } = 100;
+    public Transform target = null;
+    protected Vector3 moveDirection;
+
+    // 랜덤한 방향 설정 메서드
+    public void SetRandomMoveDirection()
+    {
+        float angleY = UnityEngine.Random.Range(0f, 360f);
+        float angleX = UnityEngine.Random.Range(-10f, 10f); // 수평 이동을 위한 각도 제한
+        Quaternion rotation = Quaternion.Euler(angleX, angleY, 0f);
+        moveDirection = rotation * Vector3.forward;
+    }
+       private void OnNearbyPlayersChanged()
     {
         // 리스트를 클리어하고 다시 갱신
         nearbyPlayerObjects.Clear();
@@ -44,40 +87,6 @@ public class Entity : NetworkBehaviour
         nearbyPlayerObjects.Add(playerNetworkObject.gameObject);
         Debug.Log($"Player {playerRef.PlayerId} added to the list.");
     }
-
-    public Animator anim { get; private set; }
-    public Rigidbody rb { get; private set; }
- 
-    public SpriteRenderer sr { get; private set; }
-    public CapsuleCollider cd { get; private set; }
-
-    [Header("Knockback info")]
-    [SerializeField] protected Vector2 knockbackPower = new Vector2(7, 12);
-    [SerializeField] protected Vector2 knockbackOffset = new Vector2(.5f, 2);
-    [SerializeField] protected float knockbackDuration = .07f;
-    protected bool isKnocked;
-
-    [Header("Collision info")]
-    public Transform attackCheck;
-    public float attackCheckRadius = 1.2f;
-    [SerializeField] protected Transform groundCheck;
-    [SerializeField] protected float groundCheckDistance = 1;
-    [SerializeField] protected Transform wallCheck;
-    [SerializeField] protected float wallCheckDistance = .8f;
-    [SerializeField] protected LayerMask whatIsGround;
-    PlayerSpawner playerSpawner;
-    public int knockbackDir { get; private set; }
-    public int facingDir { get; private set; } = 1;
-    protected bool facingRight = true; 
-    public System.Action onFlipped;
-
-    #region MyNetwork
-    // 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
-    [Networked, OnChangedRender(nameof(HealthChanged))]
-    public float NetworkedHealth { get; set; } = 100;
-    public Transform target = null;
-
-    
     protected virtual void Awake()
     {
         playerSpawner = FindObjectOfType<PlayerSpawner>();
@@ -291,10 +300,7 @@ public class Entity : NetworkBehaviour
     #region Velocity
     public void SetZeroVelocity()
     {
-        if (isKnocked)
-            return;
-
-        rb.velocity = new Vector2(0, 0);
+        rb.velocity = new Vector3(0, 0,0);
     }
 
     public void SetVelocity(float _xVelocity, float _yVelocity)
@@ -316,8 +322,8 @@ public class Entity : NetworkBehaviour
             Debug.Log("Player lost");
         }
     }
-    public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
-    public virtual bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, whatIsGround);
+   /* public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+    public virtual bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, whatIsGround);*/
 
     public virtual void Flip()
     {

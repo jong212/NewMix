@@ -63,7 +63,11 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 	public void PlayerLeft(PlayerRef player)
 	{
 		InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
-        //GameManager.instance.ReservedPlayerVisualsChanged();
-        OnPlayerLeft?.Invoke(player);
+		//GameManager.instance.ReservedPlayerVisualsChanged();
+		if (Runner.IsSharedModeMasterClient)
+		{
+			Debug.Log("LeftTest : " + "1");
+            OnPlayerLeft?.Invoke(player);
+        }
     }
 }

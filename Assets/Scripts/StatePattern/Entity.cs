@@ -1,6 +1,7 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -19,6 +20,10 @@ public class Entity : NetworkBehaviour
         // 모든 PlayerRef를 처리
         foreach (var playerRef in nearbyPlayers)
         {
+            if (Object.HasStateAuthority)
+            {
+                Debug.Log(playerRef + "Reset");
+            }
             StartCoroutine(AddPlayerObjectToList(playerRef));
         }
     }
@@ -123,20 +128,42 @@ public class Entity : NetworkBehaviour
     // 플레이어를 nearbyPlayers 리스트에서 제거
     public void RemovePlayerFromList(PlayerRef player)
     {
-        if (!Object.IsValid )
+        if (!Object.IsValid)
         {
             Debug.LogWarning("Entity is not valid or not spawned yet. Cannot remove player.");
             return; // 객체가 유효하지 않거나 아직 스폰되지 않았으면 종료
         }
+
         // nearbyPlayers 리스트에서 플레이어를 제거
         if (nearbyPlayers.Contains(player))
         {
+            Debug.Log("LeftTest : " + "3");
+
+            // NetworkObject가 유효하지 않은지 확인 후 제거
+            NetworkObject playerNetworkObject = Runner.GetPlayerObject(player);
+            if (playerNetworkObject == null || playerNetworkObject.gameObject == null)
+            {
+                Debug.LogWarning($"Player {player.PlayerId} is missing or destroyed. Removing from list.");
+            }
+
             nearbyPlayers.Remove(player);
             Debug.Log($"Player {player.PlayerId} removed from nearbyPlayers.");
         }
     }
+
     protected virtual void Update()
     {
+
+        for (int i = nearbyPlayers.Count - 1; i >= 0; i--)
+        {
+            PlayerRef player = nearbyPlayers[i];
+            if (!Runner.ActivePlayers.Contains(player))
+            {
+                Debug.Log($"Player {player.PlayerId} has left, removing from nearbyPlayers.");
+                nearbyPlayers.Remove(player);
+            }
+        }
+
         // nearbyPlayerObjects 리스트에 있는 모든 오브젝트의 정보를 출력
         foreach (var playerObject in nearbyPlayerObjects)
         {

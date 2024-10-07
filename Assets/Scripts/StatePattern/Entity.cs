@@ -8,18 +8,22 @@ public class Entity : NetworkBehaviour
 {
     public List<GameObject> nearbyPlayerObjects = new List<GameObject>();
 
-    [Networked, Capacity(12), OnChangedRender(nameof(Nearby))] public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
-    void Nearby()
+    [Networked, Capacity(12), OnChangedRender(nameof(OnNearbyPlayersChanged))]
+    public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
+  
+    private void OnNearbyPlayersChanged()
     {
+        // 리스트를 클리어하고 다시 갱신
         nearbyPlayerObjects.Clear();
 
-        // nearbyPlayers 리스트에 있는 각 PlayerRef를 처리
+        // 모든 PlayerRef를 처리
         foreach (var playerRef in nearbyPlayers)
         {
-            // 코루틴을 사용하여 null이 아닐 때까지 대기 후 리스트에 추가
             StartCoroutine(AddPlayerObjectToList(playerRef));
         }
     }
+
+    // 네트워크 객체가 유효할 때까지 대기 후 리스트에 추가
     private IEnumerator AddPlayerObjectToList(PlayerRef playerRef)
     {
         NetworkObject playerNetworkObject = null;
@@ -35,6 +39,7 @@ public class Entity : NetworkBehaviour
         nearbyPlayerObjects.Add(playerNetworkObject.gameObject);
         Debug.Log($"Player {playerRef.PlayerId} added to the list.");
     }
+
     public Animator anim { get; private set; }
     public Rigidbody rb { get; private set; }
  
@@ -96,22 +101,34 @@ public class Entity : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
        // stats = GetComponent<CharacterStats>();
         cd = GetComponent<CapsuleCollider>();
-        if (Object.HasStateAuthority)
-        {
-          
-        }
+        
     }
-    private void AddPlayerToList(PlayerRef player)
+    // 플레이어를 nearbyPlayers 리스트에 추가
+    public void AddPlayerToList(PlayerRef player)
     {
+        if (!Object.IsValid)
+        {
+            Debug.LogWarning("Network object is not spawned yet. Cannot add player.");
+            return;
+        }
+
+        // nearbyPlayers에 이미 해당 플레이어가 없으면 추가
         if (!nearbyPlayers.Contains(player))
         {
             nearbyPlayers.Add(player);
+            Debug.Log($"Player {player.PlayerId} added to nearbyPlayers.");
         }
     }
 
-    // 플레이어 리스트에서 제거
-    private void RemovePlayerFromList(PlayerRef player)
+    // 플레이어를 nearbyPlayers 리스트에서 제거
+    public void RemovePlayerFromList(PlayerRef player)
     {
+        if (!Object.IsValid )
+        {
+            Debug.LogWarning("Entity is not valid or not spawned yet. Cannot remove player.");
+            return; // 객체가 유효하지 않거나 아직 스폰되지 않았으면 종료
+        }
+        // nearbyPlayers 리스트에서 플레이어를 제거
         if (nearbyPlayers.Contains(player))
         {
             nearbyPlayers.Remove(player);
@@ -120,11 +137,19 @@ public class Entity : NetworkBehaviour
     }
     protected virtual void Update()
     {
-   foreach(var a in nearbyPlayerObjects)
+        // nearbyPlayerObjects 리스트에 있는 모든 오브젝트의 정보를 출력
+        foreach (var playerObject in nearbyPlayerObjects)
         {
-            Debug.Log(a.GetInstanceID().ToString());            
+            Debug.Log($"Player Object: {playerObject.GetInstanceID()}");
+        }
+
+        // nearbyPlayers 리스트에 있는 PlayerRef 정보를 출력
+        foreach (var playerRef in nearbyPlayers)
+        {
+            Debug.Log($"PlayerRef in nearbyPlayers: {playerRef.PlayerId}");
         }
     }
+
     private void OnEnable()
     {
     }

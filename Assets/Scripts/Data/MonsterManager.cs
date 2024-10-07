@@ -11,7 +11,10 @@ public class MonsterManager : NetworkBehaviour
     public override void Spawned()
     {
         // 필드 입장 시 몬스터 스폰
-        SpawnMonsters();
+        if (Object.HasStateAuthority)
+        {
+            SpawnMonsters();
+        }
     }
 
     private void SpawnMonsters()

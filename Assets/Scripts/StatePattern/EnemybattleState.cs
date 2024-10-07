@@ -12,9 +12,8 @@ public class EnemyBattleState : EnemyState
 
     public override void Enter()
     {
-        base.Enter();
-        GameObject enemyObject = enemyBase.gameObject; // base 클래스에 있는 enemyBase를 참조
-        GameObject.Destroy(enemyObject); // Destroy를 MonoBehaviour에서 호출
+        base.Enter();        
+        enemyBase.Runner.Despawn(enemyBase.Object);
     }
 
     public override void Exit()

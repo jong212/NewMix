@@ -14,14 +14,16 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 	{
 		InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
 
-		if (player == Runner.LocalPlayer)
+        if (player == Runner.LocalPlayer)
 		{
 			StartCoroutine(SpawnRoutine());
 
         }
         else
 		{
-			InterfaceManager.instance.ChefIconShake();
+            OnPlayerJoined?.Invoke(player);
+
+            InterfaceManager.instance.ChefIconShake();
 		}
 
 		IEnumerator SpawnRoutine()
@@ -46,7 +48,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 					rotation: orientation,
 					inputAuthority: player,
 					onCompleted: (res) => { if (res.IsSpawned) Runner.SetPlayerObject(Runner.LocalPlayer, res.Object);
-                        OnPlayerJoined?.Invoke(player);
+                        OnPlayerJoined?.Invoke(Runner.LocalPlayer); // 스폰 완료 후에 이벤트 호출
 
                     }
                 );

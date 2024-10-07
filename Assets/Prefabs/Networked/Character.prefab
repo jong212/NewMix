@@ -149,7 +149,7 @@ MonoBehaviour:
     ColliderLayer: 6
     CollisionLayerMask:
       serializedVersion: 2
-      m_Bits: 65
+      m_Bits: 321
     ProxyInterpolationMode: 0
     TeleportThreshold: 1
     AntiJitterDistance: {x: 0.025, y: 0.01}

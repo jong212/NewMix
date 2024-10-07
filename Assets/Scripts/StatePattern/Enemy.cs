@@ -1,18 +1,23 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
+using UnityEngine.UIElements;
+using static UnityEngine.UI.Image;
 
 
 public class Enemy : Entity
 {
-    [SerializeField] protected LayerMask whatIsPlayer;
+    [SerializeField] protected LayerMask ObstacleLayer;
 
     [Header("Stunned info")]
-    public float stunDuration = 1;
+    /*public float stunDuration = 1;
     public Vector2 stunDirection = new Vector2(10, 12);
-    protected bool canBeStunned;
+    protected bool canBeStunned;*/
     [SerializeField] protected GameObject counterImage;
+    private Vector3[] rayDirections = new Vector3[3]; // 배열 선언과 동시에 크기 설정
 
     [Header("Move info")]
     public float moveSpeed = 1.5f;
@@ -20,13 +25,10 @@ public class Enemy : Entity
     public float moveTime = 15;
     public float battleTime = 7;
     private float defaultMoveSpeed;
-
+    private int currentRayIndex = 0; // 현재 레이를 쏠 방향 인덱스
     [Header("Attack info")]
     public float agroDistance = 2;
-    public float attackDistance = 2;
-    public float attackCooldown;
-    public float minAttackCooldown = 1;
-    public float maxAttackCooldown = 2;
+   
     [HideInInspector] public float lastTimeAttacked;
 
     // 이동 메서드
@@ -34,6 +36,8 @@ public class Enemy : Entity
     {
         rb.velocity = moveDirection * moveSpeed;
         RotateTowardsMoveDirection();
+        UpdateRayDirections();
+
     }
 
     // 회전 메서드
@@ -43,6 +47,19 @@ public class Enemy : Entity
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = targetRotation;
+        }
+    }
+    public virtual void UpdateRayDirections()
+    {
+        if (moveDirection != Vector3.zero) // moveDirection이 유효할 때만 업데이트
+        {
+            rayDirections[0] = moveDirection; // 정면
+            rayDirections[1] = Quaternion.Euler(0, -15, 0) * moveDirection; // 왼쪽 15도
+            rayDirections[2] = Quaternion.Euler(0, 15, 0) * moveDirection; // 오른쪽 15도
+        }
+        else
+        {
+            Debug.LogWarning("moveDirection is zero, rayDirections not updated.");
         }
     }
 
@@ -106,20 +123,20 @@ public class Enemy : Entity
     }
 
     #region Counter Attack Window
-    public virtual void OpenCounterAttackWindow()
+  /*  public virtual void OpenCounterAttackWindow()
     {
         canBeStunned = true;
         counterImage.SetActive(true);
-    }
+    }*/
 
-    public virtual void CloseCounterAttackWindow()
+    /*public virtual void CloseCounterAttackWindow()
     {
         canBeStunned = false;
         counterImage.SetActive(false);
-    }
+    }*/
     #endregion
 
-    public virtual bool CanBeStunned()
+   /* public virtual bool CanBeStunned()
     {
         if (canBeStunned)
         {
@@ -128,7 +145,7 @@ public class Enemy : Entity
         }
 
         return false;
-    }
+    }*/
 
     public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
     public virtual void AnimationSpecialAttackTrigger()
@@ -149,24 +166,50 @@ public class Enemy : Entity
         }
         return false; // 특정 거리 내에 플레이어가 없을 때 false 반환
     }
-  /*  public virtual RaycastHit2D IsPlayerDetected()
-    {
-        RaycastHit2D playerDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);
-        RaycastHit2D wallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsGround);
 
-        if (wallDetected)
+    public virtual bool IsObstructed()
+    {
+        // 현재 방향에 따라 레이 발사
+        Ray ray = new Ray(Obstacle.position, rayDirections[currentRayIndex]); // 각 방향에서 레이를 발사
+        RaycastHit hitData;
+
+        // Debugging
+        Debug.Log($"Ray Direction: {ray.direction}, Ray Origin: {ray.origin}");
+
+        // Draw the ray in the scene view for debugging
+        Debug.DrawRay(ray.origin, ray.direction * ObstacleCheckDistance, Color.red); // 현재 방향으로 레이 그리기
+
+        // 충돌 감지
+        if (Physics.Raycast(ray, out hitData, ObstacleCheckDistance, ObstacleLayer))
         {
-            if (wallDetected.distance < playerDetected.distance)
-                return default(RaycastHit2D);
+            Debug.Log("장애물 검출!");
+            Debug.DrawRay(ray.origin, ray.direction * hitData.distance, Color.green); // 충돌한 지점까지 그리기
+            return true; // 장애물이 감지된 경우
         }
 
-        return playerDetected;
-    }*/
-  /*  protected override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
+        // 다음 레이 방향으로 변경
+        currentRayIndex = (currentRayIndex + 1) % rayDirections.Length;
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackDistance * facingDir, transform.position.y));
-    }*/
+        return false; // 장애물이 없는 경우
+    }
+    /*  public virtual RaycastHit2D IsPlayerDetected()
+      {
+          RaycastHit2D playerDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);
+          RaycastHit2D wallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsGround);
+
+          if (wallDetected)
+          {
+              if (wallDetected.distance < playerDetected.distance)
+                  return default(RaycastHit2D);
+          }
+
+          return playerDetected;
+      }*/
+    /*  protected override void OnDrawGizmos()
+      {
+          base.OnDrawGizmos();
+
+          Gizmos.color = Color.yellow;
+          Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackDistance * facingDir, transform.position.y));
+      }*/
 }

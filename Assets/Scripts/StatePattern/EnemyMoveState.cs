@@ -15,7 +15,9 @@ public class EnemyMoveState : EnemyState
         base.Enter();
         stateTimer = enemy.moveTime;
         rb.isKinematic = false;
-        enemyBase.SetRandomMoveDirection();
+        enemy.SetRandomMoveDirection();
+
+
 
     }
 
@@ -29,8 +31,8 @@ public class EnemyMoveState : EnemyState
     public override void Update()
     {
         base.Update();
-        enemyBase.Move();
-        if (stateTimer < 0)
+        enemy.Move();
+        if (stateTimer < 0 || enemy.IsObstructed())
         {
             stateMachine.ChangeState(enemy.idleState);
         }

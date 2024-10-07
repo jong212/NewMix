@@ -54,7 +54,7 @@ public class EnemyAi : Enemy
     }
 
 
-    public override bool CanBeStunned()
+    /*public override bool CanBeStunned()
     {
         if (base.CanBeStunned())
         {
@@ -63,7 +63,7 @@ public class EnemyAi : Enemy
         }
 
         return false;
-    }
+    }*/
 
     public override void DealDamageRpc(float damage)
     {

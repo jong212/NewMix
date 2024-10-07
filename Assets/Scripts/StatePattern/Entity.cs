@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+// Protected 를 사용하는 경우에는 해당클래스랑 자식클래스에서만 수정이 가능해야만 할 때 쓰자. 외부참조로 무변별한 수정을 막기 위함
 
 public class Entity : NetworkBehaviour
 {
@@ -14,9 +14,9 @@ public class Entity : NetworkBehaviour
   
  
 
-    public Animator anim { get; private set; }
-    public Rigidbody rb { get; private set; }
- 
+    public Animator anim { get; private set; } //다른 스크립트에서 entity.anim으로 애니메이터에 접근하여 애니메이션 상태를 확인할 수 있지만, 애니메이터를 변경할 수는 없다.
+    public Rigidbody rb { get; private set; } // 엔티티에서 게터세터 사용으로 외부수정을 제한했다 만약 Enemy에서 rb = GetComponent<Rigidbody>(); 이런코드 쓰면 오류난다 하지만 rb.verocity 값 설정은 가능하다 재정의만 불가능
+
     public SpriteRenderer sr { get; private set; }
     public CapsuleCollider cd { get; private set; }
 
@@ -24,13 +24,14 @@ public class Entity : NetworkBehaviour
     [SerializeField] protected Vector2 knockbackPower = new Vector2(7, 12);
     [SerializeField] protected Vector2 knockbackOffset = new Vector2(.5f, 2);
     [SerializeField] protected float knockbackDuration = .07f;
+    
     protected bool isKnocked;
 
     [Header("Collision info")]
     public Transform attackCheck;
     public float attackCheckRadius = 1.2f;
-    [SerializeField] protected Transform groundCheck;
-    [SerializeField] protected float groundCheckDistance = 1;
+    [SerializeField] protected Transform Obstacle;
+    [SerializeField] protected float ObstacleCheckDistance = 5;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected float wallCheckDistance = .8f;
     [SerializeField] protected LayerMask whatIsWall;
@@ -54,6 +55,7 @@ public class Entity : NetworkBehaviour
         float angleX = UnityEngine.Random.Range(-10f, 10f); // 수평 이동을 위한 각도 제한
         Quaternion rotation = Quaternion.Euler(angleX, angleY, 0f);
         moveDirection = rotation * Vector3.forward;
+
     }
        private void OnNearbyPlayersChanged()
     {
@@ -267,7 +269,7 @@ public class Entity : NetworkBehaviour
         anim.speed = 1;
     }
 
-    public virtual void DamageImpact() => StartCoroutine("HitKnockback");
+    /*public virtual void DamageImpact() => StartCoroutine("HitKnockback");
 
     public virtual void SetupKnockbackDir(Transform _damageDirection)
     {
@@ -290,7 +292,7 @@ public class Entity : NetworkBehaviour
         yield return new WaitForSeconds(knockbackDuration);
         isKnocked = false;
         SetupZeroKnockbackPower();
-    }
+    }*/
 
     protected virtual void SetupZeroKnockbackPower()
     {

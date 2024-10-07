@@ -116,7 +116,11 @@ public class Entity : NetworkBehaviour
             Debug.LogWarning("Network object is not spawned yet. Cannot add player.");
             return;
         }
-
+        if (!Object.HasStateAuthority)
+        {
+            Debug.LogWarning("No state authority. Cannot modify networked variables.");
+            return;
+        }
         // nearbyPlayers에 이미 해당 플레이어가 없으면 추가
         if (!nearbyPlayers.Contains(player))
         {
@@ -133,7 +137,11 @@ public class Entity : NetworkBehaviour
             Debug.LogWarning("Entity is not valid or not spawned yet. Cannot remove player.");
             return; // 객체가 유효하지 않거나 아직 스폰되지 않았으면 종료
         }
-
+        if (!Object.HasStateAuthority)
+        {
+            Debug.LogWarning("No state authority. Cannot modify networked variables.");
+            return;
+        }
         // nearbyPlayers 리스트에서 플레이어를 제거
         if (nearbyPlayers.Contains(player))
         {

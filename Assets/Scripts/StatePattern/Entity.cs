@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 // Protected 를 사용하는 경우에는 해당클래스랑 자식클래스에서만 수정이 가능해야만 할 때 쓰자. 외부참조로 무변별한 수정을 막기 위함
 
 public class Entity : NetworkBehaviour
@@ -49,12 +50,22 @@ public class Entity : NetworkBehaviour
     protected Vector3 moveDirection;
 
     // 랜덤한 방향 설정 메서드
+    // 쿼터니언 각도 네개  xyzw, 오일러는 xyz 근데 오일러는 짐벌락 현상이 있음  그래서 Quaternion.Euler(x,x,x)로 오일러 각도를 쿼터니언 각도로 바꿈 
+
     public void SetRandomMoveDirection()
     {
-        float angleY = UnityEngine.Random.Range(0f, 360f);
-        float angleX = UnityEngine.Random.Range(-10f, 10f); // 수평 이동을 위한 각도 제한
-        Quaternion rotation = Quaternion.Euler(angleX, angleY, 0f);
-        moveDirection = rotation * Vector3.forward;
+        float angleY = UnityEngine.Random.Range(0f, 360f); // 좌 우 랜덤 값
+                            
+        Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 이 오일러 각도 값을 쿼터니언으로 변환해서 회전을 처리하는 것입니다. (짐벌락 안 생김)
+        Debug.Log(rotation + ":rotation");
+        moveDirection = rotation * Vector3.forward; // rotation 이건 딱 
+
+        /*         
+        Vector3.forward: Unity에서 Vector3.forward는 (0, 0, 1) 벡터로 표현되며, 이는 객체가 Z 축을 따라 "앞쪽"으로 나아가는 방향을 의미합니다. 기본적으로 객체가 "앞"으로 이동하는 방향을 나타내는 벡터입니다.
+         */
+        moveDirection = Vector3.left;
+        Debug.Log(moveDirection + ":moveDirec");
+
 
     }
        private void OnNearbyPlayersChanged()
@@ -169,7 +180,10 @@ public class Entity : NetworkBehaviour
             Debug.Log($"Player {player.PlayerId} removed from nearbyPlayers.");
         }
     }
+    protected virtual void FixedUpdate()
+    {
 
+    }
     protected virtual void Update()
     {
 

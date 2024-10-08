@@ -7,7 +7,7 @@ using UnityEngine.InputSystem.HID;
 using UnityEngine.UIElements;
 using static UnityEngine.UI.Image;
 
-
+// 여기서부터 업데이트가 시작 됨 > 여기 업데이트 치고 > 현재 상태 업데이트 같이 치고 > 그래서 update, fixedupdae 추가했음 
 public class Enemy : Entity
 {
     [SerializeField] protected LayerMask ObstacleLayer;
@@ -29,13 +29,12 @@ public class Enemy : Entity
     [Header("Attack info")]
     public float agroDistance = 2;
    
-    [HideInInspector] public float lastTimeAttacked;
 
     // 이동 메서드
     public virtual void Move()
     {
         rb.velocity = moveDirection * moveSpeed;
-        RotateTowardsMoveDirection();
+       RotateTowardsMoveDirection();
         UpdateRayDirections();
 
     }
@@ -45,8 +44,9 @@ public class Enemy : Entity
     {
         if (moveDirection != Vector3.zero)
         {
+            // 몬스터의 회전을 moveDirection 방향으로 부드럽게 설정
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = targetRotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); // 부드러운 회전
         }
     }
     public virtual void UpdateRayDirections()
@@ -86,12 +86,17 @@ public class Enemy : Entity
     {
         base.Update();
 
+        Debug.Log("Enemy");
         Debug.Log(stateMachine.currentState.ToString());
         stateMachine.currentState.Update();
 
 
     }
-
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        stateMachine.currentState.FixedUpdate();
+    }
     public virtual void AssignLastAnimName(string _animBoolName) => lastAnimBoolName = _animBoolName;
 
 
@@ -153,8 +158,11 @@ public class Enemy : Entity
     }
     public virtual bool IsPlayerWithinRange()
     {
+        
+
         foreach (var player in nearbyPlayerObjects)
         {
+            Ray ray = new Ray(transform.position, player.transform.position);
             if (player != null) // 플레이어 오브젝트가 존재할 때만 거리 계산
             {
                 float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
@@ -174,7 +182,7 @@ public class Enemy : Entity
         RaycastHit hitData;
 
         // Debugging
-        Debug.Log($"Ray Direction: {ray.direction}, Ray Origin: {ray.origin}");
+        ////Debug.Log($"Ray Direction: {ray.direction}, Ray Origin: {ray.origin}");
 
         // Draw the ray in the scene view for debugging
         Debug.DrawRay(ray.origin, ray.direction * ObstacleCheckDistance, Color.red); // 현재 방향으로 레이 그리기
@@ -182,7 +190,7 @@ public class Enemy : Entity
         // 충돌 감지
         if (Physics.Raycast(ray, out hitData, ObstacleCheckDistance, ObstacleLayer))
         {
-            Debug.Log("장애물 검출!");
+           // Debug.Log("장애물 검출!");
             Debug.DrawRay(ray.origin, ray.direction * hitData.distance, Color.green); // 충돌한 지점까지 그리기
             return true; // 장애물이 감지된 경우
         }

@@ -23,9 +23,13 @@ public class EnemyGroundedState : EnemyState
     public override void Update()
     {
         base.Update();
-        if (enemyBase.IsPlayerWithinRange())
+        if (enemy.IsPlayerWithinRange())
         {
             stateMachine.ChangeState(enemy.battleState);
         }
+    }
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
     }
 }

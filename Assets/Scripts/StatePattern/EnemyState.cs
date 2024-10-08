@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// EnemyState는 몬스터 각자의 EnemyState 이다.
 // 모든 상태 클래스들은 EnemyState를 상속받게끔 한다
 // 각각의 상태클래스는 부모인 EnemyState에게 stateMachine 등등 필요한 정보를 저장해둔다 필요할 때 꺼내 쓸 수 있도록
 // 필요할 때 꺼내쓸 수 있는 값이 아니라 공용의 변수들을 설정하기 좋음 stateTimer 이런것들 실제 값은 다른데서 가져와야 한다 
@@ -36,6 +37,10 @@ public class EnemyState
         //triggerCalled = false;
         rb = enemyBase.rb; //각 상태에서 enemyBase.rb 이렇게 길게 쓰기 귀찮아서 rb로 사용할 수 있도록 처리
        // enemyBase.anim.SetBool(animBoolName, true);
+
+    }
+    public virtual void FixedUpdate()
+    {
 
     }
 

@@ -44,13 +44,16 @@ public class EnemyAi : Enemy
     protected override void Start()
     {
         base.Start();
-
         stateMachine.Initialize(idleState);
     }
 
     protected override void Update()
     {
         base.Update();
+    }
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
     }
 
 

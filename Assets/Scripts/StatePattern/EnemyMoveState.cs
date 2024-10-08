@@ -1,12 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyMoveState : EnemyState
+public class EnemyMoveState : EnemyGroundedState
 {
-    private EnemyAi enemy;
-    public EnemyMoveState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, EnemyAi _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
+    public EnemyMoveState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, EnemyAi _enemy) : base(_enemyBase, _stateMachine, _animBoolName,_enemy)
     {
-        this.enemy = _enemy;
     }
 
 
@@ -15,7 +13,7 @@ public class EnemyMoveState : EnemyState
         base.Enter();
         stateTimer = enemy.moveTime;
         rb.isKinematic = false;
-        enemy.SetRandomMoveDirection();
+       enemy.SetRandomMoveDirection();
 
 
 
@@ -25,19 +23,20 @@ public class EnemyMoveState : EnemyState
     {
         base.Exit();
 
-        enemy.lastTimeAttacked = Time.time;
     }
 
     public override void Update()
     {
         base.Update();
-        enemy.Move();
         if (stateTimer < 0 || enemy.IsObstructed())
         {
             stateMachine.ChangeState(enemy.idleState);
         }
+    }
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        enemy.Move();
 
-       // enemy.SetZeroVelocity();
-     
     }
 }

@@ -72,18 +72,12 @@ MonoBehaviour:
   ObstacleLayer:
     serializedVersion: 2
     m_Bits: 256
-  stunDuration: 1
-  stunDirection: {x: 10, y: 12}
   counterImage: {fileID: 0}
   moveSpeed: 1.5
   idleTime: 2
   moveTime: 15
   battleTime: 7
   agroDistance: 2
-  attackDistance: 2
-  attackCooldown: 0
-  minAttackCooldown: 1
-  maxAttackCooldown: 2
   lastTimeAttacked: 0
   arrowPrefab: {fileID: 0}
   arrowSpeed: 0
@@ -211,7 +205,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 2
-  m_Constraints: 116
+  m_Constraints: 84
   m_CollisionDetection: 2
 --- !u!114 &1898924008767367897
 MonoBehaviour:

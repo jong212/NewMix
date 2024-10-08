@@ -19,18 +19,19 @@ public class EnemyIdleState : EnemyGroundedState
     {
         base.Exit();
 
-        enemy.lastTimeAttacked = Time.time;
     }
 
     public override void Update()
     {
         base.Update();
 
-    if(stateTimer < 0)
+        if(stateTimer < 0)
         {
             stateMachine.ChangeState(enemy.moveState);
         }
-       // enemy.SetZeroVelocity();
-     
+    }
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
     }
 }

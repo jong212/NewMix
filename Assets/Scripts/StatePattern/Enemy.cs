@@ -1,11 +1,7 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
-using UnityEngine.UIElements;
-using static UnityEngine.UI.Image;
 
 // 여기서부터 업데이트가 시작 됨 > 여기 업데이트 치고 > 현재 상태 업데이트 같이 치고 > 그래서 update, fixedupdae 추가했음 
 public class Enemy : Entity
@@ -34,9 +30,6 @@ public class Enemy : Entity
     public virtual void Move()
     {
         rb.velocity = moveDirection * moveSpeed;
-       RotateTowardsMoveDirection();
-        UpdateRayDirections();
-
     }
 
     // 회전 메서드
@@ -44,9 +37,11 @@ public class Enemy : Entity
     {
         if (moveDirection != Vector3.zero)
         {
+            Debug.Log(stateMachine.currentState + "현재상태");
             // 몬스터의 회전을 moveDirection 방향으로 부드럽게 설정
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); // 부드러운 회전
+            rb.MoveRotation(targetRotation);
+
         }
     }
     public virtual void UpdateRayDirections()

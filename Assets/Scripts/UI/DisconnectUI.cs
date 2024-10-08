@@ -27,7 +27,7 @@ public class DisconnectUI : MonoBehaviour
 
 	public static void OnShutdown(ShutdownReason reason)
 	{
-		Debug.Log(reason);
+		//Debug.Log(reason);
 		if (reason == ShutdownReason.Ok) return;
 
 		(string status, string message) = ShutdownReasonToHuman(reason);

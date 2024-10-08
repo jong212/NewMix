@@ -57,18 +57,26 @@ public class Entity : NetworkBehaviour
         float angleY = UnityEngine.Random.Range(0f, 360f); // 좌 우 랜덤 값
                             
         Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 이 오일러 각도 값을 쿼터니언으로 변환해서 회전을 처리하는 것입니다. (짐벌락 안 생김)
-        Debug.Log(rotation + ":rotation");
+        
         moveDirection = rotation * Vector3.forward; // rotation 이건 딱 
-
         /*         
         Vector3.forward: Unity에서 Vector3.forward는 (0, 0, 1) 벡터로 표현되며, 이는 객체가 Z 축을 따라 "앞쪽"으로 나아가는 방향을 의미합니다. 기본적으로 객체가 "앞"으로 이동하는 방향을 나타내는 벡터입니다.
          */
-        moveDirection = Vector3.left;
-        Debug.Log(moveDirection + ":moveDirec");
-
-
     }
-       private void OnNearbyPlayersChanged()
+    public virtual void OnEnterMoveState()
+    {
+        // Y 축 회전을 고정하여 충돌 시 떨림 현상을 방지
+        rb.constraints = rb.constraints | RigidbodyConstraints.FreezeRotationY;
+
+        // 기타 이동 상태로 진입 시 필요한 로직
+    }
+
+    public virtual void OnExitMoveState()
+    {
+        // 다른 상태로 전환 시 회전 고정을 해제 (필요시)
+        rb.constraints = RigidbodyConstraints.None;
+    }
+    private void OnNearbyPlayersChanged()
     {
         // 리스트를 클리어하고 다시 갱신
         nearbyPlayerObjects.Clear();
@@ -93,12 +101,19 @@ public class Entity : NetworkBehaviour
         while (playerNetworkObject == null)
         {
             playerNetworkObject = Runner.GetPlayerObject(playerRef);
+            if (playerNetworkObject == null)
+            {
+                Debug.LogWarning("Waiting for valid NetworkObject...");
+            }
             yield return null; // 다음 프레임까지 대기
         }
 
         // GameObject를 리스트에 추가
-        nearbyPlayerObjects.Add(playerNetworkObject.gameObject);
-        Debug.Log($"Player {playerRef.PlayerId} added to the list.");
+        if (playerNetworkObject.gameObject != null)
+        {
+            nearbyPlayerObjects.Add(playerNetworkObject.gameObject);
+            Debug.Log($"Player {playerRef.PlayerId} added to the list.");
+        }
     }
     protected virtual void Awake()
     {
@@ -143,11 +158,12 @@ public class Entity : NetworkBehaviour
             Debug.LogWarning("No state authority. Cannot modify networked variables.");
             return;
         }
+
         // nearbyPlayers에 이미 해당 플레이어가 없으면 추가
         if (!nearbyPlayers.Contains(player))
         {
-            nearbyPlayers.Add(player);
-            Debug.Log($"Player {player.PlayerId} added to nearbyPlayers.");
+            // NetworkObject가 유효할 때까지 대기
+            StartCoroutine(AddPlayerObjectToList(player));
         }
     }
 

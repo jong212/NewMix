@@ -18,7 +18,7 @@ public class LobbyDataManager : MonoBehaviour
     {
         if (Inst)
         {
-            Debug.LogWarning("Instance already exists!");
+       //     Debug.LogWarning("Instance already exists!");
             Destroy(gameObject);
         }
         else

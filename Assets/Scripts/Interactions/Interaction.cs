@@ -6,6 +6,6 @@ public abstract class Interaction : MonoBehaviour
 
     protected void LogInteraction()
     {
-        Debug.Log($"{gameObject.name} ==> {GetType().Name}");
+   //     Debug.Log($"{gameObject.name} ==> {GetType().Name}");
     }
 }

@@ -154,7 +154,7 @@ public class Character : NetworkBehaviour
             {
                 // 조이스틱 입력이 없으면 이동 정지
                 kcc.Move(Vector3.zero); // 이동을 멈추도록 빈 벡터 전달
-                Debug.Log("Character Stopped");
+              // Debug.Log("Character Stopped");
             }
         }
         else

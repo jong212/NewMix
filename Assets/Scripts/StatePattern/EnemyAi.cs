@@ -40,7 +40,6 @@ public class EnemyAi : Enemy
         battleState = new EnemyBattleState(this, stateMachine, "battleState", this);
 
     }
-
     protected override void Start()
     {
         base.Start();

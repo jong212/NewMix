@@ -11,7 +11,7 @@ public class EnemyState
 {
     // 각 상태 클래스에서 현재 상태를 알 수 있도록 
     protected EnemyStateMachine stateMachine;
-    protected Enemy enemyBase;
+    public Enemy enemyBase;
     protected Rigidbody rb;
 
     private string animBoolName;

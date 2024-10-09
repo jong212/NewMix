@@ -75,7 +75,7 @@ MonoBehaviour:
   counterImage: {fileID: 0}
   moveSpeed: 1.5
   idleTime: 2
-  moveTime: 15
+  moveTime: 2
   battleTime: 7
   agroDistance: 2
   arrowPrefab: {fileID: 0}

@@ -81,8 +81,8 @@ public class Enemy : Entity
     {
         base.Update();
 
-        Debug.Log("Enemy");
-        Debug.Log(stateMachine.currentState.ToString());
+        //Debug.Log("Enemy");
+        //Debug.Log(stateMachine.currentState.ToString());
         stateMachine.currentState.Update();
 
 
@@ -157,6 +157,7 @@ public class Enemy : Entity
 
         foreach (var player in nearbyPlayerObjects)
         {
+            if (player == null) { continue; }
             Ray ray = new Ray(transform.position, player.transform.position);
             if (player != null) // 플레이어 오브젝트가 존재할 때만 거리 계산
             {
@@ -189,12 +190,13 @@ public class Enemy : Entity
             Debug.DrawRay(ray.origin, ray.direction * hitData.distance, Color.green); // 충돌한 지점까지 그리기
             return true; // 장애물이 감지된 경우
         }
-
+        
         // 다음 레이 방향으로 변경
         currentRayIndex = (currentRayIndex + 1) % rayDirections.Length;
 
         return false; // 장애물이 없는 경우
     }
+
     /*  public virtual RaycastHit2D IsPlayerDetected()
       {
           RaycastHit2D playerDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);

@@ -47,21 +47,20 @@ public class Entity : NetworkBehaviour
     [Networked, OnChangedRender(nameof(HealthChanged))]
     public float NetworkedHealth { get; set; } = 100;
     public Transform target = null;
-    protected Vector3 moveDirection;
+    [Networked]     protected Vector3 moveDirection { get; set; }
 
     // 랜덤한 방향 설정 메서드
     // 쿼터니언 각도 네개  xyzw, 오일러는 xyz 근데 오일러는 짐벌락 현상이 있음  그래서 Quaternion.Euler(x,x,x)로 오일러 각도를 쿼터니언 각도로 바꿈 
 
     public void SetRandomMoveDirection()
     {
-        float angleY = UnityEngine.Random.Range(0f, 360f); // 좌 우 랜덤 값
-                            
-        Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 이 오일러 각도 값을 쿼터니언으로 변환해서 회전을 처리하는 것입니다. (짐벌락 안 생김)
-        
-        moveDirection = rotation * Vector3.forward; // rotation 이건 딱 
-        /*         
-        Vector3.forward: Unity에서 Vector3.forward는 (0, 0, 1) 벡터로 표현되며, 이는 객체가 Z 축을 따라 "앞쪽"으로 나아가는 방향을 의미합니다. 기본적으로 객체가 "앞"으로 이동하는 방향을 나타내는 벡터입니다.
-         */
+        if (Object.HasStateAuthority)
+        {
+            float angleY = UnityEngine.Random.Range(0f, 360f); // 좌 우 랜덤 값
+            Debug.Log(angleY + "DDDDDDDDDDD");
+            Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 이 오일러 각도 값을 쿼터니언으로 변환해서 회전을 처리하는 것입니다. (짐벌락 안 생김)
+            moveDirection = rotation * Vector3.forward; // rotation 이건 딱 
+        }
     }
     public virtual void OnEnterMoveState()
     {
@@ -78,16 +77,15 @@ public class Entity : NetworkBehaviour
     }
     private void OnNearbyPlayersChanged()
     {
-        // 리스트를 클리어하고 다시 갱신
+        Debug.Log("???");
         nearbyPlayerObjects.Clear();
 
         // 모든 PlayerRef를 처리
         foreach (var playerRef in nearbyPlayers)
         {
-            if (Object.HasStateAuthority)
-            {
+            
                 Debug.Log(playerRef + "Reset");
-            }
+            
             StartCoroutine(AddPlayerObjectToList(playerRef));
         }
     }
@@ -146,54 +144,76 @@ public class Entity : NetworkBehaviour
         
     }
     // 플레이어를 nearbyPlayers 리스트에 추가
+    // Method to add a player to the nearbyPlayers list
     public void AddPlayerToList(PlayerRef player)
     {
-        if (!Object.IsValid)
+        if (this == null || gameObject == null)
         {
-            Debug.LogWarning("Network object is not spawned yet. Cannot add player.");
-            return;
-        }
-        if (!Object.HasStateAuthority)
-        {
-            Debug.LogWarning("No state authority. Cannot modify networked variables.");
+            Debug.LogWarning("Entity has been destroyed. Cannot add player.");
             return;
         }
 
-        // nearbyPlayers에 이미 해당 플레이어가 없으면 추가
-        if (!nearbyPlayers.Contains(player))
+        StartCoroutine(WaitForPlayerInitialization(player));
+    }
+
+    // Coroutine to wait until the player's NetworkObject is valid before adding to the list
+    private IEnumerator WaitForPlayerInitialization(PlayerRef player)
+    {
+        NetworkObject playerNetworkObject = null;
+
+        // Wait until the player's NetworkObject is valid and initialized on the master client
+        while (playerNetworkObject == null || !playerNetworkObject.IsValid)
         {
-            // NetworkObject가 유효할 때까지 대기
-            StartCoroutine(AddPlayerObjectToList(player));
+            playerNetworkObject = Runner.GetPlayerObject(player);
+            if (playerNetworkObject == null)
+            {
+                Debug.LogWarning("Waiting for player NetworkObject to be valid...");
+            }
+
+            // Check if the parent object (this Entity or EnemyAi) has been destroyed
+            if (this == null || gameObject == null)
+            {
+                Debug.LogWarning("Entity has been destroyed during coroutine. Exiting...");
+                yield break; // Stop the coroutine if the object is destroyed
+            }
+
+            yield return null; // Wait until the next frame
+        }
+
+        // Now that the player's NetworkObject is valid, check if we have state authority and proceed
+        if (Object.IsValid && Object.HasStateAuthority && !nearbyPlayers.Contains(player))
+        {
+            nearbyPlayers.Add(player); // Add the player to the networked list
+            Debug.Log($"Player {player.PlayerId} added to nearbyPlayers.");
         }
     }
 
     // 플레이어를 nearbyPlayers 리스트에서 제거
     public void RemovePlayerFromList(PlayerRef player)
     {
-        if (!Object.IsValid)
+        if (this == null || gameObject == null)
         {
-            Debug.LogWarning("Entity is not valid or not spawned yet. Cannot remove player.");
-            return; // 객체가 유효하지 않거나 아직 스폰되지 않았으면 종료
-        }
-        if (!Object.HasStateAuthority)
-        {
-            Debug.LogWarning("No state authority. Cannot modify networked variables.");
+            Debug.LogWarning("Entity has been destroyed. Cannot remove player.");
             return;
         }
-        // nearbyPlayers 리스트에서 플레이어를 제거
-        if (nearbyPlayers.Contains(player))
+        StartCoroutine(WaitForStateAuthorityAndRemovePlayer(player));
+
+    }
+
+    private IEnumerator WaitForStateAuthorityAndRemovePlayer(PlayerRef player)
+    {
+        // Wait until this client has state authority
+        while (!Object.HasStateAuthority || !Object.IsValid)
         {
-            Debug.Log("LeftTest : " + "3");
+            Debug.LogWarning("Waiting for state authority before modifying networked variables...");
+            yield return null; // Wait for the next frame and try again
+        }
 
-            // NetworkObject가 유효하지 않은지 확인 후 제거
-            NetworkObject playerNetworkObject = Runner.GetPlayerObject(player);
-            if (playerNetworkObject == null || playerNetworkObject.gameObject == null)
-            {
-                Debug.LogWarning($"Player {player.PlayerId} is missing or destroyed. Removing from list.");
-            }
-
+        // Now we have state authority, so proceed
+        if (Object.IsValid && nearbyPlayers.Contains(player))
+        {
+            Debug.Log($"Removing player {player.PlayerId} from nearbyPlayers.");
             nearbyPlayers.Remove(player);
-            Debug.Log($"Player {player.PlayerId} removed from nearbyPlayers.");
         }
     }
     protected virtual void FixedUpdate()
@@ -202,7 +222,7 @@ public class Entity : NetworkBehaviour
     }
     protected virtual void Update()
     {
-
+        Debug.Log(moveDirection);
         for (int i = nearbyPlayers.Count - 1; i >= 0; i--)
         {
             PlayerRef player = nearbyPlayers[i];
@@ -213,17 +233,7 @@ public class Entity : NetworkBehaviour
             }
         }
 
-        // nearbyPlayerObjects 리스트에 있는 모든 오브젝트의 정보를 출력
-        foreach (var playerObject in nearbyPlayerObjects)
-        {
-            Debug.Log($"Player Object: {playerObject.GetInstanceID()}");
-        }
-
-        // nearbyPlayers 리스트에 있는 PlayerRef 정보를 출력
-        foreach (var playerRef in nearbyPlayers)
-        {
-            Debug.Log($"PlayerRef in nearbyPlayers: {playerRef.PlayerId}");
-        }
+  
     }
 
     private void OnEnable()

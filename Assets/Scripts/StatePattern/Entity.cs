@@ -306,6 +306,10 @@ public class Entity : NetworkBehaviour
             }
         }
     }
+    public void DestroyThis()
+    {
+      Runner.Despawn(Object); // Fusion의 Despawn 호출
+    }
     public virtual void OnTriggerEnter(Collider col)
     {
         // 충돌한 객체의 상위(루트) 객체에서 태그 확인

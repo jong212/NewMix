@@ -39,15 +39,16 @@ public class EnemyAi : Enemy
         moveState = new EnemyMoveState(this, stateMachine, "Move", this);
         battleState = new EnemyBattleState(this, stateMachine, "battleState", this);
 
+        if (idleState == null || moveState == null || battleState == null)
+        {
+            Debug.LogError("State initialization failed.");
+        }
+
     }
     protected override void Start()
     {
         base.Start();
-        if (Object.HasStateAuthority)
-        {
             stateMachine.Initialize(idleState);
-        }
-           
     }
 
     protected override void Update()

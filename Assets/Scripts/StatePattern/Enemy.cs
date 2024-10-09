@@ -37,7 +37,6 @@ public class Enemy : Entity
     {
         if (moveDirection != Vector3.zero)
         {
-            Debug.Log(stateMachine.currentState + "현재상태");
             // 몬스터의 회전을 moveDirection 방향으로 부드럽게 설정
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             rb.MoveRotation(targetRotation);
@@ -65,9 +64,12 @@ public class Enemy : Entity
     protected override void Awake()
     {
         base.Awake();
-        stateMachine = new EnemyStateMachine();
-
+        stateMachine = new EnemyStateMachine(); 
         defaultMoveSpeed = moveSpeed;
+    }
+    public virtual EnemyState GetStateById(int stateId)
+    {
+        return null; // 기본적으로 null을 반환, 자식 클래스에서 구현 필요
     }
 
     protected override void Start()
@@ -83,14 +85,21 @@ public class Enemy : Entity
 
         //Debug.Log("Enemy");
         //Debug.Log(stateMachine.currentState.ToString());
-        stateMachine.currentState.Update();
-
+        if (Object.HasStateAuthority && stateMachine.currentState != null)
+        {
+            stateMachine.currentState.Update();
+        }
 
     }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        stateMachine.currentState.FixedUpdate();
+        if (Object.HasStateAuthority && stateMachine.currentState != null)
+        {
+            stateMachine.currentState.FixedUpdate();
+        }
+
+            
     }
     public virtual void AssignLastAnimName(string _animBoolName) => lastAnimBoolName = _animBoolName;
 

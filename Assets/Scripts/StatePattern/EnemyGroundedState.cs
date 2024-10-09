@@ -25,7 +25,7 @@ public class EnemyGroundedState : EnemyState
         base.Update();
         if (enemy.IsPlayerWithinRange())
         {
-            stateMachine.ChangeState(enemy.battleState);
+            stateMachine.ChangeState(enemy.battleState, ((int)EnemyStateID.Battle));
         }
     }
     public override void FixedUpdate()

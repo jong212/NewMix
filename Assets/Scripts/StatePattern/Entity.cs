@@ -2,13 +2,22 @@ using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 // Protected 를 사용하는 경우에는 해당클래스랑 자식클래스에서만 수정이 가능해야만 할 때 쓰자. 외부참조로 무변별한 수정을 막기 위함
-
+public enum EnemyStateID
+{
+    Idle = 0,
+    Move = 1,
+    Battle = 2,
+    // Add other states as needed
+}
 public class Entity : NetworkBehaviour
 {
+
     public List<GameObject> nearbyPlayerObjects = new List<GameObject>();
+    [Networked] public int NetworkedStateId { get; set; }
 
     [Networked, Capacity(12), OnChangedRender(nameof(OnNearbyPlayersChanged))]
     public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
@@ -133,7 +142,10 @@ public class Entity : NetworkBehaviour
         }
 
     }
-
+    public virtual EnemyState GetStateById(int stateId)
+    {
+        return null; // 자식 클래스에서 구체화 필요
+    }
     protected virtual void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
@@ -202,6 +214,18 @@ public class Entity : NetworkBehaviour
 
     private IEnumerator WaitForStateAuthorityAndRemovePlayer(PlayerRef player)
     {
+        if (this is EnemyAi enemyAi) // this가 EnemyAi인지 확인 후 캐스팅
+        {
+            int stateId = NetworkedStateId;
+            EnemyState newState = enemyAi.GetStateById(stateId); // EnemyAi의 GetStateById 호출
+            while (!Object.HasStateAuthority || !Object.IsValid)
+            {
+                Debug.LogWarning("Waiting for state authority before changing state...");
+                yield return null; // 다음 프레임까지 대기
+            }
+
+            enemyAi.stateMachine.ChangeState(newState, stateId); // 상태 변경
+        }
         // Wait until this client has state authority
         while (!Object.HasStateAuthority || !Object.IsValid)
         {
@@ -215,14 +239,22 @@ public class Entity : NetworkBehaviour
             Debug.Log($"Removing player {player.PlayerId} from nearbyPlayers.");
             nearbyPlayers.Remove(player);
         }
+       
     }
+
     protected virtual void FixedUpdate()
     {
 
     }
     protected virtual void Update()
     {
-        Debug.Log(moveDirection);
+        if (Object.IsValid)
+        {
+            Debug.Log("true");
+        } else
+        {
+            Debug.Log("false");            
+        }
         for (int i = nearbyPlayers.Count - 1; i >= 0; i--)
         {
             PlayerRef player = nearbyPlayers[i];

@@ -24,7 +24,7 @@ public class Enemy : Entity
     private int currentRayIndex = 0; // 현재 레이를 쏠 방향 인덱스
     [Header("Attack info")]
     public float agroDistance = 2;
-   
+    public bool test ;
 
     // 이동 메서드
     public virtual void Move()
@@ -32,17 +32,17 @@ public class Enemy : Entity
         rb.velocity = moveDirection * moveSpeed;
     }
 
-    // 회전 메서드
+    // 몬스터 회전을 moveDirection 방향으로 설정하는 함수 (상태당 한 번씩)
     public virtual void RotateTowardsMoveDirection()
     {
         if (moveDirection != Vector3.zero)
         {
-            // 몬스터의 회전을 moveDirection 방향으로 부드럽게 설정
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             rb.MoveRotation(targetRotation);
-
         }
     }
+
+    // 정해진 랜덤 방향의 좌 우로 15도 한 값을 배열로 저장하는 함수 (상태당 한 번씩)
     public virtual void UpdateRayDirections()
     {
         if (moveDirection != Vector3.zero) // moveDirection이 유효할 때만 업데이트
@@ -82,7 +82,7 @@ public class Enemy : Entity
     protected override void Update()
     {
         base.Update();
-
+        Debug.Log(test + "Testss");
         //Debug.Log("Enemy");
         //Debug.Log(stateMachine.currentState.ToString());
         if (Object.HasStateAuthority && stateMachine.currentState != null)
@@ -162,8 +162,6 @@ public class Enemy : Entity
     }
     public virtual bool IsPlayerWithinRange()
     {
-        
-
         foreach (var player in nearbyPlayerObjects)
         {
             if (player == null) { continue; }
@@ -179,7 +177,14 @@ public class Enemy : Entity
         }
         return false; // 특정 거리 내에 플레이어가 없을 때 false 반환
     }
-
+    public virtual void DrawRayPlayerDirection()
+    {
+        foreach (var player in nearbyPlayerObjects)
+        {
+            Vector3 playerDir = (transform.position - player.transform.position).normalized;
+            Debug.DrawRay(transform.position, playerDir * agroDistance, Color.green);
+        }
+    }
     public virtual bool IsObstructed()
     {
         // 현재 방향에 따라 레이 발사

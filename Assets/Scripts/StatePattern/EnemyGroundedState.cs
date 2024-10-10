@@ -27,6 +27,7 @@ public class EnemyGroundedState : EnemyState
         {
             enemyBase.DestroyThis();
         }
+        enemy.DrawRayPlayerDirection();
     }
     public override void FixedUpdate()
     {

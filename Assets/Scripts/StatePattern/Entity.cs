@@ -52,11 +52,10 @@ public class Entity : NetworkBehaviour
     public System.Action onFlipped;
 
     #region MyNetwork
-    // 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
-    [Networked, OnChangedRender(nameof(HealthChanged))]
-    public float NetworkedHealth { get; set; } = 100;
+    
+    [Networked, OnChangedRender(nameof(HealthChanged))] public float NetworkedHealth { get; set; } = 100;// 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
+    [Networked] protected Vector3 moveDirection { get; set; }
     public Transform target = null;
-    [Networked]     protected Vector3 moveDirection { get; set; }
 
     // 랜덤한 방향 설정 메서드
     // 쿼터니언 각도 네개  xyzw, 오일러는 xyz 근데 오일러는 짐벌락 현상이 있음  그래서 Quaternion.Euler(x,x,x)로 오일러 각도를 쿼터니언 각도로 바꿈 
@@ -65,10 +64,9 @@ public class Entity : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            float angleY = UnityEngine.Random.Range(0f, 360f); // 좌 우 랜덤 값
-            Debug.Log(angleY + "DDDDDDDDDDD");
+            float angleY = UnityEngine.Random.Range(0f, 360f);     // 좌 우 랜덤 값
             Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 이 오일러 각도 값을 쿼터니언으로 변환해서 회전을 처리하는 것입니다. (짐벌락 안 생김)
-            moveDirection = rotation * Vector3.forward; // rotation 이건 딱 
+            moveDirection = rotation * Vector3.forward;            // rotation 이건 딱 
         }
     }
     public virtual void OnEnterMoveState()

@@ -37,7 +37,7 @@ public class EnemyAi : Enemy
         base.Awake();
         idleState = new EnemyIdleState(this, stateMachine, "Idle", this);
         moveState = new EnemyMoveState(this, stateMachine, "Move", this);
-        battleState = new EnemyBattleState(this, stateMachine, "battleState", this);
+        battleState = new EnemyBattleState(this, stateMachine, "battle", this);
 
         if (idleState == null || moveState == null || battleState == null)
         {

@@ -57,9 +57,7 @@ public class Entity : NetworkBehaviour
     [Networked] protected Vector3 moveDirection { get; set; }
     public Transform target = null;
 
-    // 랜덤한 방향 설정 메서드
-    // 쿼터니언 각도 네개  xyzw, 오일러는 xyz 근데 오일러는 짐벌락 현상이 있음  그래서 Quaternion.Euler(x,x,x)로 오일러 각도를 쿼터니언 각도로 바꿈 
-
+    //  오브젝트가 앞으로 움직일 랜덤한 방향 
     public void SetRandomMoveDirection()
     {
         if (Object.HasStateAuthority)
@@ -69,6 +67,15 @@ public class Entity : NetworkBehaviour
             moveDirection = rotation * Vector3.forward;            // rotation 이건 딱 
         }
     }
+
+    public float GetHorizontalDistance(Vector3 pos1, Vector3 pos2)
+    {
+        // Y값을 0으로 설정하여 XZ 평면의 거리만 계산
+        pos1.y = 0;
+        pos2.y = 0;
+        return Vector3.Distance(pos1, pos2);
+    }
+
     public virtual void OnEnterMoveState()
     {
         // Y 축 회전을 고정하여 충돌 시 떨림 현상을 방지
@@ -384,8 +391,7 @@ public class Entity : NetworkBehaviour
         if (isKnocked)
             return;
 
-        rb.velocity = new Vector2(_xVelocity, _yVelocity);
-        FlipController(_xVelocity);
+        /*rb.velocity = new Vector3(_xVelocity*//**//*, rb.velocity.y, _zVelocity); // XZ 평면에서만 속도 설정*/
     }
     #endregion
 

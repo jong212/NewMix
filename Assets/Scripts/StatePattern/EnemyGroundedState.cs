@@ -23,14 +23,18 @@ public class EnemyGroundedState : EnemyState
     public override void Update()
     {
         base.Update();
-        if (enemy.IsPlayerWithinRange())
-        {
-            enemyBase.DestroyThis();
-        }
-        enemy.DrawRayPlayerDirection();
+
     }
     public override void FixedUpdate()
     {
+        
+        if (enemy.GetClosestPlayerWithinRange() != null)
+        {
+            // 가장 가까운 플레이어가 존재할 때 처리
+            stateMachine.ChangeState(enemy.battleState, ((int)EnemyStateID.Battle));
+        }
+            enemy.DrawRayPlayerDirection();
+
         base.FixedUpdate();
     }
 }

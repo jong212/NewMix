@@ -77,7 +77,7 @@ MonoBehaviour:
   counterImage: {fileID: 0}
   moveSpeed: 1.5
   idleTime: 2
-  moveTime: 2
+  moveTime: 3
   battleTime: 7
   agroDistance: 2
   arrowPrefab: {fileID: 0}
@@ -215,7 +215,7 @@ MonoBehaviour:
   TotalWords: 1
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 00000000470f694604a15a453dbceeafb99f3840ff484163148bc99ec68dcd4c8523fe4f
+  StateHashes: 00000000503ef49cd41d22733dbceeafb99f3840ff484163148bc99ec68dcd4c8523fe4f
   TriggerHashes: 00000000
 --- !u!1 &4335755581001208978
 GameObject:

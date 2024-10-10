@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyBattleState : EnemyState
@@ -14,25 +15,43 @@ public class EnemyBattleState : EnemyState
     {
         base.Enter();
 
-        // Despawn 전에 확인
-        if (enemyBase != null && enemyBase.Object != null && enemyBase.Object.IsValid)
-        {
-            Debug.Log("Despawning enemy...");
-            enemyBase.Runner.Despawn(enemyBase.Object);  // 오브젝트 디스폰
-            return;  // Despawn 이후 더 이상의 처리를 방지
-        }
     }
 
     public override void Update()
     {
-        // Despawn된 이후로 Update가 호출되지 않도록 방어 코드 추가
-        if (enemyBase == null || !enemyBase.Object.IsValid)
+        base.Update();  // 기본 Update 호출
+  
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        if(enemy.closestPlayerTransform == null) stateMachine.ChangeState(enemy.idleState, ((int)EnemyStateID.Idle));
+
+              
+        if(enemy.CheckAgroDistance())
         {
-            Debug.LogWarning("Enemy has been despawned, skipping Update.");
-            return;  // Despawn된 후라면 더 이상의 처리를 하지 않음
+            stateTimer = enemy.battleTime;
+            Debug.Log("GoodAttack");
+        }  
+        else
+        {
+            if(stateTimer < 0 || enemy.GetHorizontalDistance(enemy.transform.position, enemy.closestPlayerTransform.position) > 10)
+            {
+                stateMachine.ChangeState(enemy.idleState, ((int)EnemyStateID.Idle));
+                Debug.Log("PlayerOut");
+
+            }
         }
 
-        base.Update();  // 기본 Update 호출
+        float distanceToPlayerX = Mathf.Abs(enemy.closestPlayerTransform.position.x - enemy.transform.position.x);
+        if (distanceToPlayerX < 1.8f) return;
+        Vector3 directionToPlayer = (enemy.closestPlayerTransform.position - enemy.transform.position).normalized;
+        directionToPlayer.y = 0; // Y축을 무시하여 평면에서만 이동
+
+        enemy.rb.velocity = directionToPlayer * enemy.moveSpeed;
+
     }
     public override void Exit()
     {

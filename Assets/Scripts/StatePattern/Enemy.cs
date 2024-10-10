@@ -7,26 +7,18 @@ using UnityEngine;
 public class Enemy : Entity
 {
     [SerializeField] protected LayerMask ObstacleLayer;
-
-    [Header("Stunned info")]
-    /*public float stunDuration = 1;
-    public Vector2 stunDirection = new Vector2(10, 12);
-    protected bool canBeStunned;*/
     [SerializeField] protected GameObject counterImage;
-    private Vector3[] rayDirections = new Vector3[3]; // 배열 선언과 동시에 크기 설정
-
-    [Header("Move info")]
+    private Vector3[] rayDirections = new Vector3[3];   // 배열 선언과 동시에 크기 설정
+    private int currentRayIndex = 0;                     // 현재 레이를 쏠 방향 인덱스
+    public EnemyStateMachine stateMachine { get; private set; }
+    public string lastAnimBoolName { get; private set; }
     public float moveSpeed = 1.5f;
     public float idleTime = 2;
-    public float moveTime = 15;
+    public float moveTime = 3;
     public float battleTime = 7;
-    private float defaultMoveSpeed;
-    private int currentRayIndex = 0; // 현재 레이를 쏠 방향 인덱스
-    [Header("Attack info")]
-    public float agroDistance = 2;
-    public bool test ;
+    public float agroDistance = 5;
 
-    // 이동 메서드
+    // 방향벡터와 속도를 곱한 값으로 이동하는 함수
     public virtual void Move()
     {
         rb.velocity = moveDirection * moveSpeed;
@@ -47,25 +39,16 @@ public class Enemy : Entity
     {
         if (moveDirection != Vector3.zero) // moveDirection이 유효할 때만 업데이트
         {
-            rayDirections[0] = moveDirection; // 정면
-            rayDirections[1] = Quaternion.Euler(0, -15, 0) * moveDirection; // 왼쪽 15도
-            rayDirections[2] = Quaternion.Euler(0, 15, 0) * moveDirection; // 오른쪽 15도
-        }
-        else
-        {
-            Debug.LogWarning("moveDirection is zero, rayDirections not updated.");
-        }
+            rayDirections[0] = moveDirection;                                // 정면
+            rayDirections[1] = Quaternion.Euler(0, -15, 0) * moveDirection;  // 왼쪽 15도
+            rayDirections[2] = Quaternion.Euler(0, 15, 0) * moveDirection;   // 오른쪽 15도
+        } 
     }
 
-    public EnemyStateMachine stateMachine { get; private set; }
-    //public EntityFX fx { get; private set; }
-   // private Player player;
-    public string lastAnimBoolName { get; private set; }
     protected override void Awake()
     {
         base.Awake();
         stateMachine = new EnemyStateMachine(); 
-        defaultMoveSpeed = moveSpeed;
     }
     public virtual EnemyState GetStateById(int stateId)
     {
@@ -75,21 +58,15 @@ public class Enemy : Entity
     protected override void Start()
     {
         base.Start();
-
-       // fx = GetComponent<EntityFX>();
     }
 
     protected override void Update()
     {
         base.Update();
-        Debug.Log(test + "Testss");
-        //Debug.Log("Enemy");
-        //Debug.Log(stateMachine.currentState.ToString());
         if (Object.HasStateAuthority && stateMachine.currentState != null)
         {
             stateMachine.currentState.Update();
         }
-
     }
     protected override void FixedUpdate()
     {
@@ -98,137 +75,78 @@ public class Enemy : Entity
         {
             stateMachine.currentState.FixedUpdate();
         }
-
             
     }
     public virtual void AssignLastAnimName(string _animBoolName) => lastAnimBoolName = _animBoolName;
-
-
-    
-
-    public virtual void FreezeTime(bool _timeFrozen)
-    {
-        if (_timeFrozen)
-        {
-            moveSpeed = 0;
-            anim.speed = 0;
-        }
-        else
-        {
-            moveSpeed = defaultMoveSpeed;
-            anim.speed = 1;
-        }
-    }
-
-    public virtual void FreezeTimeFor(float _duration) => StartCoroutine(FreezeTimerCoroutine(_duration));
-
-    protected virtual IEnumerator FreezeTimerCoroutine(float _seconds)
-    {
-        FreezeTime(true);
-
-        yield return new WaitForSeconds(_seconds);
-
-        FreezeTime(false);
-    }
-
-    #region Counter Attack Window
-  /*  public virtual void OpenCounterAttackWindow()
-    {
-        canBeStunned = true;
-        counterImage.SetActive(true);
-    }*/
-
-    /*public virtual void CloseCounterAttackWindow()
-    {
-        canBeStunned = false;
-        counterImage.SetActive(false);
-    }*/
-    #endregion
-
-   /* public virtual bool CanBeStunned()
-    {
-        if (canBeStunned)
-        {
-            CloseCounterAttackWindow();
-            return true;
-        }
-
-        return false;
-    }*/
-
     public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
     public virtual void AnimationSpecialAttackTrigger()
     {
     }
-    public virtual bool IsPlayerWithinRange()
+    public Transform closestPlayerTransform = null; // 어그로 범위 내 가장 가까운 플레이어의 transform 저장
+    public virtual Transform GetClosestPlayerWithinRange()
     {
+        float closestDistance = float.MaxValue; // 가장 가까운 거리 비교용
+        closestPlayerTransform = null; // 함수가 실행될 때마다 초기화
+
         foreach (var player in nearbyPlayerObjects)
         {
-            if (player == null) { continue; }
-            Ray ray = new Ray(transform.position, player.transform.position);
-            if (player != null) // 플레이어 오브젝트가 존재할 때만 거리 계산
+            if (player == null || player.gameObject == null || !player.gameObject.activeInHierarchy)
             {
-                float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-                if (distanceToPlayer <= agroDistance)
-                {
-                    return true; // 플레이어가 특정 거리 내에 있을 때 true 반환
-                }
+                // player가 null이거나, gameObject가 파괴되었거나 비활성화된 경우 continue
+                continue;
+            }
+
+            float distanceToPlayer = GetHorizontalDistance(transform.position, player.transform.position);
+
+            // 어그로 범위 내에 있는 플레이어 중에서 가장 가까운 플레이어 찾기
+            if (distanceToPlayer <= agroDistance && distanceToPlayer < closestDistance)
+            {
+                closestDistance = distanceToPlayer;
+                closestPlayerTransform = player.transform; // 가장 가까운 어그로 범위 내 플레이어 업데이트
             }
         }
-        return false; // 특정 거리 내에 플레이어가 없을 때 false 반환
+
+        // 가장 가까운 플레이어의 Transform 반환 (없으면 null)
+        return closestPlayerTransform;
     }
+
+    public virtual bool CheckAgroDistance()
+    {
+        if (closestPlayerTransform != null)
+        {
+            float distanceToPlayer = GetHorizontalDistance(transform.position, closestPlayerTransform.transform.position);
+            if(distanceToPlayer <= agroDistance)
+            {
+                return true;
+            }
+        }        
+        return false;
+    }
+    // 플레이어를 감지하는 어그로 범위 Ray로 쏘기 (플레이어 방향 구해서 agroDistance곱해서 쏘기)
     public virtual void DrawRayPlayerDirection()
     {
         foreach (var player in nearbyPlayerObjects)
         {
-            Vector3 playerDir = (transform.position - player.transform.position).normalized;
+            Vector3 playerDir = (player.transform.position - transform.position).normalized;
+            playerDir.y = 0; // Y축 값은 무시
             Debug.DrawRay(transform.position, playerDir * agroDistance, Color.green);
         }
     }
+
+    // 각 방향에서 레이를 발사해서 장애물 검출하는 함수
     public virtual bool IsObstructed()
     {
-        // 현재 방향에 따라 레이 발사
-        Ray ray = new Ray(Obstacle.position, rayDirections[currentRayIndex]); // 각 방향에서 레이를 발사
+        Ray ray = new Ray(Obstacle.position, rayDirections[currentRayIndex]); 
         RaycastHit hitData;
+        Debug.DrawRay(ray.origin, ray.direction * ObstacleCheckDistance, Color.red);
 
-        // Debugging
-        ////Debug.Log($"Ray Direction: {ray.direction}, Ray Origin: {ray.origin}");
-
-        // Draw the ray in the scene view for debugging
-        Debug.DrawRay(ray.origin, ray.direction * ObstacleCheckDistance, Color.red); // 현재 방향으로 레이 그리기
-
-        // 충돌 감지
         if (Physics.Raycast(ray, out hitData, ObstacleCheckDistance, ObstacleLayer))
         {
-           // Debug.Log("장애물 검출!");
-            Debug.DrawRay(ray.origin, ray.direction * hitData.distance, Color.green); // 충돌한 지점까지 그리기
+            Debug.DrawRay(ray.origin, ray.direction * hitData.distance, Color.green); 
             return true; // 장애물이 감지된 경우
         }
         
-        // 다음 레이 방향으로 변경
         currentRayIndex = (currentRayIndex + 1) % rayDirections.Length;
-
         return false; // 장애물이 없는 경우
     }
-
-    /*  public virtual RaycastHit2D IsPlayerDetected()
-      {
-          RaycastHit2D playerDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);
-          RaycastHit2D wallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsGround);
-
-          if (wallDetected)
-          {
-              if (wallDetected.distance < playerDetected.distance)
-                  return default(RaycastHit2D);
-          }
-
-          return playerDetected;
-      }*/
-    /*  protected override void OnDrawGizmos()
-      {
-          base.OnDrawGizmos();
-
-          Gizmos.color = Color.yellow;
-          Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackDistance * facingDir, transform.position.y));
-      }*/
 }

@@ -76,10 +76,14 @@ MonoBehaviour:
     m_Bits: 256
   counterImage: {fileID: 0}
   moveSpeed: 1.5
+  attackDistance: 3
+  attackCooldown: 0
+  AttackCooldown: 1
   idleTime: 2
   moveTime: 3
   battleTime: 7
-  agroDistance: 2
+  lastTimeAttacked: 0
+  closestPlayerTransform: {fileID: 0}
   arrowPrefab: {fileID: 0}
   arrowSpeed: 0
   arrowDamage: 0
@@ -212,10 +216,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 1257087489836784590}
-  TotalWords: 1
+  TotalWords: 2
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 00000000503ef49cd41d22733dbceeafb99f3840ff484163148bc99ec68dcd4c8523fe4f
+  StateHashes: 00000000503ef49cd41d22733dbceeafb99f3840ff484163148bc99ec68dcd4c8523fe4f0212351441bc0617
   TriggerHashes: 00000000
 --- !u!1 &4335755581001208978
 GameObject:
@@ -334,7 +338,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3545357213934942793, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6387767192830171094}
   m_SourcePrefab: {fileID: 100100000, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
 --- !u!95 &1257087489836784590 stripped
 Animator:
@@ -346,3 +353,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3545357213934708329, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
   m_PrefabInstance: {fileID: 2324334541976343111}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1257087489846175758 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3545357213934942793, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
+  m_PrefabInstance: {fileID: 2324334541976343111}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6387767192830171094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257087489846175758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df04f91932e820a45a6d31a57f31c009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

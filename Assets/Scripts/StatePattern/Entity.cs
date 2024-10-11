@@ -38,9 +38,7 @@ public class Entity : NetworkBehaviour
     protected bool isKnocked;
 
     [Header("Collision info")]
-    public Transform attackCheck;
-    public float attackCheckRadius = 1.2f;
-    [SerializeField] protected Transform Obstacle;
+     [SerializeField] protected Transform Obstacle;
     [SerializeField] protected float ObstacleCheckDistance = 5;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected float wallCheckDistance = .8f;
@@ -147,10 +145,7 @@ public class Entity : NetworkBehaviour
         }
 
     }
-    public virtual EnemyState GetStateById(int stateId)
-    {
-        return null; // 자식 클래스에서 구체화 필요
-    }
+     
     protected virtual void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();

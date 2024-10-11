@@ -11,12 +11,19 @@ public class Enemy : Entity
     private Vector3[] rayDirections = new Vector3[3];   // 배열 선언과 동시에 크기 설정
     private int currentRayIndex = 0;                     // 현재 레이를 쏠 방향 인덱스
     public EnemyStateMachine stateMachine { get; private set; }
-    public string lastAnimBoolName { get; private set; }
+
     public float moveSpeed = 1.5f;
+    [Header("Attack info")]
+    protected float agroDistance = 5;
+    public float attackDistance = 3; // 근접2 원거리 2이상 권장
+    public float attackCooldown;
+    public float AttackCooldown = 1;
     public float idleTime = 2;
     public float moveTime = 3;
     public float battleTime = 7;
-    public float agroDistance = 5;
+    [HideInInspector] public float lastTimeAttacked;
+
+    public string lastAnimBoolName { get; private set; }
 
     // 방향벡터와 속도를 곱한 값으로 이동하는 함수
     public virtual void Move()
@@ -63,11 +70,7 @@ public class Enemy : Entity
         base.Awake();
         stateMachine = new EnemyStateMachine(); 
     }
-    public virtual EnemyState GetStateById(int stateId)
-    {
-        return null; // 기본적으로 null을 반환, 자식 클래스에서 구현 필요
-    }
-
+  
     protected override void Start()
     {
         base.Start();

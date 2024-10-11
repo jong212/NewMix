@@ -31,7 +31,7 @@ public class EnemyState
 
     public virtual void Enter()
     {
-        //triggerCalled = false;
+        triggerCalled = false;
         rb = enemyBase.rb; //각 상태에서 enemyBase.rb 이렇게 길게 쓰기 귀찮아서 rb로 사용할 수 있도록 처리
         enemyBase.anim.SetBool(animBoolName, true);
 
@@ -45,7 +45,6 @@ public class EnemyState
     public virtual void Exit()
     {
         enemyBase.anim.SetBool(animBoolName, false);
-       // enemyBase.AssignLastAnimName(animBoolName);
     }
 
     public virtual void AnimationFinishTrigger()

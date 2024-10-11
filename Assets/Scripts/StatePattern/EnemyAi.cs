@@ -28,6 +28,7 @@ public class EnemyAi : Enemy
     public EnemyIdleState idleState { get; private set; }
     public EnemyMoveState moveState { get; private set; }
     public EnemyBattleState battleState { get; private set; }
+    public EnemyAttackState attackState { get; private set; }
 
     #endregion
 
@@ -35,14 +36,11 @@ public class EnemyAi : Enemy
     protected override void Awake()
     {
         base.Awake();
+        
         idleState = new EnemyIdleState(this, stateMachine, "Idle", this);
         moveState = new EnemyMoveState(this, stateMachine, "Move", this);
         battleState = new EnemyBattleState(this, stateMachine, "Battle", this);
-
-        if (idleState == null || moveState == null || battleState == null)
-        {
-            Debug.LogError("State initialization failed.");
-        }
+        attackState = new EnemyAttackState(this, stateMachine, "Attack", this);
 
     }
     protected override void Start()
@@ -67,31 +65,7 @@ public class EnemyAi : Enemy
         }
     }
 
-    public override EnemyState GetStateById(int stateId)
-    {
-        switch (stateId)
-        {
-            case 0:
-                return idleState;
-            case 1:
-                return moveState;
-            case 2:
-                return battleState;
-            default:
-                Debug.LogWarning("Invalid stateId provided.");
-                return null;
-        }
-    }
-    /*public override bool CanBeStunned()
-    {
-        if (base.CanBeStunned())
-        {
-            //stateMachine.ChangeState(stunnedState);
-            return true;
-        }
-
-        return false;
-    }*/
+ 
 
     public override void DealDamageRpc(float damage)
     {
@@ -116,19 +90,5 @@ public class EnemyAi : Enemy
 
     }
 
-    public override void AnimationSpecialAttackTrigger()
-    {
-        GameObject newArrow = Instantiate(arrowPrefab, attackCheck.position, Quaternion.identity);
-        //newArrow.GetComponent<Arrow_Controller>().SetupArrow(arrowSpeed * facingDir, stats);
-    }
 
-/*    public bool GroundBehind() => Physics2D.BoxCast(groundBehindCheck.position, groundBehindCheckSize, 0, Vector2.zero, 0, whatIsGround);
-    public bool WallBehind() => Physics2D.Raycast(wallCheck.position, Vector2.right * -facingDir, wallCheckDistance + 2, whatIsGround);*/
-
- /*   protected override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
-
-        Gizmos.DrawWireCube(groundBehindCheck.position, groundBehindCheckSize);
-    }*/
 }

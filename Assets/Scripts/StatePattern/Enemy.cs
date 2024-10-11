@@ -45,6 +45,19 @@ public class Enemy : Entity
         } 
     }
 
+    public virtual void TargetMoveMonster()
+    {
+        Vector3 directionToPlayer = (closestPlayerTransform.position - transform.position).normalized; // 방향 벡터
+        directionToPlayer.y = 0;                                                                       // Y축 무시 평면 이동
+        rb.velocity = directionToPlayer * moveSpeed;                                                   // 방향으로 속도만큼 이동
+
+        if (directionToPlayer != Vector3.zero)                                                         // 방향 벡터가 유효한지 확인
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);                    // 이동 방향을 향한 회전값 생성
+            rb.MoveRotation(targetRotation);                                                           // 회전값을 적용하여 회전
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -127,6 +140,8 @@ public class Enemy : Entity
     {
         foreach (var player in nearbyPlayerObjects)
         {
+            if(player == null) continue;
+
             Vector3 playerDir = (player.transform.position - transform.position).normalized;
             playerDir.y = 0; // Y축 값은 무시
             Debug.DrawRay(transform.position, playerDir * agroDistance, Color.green);

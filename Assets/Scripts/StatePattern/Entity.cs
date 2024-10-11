@@ -62,9 +62,9 @@ public class Entity : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            float angleY = UnityEngine.Random.Range(0f, 360f);     // 좌 우 랜덤 값
-            Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 이 오일러 각도 값을 쿼터니언으로 변환해서 회전을 처리하는 것입니다. (짐벌락 안 생김)
-            moveDirection = rotation * Vector3.forward;            // rotation 이건 딱 
+            float angleY = UnityEngine.Random.Range(0f, 360f);     // 
+            Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 
+            moveDirection = rotation * Vector3.forward;            //  
         }
     }
 
@@ -221,15 +221,13 @@ public class Entity : NetworkBehaviour
     {
         if (this is EnemyAi enemyAi) // this가 EnemyAi인지 확인 후 캐스팅
         {
-            int stateId = NetworkedStateId;
-            EnemyState newState = enemyAi.GetStateById(stateId); // EnemyAi의 GetStateById 호출
             while (!Object.HasStateAuthority || !Object.IsValid)
             {
                 Debug.LogWarning("Waiting for state authority before changing state...");
                 yield return null; // 다음 프레임까지 대기
             }
 
-            enemyAi.stateMachine.ChangeState(newState, stateId); // 상태 변경
+            enemyAi.stateMachine.ChangeState(enemyAi.idleState); // 상태 변경
         }
         // Wait until this client has state authority
         while (!Object.HasStateAuthority || !Object.IsValid)

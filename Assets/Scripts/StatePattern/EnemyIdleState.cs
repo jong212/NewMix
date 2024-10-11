@@ -27,7 +27,7 @@ public class EnemyIdleState : EnemyGroundedState
 
         if(stateTimer < 0)
         {
-            stateMachine.ChangeState(enemy.moveState,((int)EnemyStateID.Move));
+            stateMachine.ChangeState(enemy.moveState);
         }
     }
     public override void FixedUpdate()

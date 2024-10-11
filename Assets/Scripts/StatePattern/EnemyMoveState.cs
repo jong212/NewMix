@@ -36,7 +36,7 @@ public class EnemyMoveState : EnemyGroundedState
        // Debug.Log("Update2");
         if (stateTimer < 0 || enemy.IsObstructed())
         {
-            stateMachine.ChangeState(enemy.idleState,((int)EnemyStateID.Idle));
+            stateMachine.ChangeState(enemy.idleState);
         }
     }
     public override void FixedUpdate()

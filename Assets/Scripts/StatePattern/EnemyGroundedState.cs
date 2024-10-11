@@ -31,7 +31,7 @@ public class EnemyGroundedState : EnemyState
         if (enemy.GetClosestPlayerWithinRange() != null)
         {
             // 가장 가까운 플레이어가 존재할 때 처리
-            stateMachine.ChangeState(enemy.battleState, ((int)EnemyStateID.Battle));
+            stateMachine.ChangeState(enemy.battleState);
         }
             enemy.DrawRayPlayerDirection();
 

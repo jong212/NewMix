@@ -8,7 +8,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     public event Action<PlayerRef> OnPlayerJoined;
     public event Action<PlayerRef> OnPlayerLeft;
 
-    [field: SerializeField] public GameObject PlayerPrefab { get; private set; }
+    private GameObject playerPrefab;
 
     public void PlayerJoined(PlayerRef player)
     {
@@ -27,11 +27,24 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         yield return new WaitForEndOfFrame();
         yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD);
 
+        bool isLoaded = false;
+
+        // 프리팹 로드
+        AddressableManager.instance.LoadPrefabsWithLabel("player", () =>
+        {
+            playerPrefab = AddressableManager.instance.GetPrefab("Character");
+            isLoaded = true;
+        });
+
+        // 프리팹 로드가 완료될 때까지 대기
+        yield return new WaitUntil(() => isLoaded);
+
+
         if (SpawnpointManager.GetSpawnpoint(out Vector3 location, out Quaternion orientation))
         {
             Debug.Log("Spawning player");
             Runner.SpawnAsync(
-                prefab: PlayerPrefab,
+                prefab: playerPrefab,
                 position: location,
                 rotation: orientation,
                 inputAuthority: player,

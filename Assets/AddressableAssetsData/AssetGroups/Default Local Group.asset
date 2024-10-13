@@ -27,7 +27,7 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Networked/Character.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - default
+    - player
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}

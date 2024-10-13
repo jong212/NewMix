@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/1Lobby.unity
+    guid: f905fda641b4cef49994f41cc0a419e4
+  - enabled: 1
+    path: Assets/Scenes/2Down.unity
+    guid: 08452dc989c71af43b389997f3731f10
+  - enabled: 1
+    path: Assets/Scenes/3Loading.unity
+    guid: 95a9ff10c81f5744d9a7974881911b4d
+  - enabled: 1
+    path: Assets/Scenes/4Login.unity
+    guid: a386c3825d6b3554b86d4712cd648613
+  - enabled: 1
     path: Assets/Scenes/Preloader.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
@@ -18,4 +30,5 @@ EditorBuildSettings:
     path: Assets/Scenes/A.unity
     guid: 86db2835afa56694da48414fda95fe30
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: b3d4bdc92c428a84085f3a0f65c266bf, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: bfca276932017b04f90bf40f862c93b7, type: 2}

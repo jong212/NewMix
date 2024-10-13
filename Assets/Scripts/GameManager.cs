@@ -10,6 +10,7 @@ using Fusion;
 public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
 {
     public static event System.Action<byte> OnReservedPlayerVisualsChanged;
+ 
 
     // 네트워크에서 관리되는 주문 리스트, 생성된 주문의 수, 주문 타이머
     [Networked, Capacity(6), UnitySerializeField] public NetworkLinkedList<Order> OrderList => default;

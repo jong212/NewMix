@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0f225ef97272594468287a0619a2463b
+  m_SerializeEntries:
+  - m_GUID: 2776642bf9c243944bcbb03410608365
+    m_Address: Assets/_ResourcesAssets/Monsters Ultimate Pack 02 Cute Series/Wolf
+      Cute Series/Materials/Wolf.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - mat
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 0b65782305ede5b409ae8b2920ea074d, type: 2}
+    - {fileID: 11400000, guid: f4978d100ade0014e9f59222812bfa6d, type: 2}

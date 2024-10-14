@@ -92,7 +92,6 @@ public class EnemyBattleState : EnemyState
     {
         if (Time.time >= enemy.lastTimeAttacked + enemy.attackCooldown)
         {
-            enemy.attackCooldown = enemy.AttackCooldown;
             enemy.lastTimeAttacked = Time.time;
             return true;
         }

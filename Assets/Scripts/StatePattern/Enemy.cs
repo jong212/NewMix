@@ -7,20 +7,17 @@ using UnityEngine;
 public class Enemy : Entity
 {
     [SerializeField] protected LayerMask ObstacleLayer;
-    [SerializeField] protected GameObject counterImage;
-    private Vector3[] rayDirections = new Vector3[3];   // 배열 선언과 동시에 크기 설정
-    private int currentRayIndex = 0;                     // 현재 레이를 쏠 방향 인덱스
+    private Vector3[] rayDirections = new Vector3[3];            // 배열 선언과 동시에 크기 설정
+    private int currentRayIndex = 0;                             // 현재 레이를 쏠 방향 인덱스
     public EnemyStateMachine stateMachine { get; private set; }
 
-    public float moveSpeed = 1.5f;
-    [Header("Attack info")]
-    protected float agroDistance = 5;
-    public float attackDistance = 3; // 근접2 원거리 2이상 권장
-    public float attackCooldown;
-    public float AttackCooldown = 1;
-    public float idleTime = 2;
-    public float moveTime = 3;
-    public float battleTime = 7;
+    protected float agroDistance = 5;                            // 플레이어 감지 거리
+    public float attackDistance = 3;                             // 근접 원거리 따라 다르게 설정할 것
+    public float attackCooldown = 1;                             // 몬스터 공격 쿨타임
+    public float moveSpeed = 1.5f;                               // 몬스터 이속
+    public float idleTime = 2;                                   // 상태 지속 시간
+    public float moveTime = 3;                                   // 상태 지속 시간
+    public float battleTime = 7;                                 // 상태 지속 시간
     [HideInInspector] public float lastTimeAttacked;
 
     public string lastAnimBoolName { get; private set; }

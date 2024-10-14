@@ -337,12 +337,12 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
                 platform.Object.RequestStateAuthority();
             }
 
-            var Enemys = FindObjectsOfType<EnemyNetwork>()
+            /*var Enemys = FindObjectsOfType<EnemyNetwork>()
                 .Where(e => !e.Object.HasStateAuthority);
             foreach (var platform in Enemys)
             {
                 platform.Object.RequestStateAuthority();
-            }
+            }*/
         }
     }
 

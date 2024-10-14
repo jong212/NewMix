@@ -6,23 +6,6 @@ using UnityEngine;
 
 public class EnemyAi : Enemy
 {
-
-    [Header("Archer spisifc info")]
-    [SerializeField] private GameObject arrowPrefab;
-    [SerializeField] private float arrowSpeed;
-    [SerializeField] private float arrowDamage;
-
-    
-    public Vector2 jumpVelocity;
-    public float jumpCooldown;
-    public float safeDistance; // how close palyer should be to trigger jump on battle state
-    [HideInInspector] public float lastTimeJumped;
-
-    [Header("Additional collision check")]
-    [SerializeField] private Transform groundBehindCheck;
-    [SerializeField] private Vector2 groundBehindCheckSize;
-
-    //테스트
     #region States
 
     public EnemyIdleState idleState { get; private set; }
@@ -31,7 +14,6 @@ public class EnemyAi : Enemy
     public EnemyAttackState attackState { get; private set; }
 
     #endregion
-
 
     protected override void Awake()
     {
@@ -55,8 +37,8 @@ public class EnemyAi : Enemy
         {
             base.Update();
         }
-           
     }
+
     protected override void FixedUpdate()
     {
         if (Object.HasStateAuthority)
@@ -64,8 +46,6 @@ public class EnemyAi : Enemy
             base.FixedUpdate();
         }
     }
-
- 
 
     public override void DealDamageRpc(float damage)
     {

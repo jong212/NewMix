@@ -11,7 +11,6 @@ public enum EnemyStateID
     Idle = 0,
     Move = 1,
     Battle = 2,
-    // Add other states as needed
 }
 public class Entity : NetworkBehaviour
 {
@@ -21,8 +20,6 @@ public class Entity : NetworkBehaviour
 
     [Networked, Capacity(12), OnChangedRender(nameof(OnNearbyPlayersChanged))]
     public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
-  
- 
 
     public Animator anim { get; private set; } //다른 스크립트에서 entity.anim으로 애니메이터에 접근하여 애니메이션 상태를 확인할 수 있지만, 애니메이터를 변경할 수는 없다.
     public Rigidbody rb { get; private set; } // 엔티티에서 게터세터 사용으로 외부수정을 제한했다 만약 Enemy에서 rb = GetComponent<Rigidbody>(); 이런코드 쓰면 오류난다 하지만 rb.verocity 값 설정은 가능하다 재정의만 불가능
@@ -30,15 +27,9 @@ public class Entity : NetworkBehaviour
     public SpriteRenderer sr { get; private set; }
     public CapsuleCollider cd { get; private set; }
 
-    [Header("Knockback info")]
-    [SerializeField] protected Vector2 knockbackPower = new Vector2(7, 12);
-    [SerializeField] protected Vector2 knockbackOffset = new Vector2(.5f, 2);
-    [SerializeField] protected float knockbackDuration = .07f;
-    
-    protected bool isKnocked;
 
     [Header("Collision info")]
-     [SerializeField] protected Transform Obstacle;
+    [SerializeField] protected Transform Obstacle;
     [SerializeField] protected float ObstacleCheckDistance = 5;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected float wallCheckDistance = .8f;
@@ -333,41 +324,11 @@ public class Entity : NetworkBehaviour
         Destroy(gameObject);
     }
     #endregion
-    public virtual void SlowEntityBy(float _slowPercentage, float _slowDuration)
-    {
-
-    }
 
     protected virtual void ReturnDefaultSpeed()
     {
         anim.speed = 1;
     }
-
-    /*public virtual void DamageImpact() => StartCoroutine("HitKnockback");
-
-    public virtual void SetupKnockbackDir(Transform _damageDirection)
-    {
-        if (_damageDirection.position.x > transform.position.x)
-            knockbackDir = -1;
-        else if (_damageDirection.position.x < transform.position.x)
-            knockbackDir = 1;
-    }
-    public void SetupKnockbackPower(Vector2 _knockbackpower) => knockbackPower = _knockbackpower;
-    protected virtual IEnumerator HitKnockback()
-    {
-        isKnocked = true;
-
-        float xOffset = Random.Range(knockbackOffset.x, knockbackOffset.y);
-
-
-        if (knockbackPower.x > 0 || knockbackPower.y > 0) // This line makes player immune to freeze effect when he takes hit
-            rb.velocity = new Vector2((knockbackPower.x + xOffset) * knockbackDir, knockbackPower.y);
-
-        yield return new WaitForSeconds(knockbackDuration);
-        isKnocked = false;
-        SetupZeroKnockbackPower();
-    }*/
-
     protected virtual void SetupZeroKnockbackPower()
     {
 
@@ -379,13 +340,6 @@ public class Entity : NetworkBehaviour
         rb.velocity = new Vector3(0, 0,0);
     }
 
-    public void SetVelocity(float _xVelocity, float _yVelocity)
-    {
-        if (isKnocked)
-            return;
-
-        /*rb.velocity = new Vector3(_xVelocity*//**//*, rb.velocity.y, _zVelocity); // XZ 평면에서만 속도 설정*/
-    }
     #endregion
 
     public virtual void OnTriggerExit(Collider col)
@@ -397,32 +351,4 @@ public class Entity : NetworkBehaviour
             Debug.Log("Player lost");
         }
     }
-   /* public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
-    public virtual bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, whatIsGround);*/
-
-    public virtual void Flip()
-    {
-        facingDir = facingDir * -1;
-        facingRight = !facingRight;
-        transform.Rotate(0, 180, 0);
-
-        if (onFlipped != null)
-            onFlipped();
-    }
-
-    public virtual void FlipController(float _x)
-    {
-        if (_x > 0 && !facingRight)
-            Flip();
-        else if (_x < 0 && facingRight)
-            Flip();
-    }
-    public virtual void SetupDefailtFacingDir(int _direction)
-    {
-        facingDir = _direction;
-
-        if (facingDir == -1)
-            facingRight = false;
-    }
-   
 }

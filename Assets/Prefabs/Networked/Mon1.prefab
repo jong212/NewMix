@@ -13,12 +13,11 @@ GameObject:
   - component: {fileID: 3901600442813068076}
   - component: {fileID: -7809176092279137244}
   - component: {fileID: -3630243333851463070}
-  - component: {fileID: 1898924008767367897}
   - component: {fileID: -6880436890373463894}
   - component: {fileID: 6715843726876892681}
   - component: {fileID: 1843352663235160571}
   m_Layer: 0
-  m_Name: MonsterAi
+  m_Name: Mon1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,8 +59,6 @@ MonoBehaviour:
   knockbackPower: {x: 7, y: 12}
   knockbackOffset: {x: 0.5, y: 2}
   knockbackDuration: 0.07
-  attackCheck: {fileID: 0}
-  attackCheckRadius: 1.2
   Obstacle: {fileID: 8082270149814068328}
   ObstacleCheckDistance: 5
   wallCheck: {fileID: 0}
@@ -132,7 +129,6 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 7259496203936178910}
-  - {fileID: 1898924008767367897}
   - {fileID: -6880436890373463894}
   - {fileID: 6715843726876892681}
   - {fileID: 1843352663235160571}
@@ -163,18 +159,6 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 84
   m_CollisionDetection: 2
---- !u!114 &1898924008767367897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2350303833550570012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5f503522eeeb46499d76b836449e315, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-6880436890373463894
 MonoBehaviour:
   m_ObjectHideFlags: 0

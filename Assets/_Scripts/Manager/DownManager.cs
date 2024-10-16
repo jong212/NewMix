@@ -72,8 +72,8 @@ public class DownManager : MonoBehaviour
                 downValText.text = "100 %";
                 downSlider.value = 1f;
             yield return new WaitForSeconds(2f);
-            /*LoadingManager.LoadScene("4Login");*/
-            LoadingManager.LoadScene("Preloader");
+            LoadingManager.LoadScene("4Login");
+            //LoadingManager.LoadScene("Preloader"); 4Login으로 하는게 맞는데 4Login씬에암것도 업어서 바로 게임실행 해보고 싶을때만 이 주석으로 교체
         }
 
     }
@@ -156,9 +156,8 @@ public class DownManager : MonoBehaviour
 
             if(total == patchSize)
             {
-                /*LoadingManager.LoadScene("4Login");*/
-                LoadingManager.LoadScene("Preloader");
-                break;
+                LoadingManager.LoadScene("4Login");
+                //LoadingManager.LoadScene("Preloader"); 4Login으로 하는게 맞는데 4Login씬에암것도 업어서 바로 게임실행 해보고 싶을때만 이 주석으로 교체                break;
             }
             total = 0f;
             yield return new WaitForEndOfFrame();   

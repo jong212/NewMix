@@ -7,7 +7,6 @@ public class StaticManager : MonoBehaviour
 {
     public static StaticManager Instance { get; private set; }
 
-    public static BackendManager Backend { get; private set; }
     public static UIManager UI { get; private set; }
 
 
@@ -29,11 +28,9 @@ public class StaticManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-        Backend = GetComponentInChildren<BackendManager>();
         UI = GetComponentInChildren<UIManager>();
 
         UI.Init(); 
-        Backend.Init();
 
 
     }

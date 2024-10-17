@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 2630977137863919237}
   - component: {fileID: 3693980792501849758}
   m_Layer: 5
-  m_Name: SetNickName
+  m_Name: BackEndSetName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -446,7 +446,7 @@ GameObject:
   - component: {fileID: 9009150451073218096}
   - component: {fileID: 7778301752369631420}
   m_Layer: 5
-  m_Name: Button (Legacy)
+  m_Name: CheckNicknameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

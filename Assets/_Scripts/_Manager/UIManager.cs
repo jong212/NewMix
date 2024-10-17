@@ -6,8 +6,17 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private AlertUI _alertUI;
+    public AlertUI AlertUI
+    {
+        get
+        {
+            return _alertUI;
+        }
+    }
     public void Init()
     {
+        AlertUI.gameObject.SetActive(false);
     }
     private bool TryLoadUIObject(string prefabName, Transform parent, out GameObject gameObject)
     {

@@ -35,11 +35,24 @@ public class LoginSceneManager : MonoBehaviour
         if (FindObjectOfType(typeof(StaticManager)) == null) { 
             var obj = Resources.Load<GameObject>("Prefabs/StaticManager");
             Instantiate(obj);
+
         }
-    }
-    private void Start()
-    {
-        StartGoogleLogin();
+        var bro = Backend.Initialize(); // 뒤끝 초기화
+
+        // 뒤끝 초기화에 대한 응답값
+
+        if (bro.IsSuccess())
+        {
+            StartGoogleLogin();
+            Debug.Log("초기화 성공 : " + bro.StatusCode);
+
+        }
+        else
+        {
+            Debug.LogError("초기화 실패 : " + bro);
+        }
+
+
     }
     public void StartGoogleLogin()
     {
@@ -60,9 +73,9 @@ public class LoginSceneManager : MonoBehaviour
 
         switch (bro.StatusCode)
         {
-            case 200: Debug.Log("success");
+            case 200: Debug.Log("success"); StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
                 break;
-            case 201: StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
+            case 201: ;
                 break;
         }
     }

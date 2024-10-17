@@ -12,15 +12,13 @@ public class BackendManager : MonoBehaviour
         if (bro.IsSuccess())
         {
             Debug.Log("뒤끝 초기화 성공 : " + bro); // 성공일 경우 statusCode 204 Success
-            StartGoogleLogin();
 
         }
         else
         {
             Debug.LogError("초기화 실패 : " + bro); // 실패일 경우 statusCode 400대 에러 발생
         }
-        string googlehash = Backend.Utils.GetGoogleHash();
-        Debug.Log(googlehash);
+        //string googlehash = Backend.Utils.GetGoogleHash();
 
         /*
                  /*
@@ -48,28 +46,6 @@ public class BackendManager : MonoBehaviour
             }
 
          */
-    }
-    public void StartGoogleLogin()
-    {
-        TheBackend.ToolKit.GoogleLogin.Android.GoogleLogin(true, GoogleLoginCallback);
-    }
-
-    private void GoogleLoginCallback(bool isSuccess, string errorMessage, string token)
-    {
-        if (isSuccess == false)
-        {
-            Debug.LogError(errorMessage);
-            return;
-        }
-
-        Debug.Log("구글 토큰 : " + token);
-        var bro = Backend.BMember.AuthorizeFederation(token, FederationType.Google);
-        Debug.Log("페데레이션 로그인 결과 : " + bro);
-        switch (bro.StatusCode) 
-        {
-            case 200:  
-                break;
-        }
     }
 
     private void NameSet()

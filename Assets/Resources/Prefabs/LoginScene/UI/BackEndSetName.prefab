@@ -433,6 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e040dcda7f42ff04d8e2ababc4d94a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _nicknameCreateInput: {fileID: 175138864268316262}
+  _nicknameCreateButton: {fileID: 7778301752369631420}
 --- !u!1 &9115045164516999705
 GameObject:
   m_ObjectHideFlags: 0

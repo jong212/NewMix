@@ -24,6 +24,21 @@ public class BackEndSetName : BaseUI
         {
             ShowAlertUI("닉네임이 비어있습니다.");
             return;
+        } 
+        else
+        {
+            Backend.BMember.CheckNicknameDuplication(nickname, (callback) =>
+            {
+                if(callback.StatusCode == 204)
+                {
+                    Debug.Log("해당 닉네임으로 수정 가능합니다");
+                }
+                else if (callback.StatusCode == 409)
+                {
+                    Debug.Log("중복입니다");
+
+                }
+            });
         }
     }
     void Start()

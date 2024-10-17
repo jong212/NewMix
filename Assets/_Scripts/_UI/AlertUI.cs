@@ -7,6 +7,7 @@ public class AlertUI : MonoBehaviour
 {
     [SerializeField] private Image _alertTitleImage;
     [SerializeField] private Text _alertTitleText;
+    [SerializeField] private Text _description;
     [SerializeField] private Button _customButton;
     public delegate void ClickConfirmButton();
 
@@ -15,19 +16,21 @@ public class AlertUI : MonoBehaviour
     {
        OpenWarningUI(titleText, infoText, null);
     }
-
  
     public void OpenWarningUI(string titleText, string infoText, ClickConfirmButton clickConfirmButton)
     {
         _alertTitleImage.color = new Color32(203, 88, 0, 255);
         OpenUI(titleText, infoText, clickConfirmButton);
     }
+
+
+
     private void OpenUI(string titleText, string infoText,ClickConfirmButton clickConfirmButton)
     {
         gameObject.SetActive(true);
 
         _alertTitleText.text = titleText;
-
+        _description.text = infoText;
         _customButton.onClick.RemoveAllListeners();
         _customButton.onClick.AddListener(() => {
             CloseUI();

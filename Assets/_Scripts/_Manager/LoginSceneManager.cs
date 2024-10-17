@@ -69,15 +69,26 @@ public class LoginSceneManager : MonoBehaviour
 
         /*Debug.Log("구글 토큰 : " + token);*/
         var bro = Backend.BMember.AuthorizeFederation(token, FederationType.Google);
+
         Debug.Log("페데레이션 로그인 결과 : " + bro);
 
-        switch (bro.StatusCode)
+        if (bro.StatusCode == 200 || bro.StatusCode == 201) //200 : 기존 회원 로그인 성공, 201 신규 사용자 회원가입 및 로그인 성공
         {
-            case 200: Debug.Log("success"); StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
-                break;
-            case 201: ;
-                break;
+            var nickData = Backend.BMember.GetUserInfo();
+            LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
+            string nick = userInfoJson["nickname"]?.ToString();
+
+            if (string.IsNullOrEmpty(nick))
+            {
+                Debug.Log("닉네임이 없습니다. 닉네임 설정 필요");
+                StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
+            }
+            else
+            {
+                Debug.Log($"닉네임: {nick}");
+            }
         }
+
     }
 
 }

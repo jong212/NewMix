@@ -7,6 +7,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private AlertUI _alertUI;
+    [SerializeField] private ConfirmUI _confirmUI;
     public AlertUI AlertUI
     {
         get
@@ -14,9 +15,17 @@ public class UIManager : MonoBehaviour
             return _alertUI;
         }
     }
+    public ConfirmUI ConfirmUI
+    {
+        get
+        {
+            return _confirmUI;
+        }
+    }
     public void Init()
     {
         AlertUI.gameObject.SetActive(false);
+        ConfirmUI.gameObject.SetActive(false);
     }
     private bool TryLoadUIObject(string prefabName, Transform parent, out GameObject gameObject)
     {

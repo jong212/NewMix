@@ -78,12 +78,12 @@ public class LoginSceneManager : MonoBehaviour
             LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
             string nick = userInfoJson["nickname"]?.ToString();
 
+            // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             if (string.IsNullOrEmpty(nick))
-            {
-                Debug.Log("닉네임이 없습니다. 닉네임 설정 필요");
+            {                
                 StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
             }
-            else
+            else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
             {
                 Debug.Log($"닉네임: {nick}");
             }

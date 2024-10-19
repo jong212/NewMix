@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WebSocketSharp;
 
@@ -51,6 +52,7 @@ public class BackEndSetName : BaseUI
         Backend.BMember.CreateNickname(nickname, (callback) =>
         {
             Debug.Log("닉네임 설정 완료");
+            SceneManager.LoadScene("Preloader");
         });
     }
 }

@@ -17,17 +17,17 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 94b466ca57349f543acf1e50c196809d
   m_SerializeEntries:
-  - m_GUID: cbabbd063f4fcf249af6d8dab07e2d00
-    m_Address: Assets/Test/Cube.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4a9627b58795ce940a971986ff1b8356
     m_Address: Assets/Prefabs/Networked/Character.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a00f35947c22cf14b9b13e919028102c
+    m_Address: Assets/Markus Art/Character/Prefabs/Stickman_White.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Init
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 94b466ca57349f543acf1e50c196809d
   m_currentHash:
     serializedVersion: 2
-    Hash: 9aeaa3901c20ae26c130f711f0bb63d2
+    Hash: 43b854b9ca950e60b66e80ff421714c8
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -68,20 +68,6 @@ MonoBehaviour:
         m_Value: ServerData/[BuildTarget]
       - m_Id: c6f1afe4e624b1245bec72fbb8494199
         m_Value: https://jhaddressable.s3.ap-northeast-2.amazonaws.com/[BuildTarget]
-    - m_InheritedParent: 
-      m_Id: 23bf48309371975419706102c988a570
-      m_ProfileName: New Profile
-      m_Values:
-      - m_Id: 65f65dcc5724b8244963779e30aacffa
-        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
-      - m_Id: 117f31e1119db0e41b64746b2b5b92aa
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: 96a7affcfccb9844797b3c93e63b9a97
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: 73cdeb76ab4e2684f9e665ade1750880
-        m_Value: ServerData/[BuildTarget]
-      - m_Id: c6f1afe4e624b1245bec72fbb8494199
-        m_Value: https://jhaddressable.s3.ap-northeast-2.amazonaws.com/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 65f65dcc5724b8244963779e30aacffa
       m_Name: BuildTarget
@@ -104,6 +90,7 @@ MonoBehaviour:
     - default
     - mat
     - player
+    - Init
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 31a8327a75b471e4b9eb0d53d5f3dc00, type: 2}

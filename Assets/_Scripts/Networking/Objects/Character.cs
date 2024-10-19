@@ -11,16 +11,13 @@ public class Character : NetworkBehaviour
 
     [field: SerializeField] public CharacterSpecs Specs { get; private set; }
     [SerializeField] private SimpleKCC kcc;
-    [SerializeField] private CharacterVisual[] visuals;
     [SerializeField] private Transform uiPoint;
+    [SerializeField] private Animator anim;
 
     [Networked, OnChangedRender(nameof(NicknameChanged))] public NetworkString<_16> Nickname { get; set; }
-    [Networked, OnChangedRender(nameof(VisualChanged))] public byte Visual { get; set; }
     [Networked] public Item HeldItem { get; set; }
     [Networked] public bool WaitingForAuthority { get; set; }
 
-    public Transform HoldPoint => visuals[Visual].holdPoint;
-    public CharacterVisual CharacterVisual => visuals[Visual];
 
     private PlayerInput prevInput;
     private WorldNickname nicknameUI = null;
@@ -35,7 +32,7 @@ public class Character : NetworkBehaviour
             cameraFollow.target = this.transform;
 
             Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
-            Visual = LocalData.model;
+
         }
 
         nicknameUI = Instantiate(
@@ -43,7 +40,6 @@ public class Character : NetworkBehaviour
             InterfaceManager.instance.worldCanvas.transform);
 
         NicknameChanged();
-        VisualChanged();
         ModifyKCCCollider();
     }
     private void ModifyKCCCollider()
@@ -91,18 +87,13 @@ public class Character : NetworkBehaviour
 
     public override void Render()
     {
-        Animator anim = visuals[Visual].animator;
 
         // kcc.RealSpeed를 사용하여 Movement 애니메이션 파라미터 설정
         // 캐릭터의 실제 이동 속도에 따라 애니메이션 설정
         anim.SetFloat("Movement", kcc.RealSpeed > 0 ? kcc.RealSpeed / Specs.MovementSpeed : 0);
-        anim.SetLayerWeight(1, Mathf.MoveTowards(anim.GetLayerWeight(1), HeldItem ? 1 : 0, 5 * Runner.DeltaTime));
 
         // 위치 보정: 권한 전송 대기 중일 때 heldItem의 위치 조정
-        if (HeldItem != null && HeldItem.Object.StateAuthority != Object.InputAuthority)
-        {
-            HeldItem.transform.SetPositionAndRotation(HoldPoint.position, HoldPoint.rotation);
-        }
+     
     }
 
     public override void FixedUpdateNetwork()
@@ -209,14 +200,7 @@ public class Character : NetworkBehaviour
         nicknameUI.SetTarget(uiPoint, Nickname.Value);
     }
 
-    private void VisualChanged()
-    {
-        for (int i = 0; i < visuals.Length; i++)
-        {
-            visuals[i].gameObject.SetActive(i == Visual);
-        }
-    }
-
+ 
     #endregion
 
     public void SetHeldItem(Item item)
@@ -251,7 +235,6 @@ public class Character : NetworkBehaviour
                     WaitingForAuthority = false;
                     HeldItem = item;
                     HeldItem.transform.SetParent(Object.transform);
-                    HeldItem.transform.SetPositionAndRotation(HoldPoint.position, HoldPoint.rotation);
                     kcc.RefreshChildColliders();
                 },
                 onUnauthorized: () => WaitingForAuthority = false
@@ -267,13 +250,7 @@ public class Character : NetworkBehaviour
         }
 
         // Drop held object if it is physical
-        if (HeldItem && HeldItem.TryGetBehaviour(out Throwable throwable))
-        {
-            Vector3 throwDirection = Quaternion.AngleAxis(-Specs.ThrowArc, HoldPoint.right) * HoldPoint.forward;
-
-            throwable.Throw(throwDirection * Specs.ThrowForce);
-            SetHeldItem(null);
-        }
+      
     }
 
     private void UseInteractWith(IEnumerable<Interactable> interactables)
@@ -298,16 +275,6 @@ public class Character : NetworkBehaviour
 
     private void OnDrawGizmos()
     {
-        if (visuals == null || visuals.Length == 0) return;
-        if (Specs == null) return;
 
-        Transform hp = (Runner != null && Runner.IsRunning == true)
-            ? HoldPoint
-            : visuals[0].holdPoint;
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(hp.position, new Vector3(0.25f, 2f, 0.25f));
-        Gizmos.DrawWireSphere(transform.position + transform.forward * Specs.Reach / 2, Specs.Reach / 2);
-        Gizmos.DrawWireSphere(transform.position + Vector3.up * 2 + transform.forward * Specs.Reach / 2, Specs.Reach / 2);
     }
 }

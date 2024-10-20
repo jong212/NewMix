@@ -32,7 +32,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         // ÇÁ¸®ÆÕ ·Îµå
         AddressableManager.instance.LoadPrefabsWithLabel("player", () =>
         {
-            playerPrefab = AddressableManager.instance.GetPrefab("Character");
+            playerPrefab = AddressableManager.instance.GetPrefab("player","Character");
             isLoaded = true;
         });
 

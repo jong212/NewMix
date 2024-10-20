@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 94b466ca57349f543acf1e50c196809d
   m_currentHash:
     serializedVersion: 2
-    Hash: 43b854b9ca950e60b66e80ff421714c8
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -90,7 +90,7 @@ MonoBehaviour:
     - default
     - mat
     - player
-    - Init
+    - SelectPlayer
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 31a8327a75b471e4b9eb0d53d5f3dc00, type: 2}

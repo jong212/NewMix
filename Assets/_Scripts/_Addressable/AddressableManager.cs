@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+//https://chatgpt.com/share/671545ed-6cd0-800b-ae52-d92b932c3177
 public class AddressableManager : MonoBehaviour
 {
     public static AddressableManager instance;
 
-    private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
+    private Dictionary<string, List<GameObject>> prefabCache = new Dictionary<string, List<GameObject>>();
 
     private void Awake()
     {
@@ -29,43 +29,70 @@ public class AddressableManager : MonoBehaviour
         {
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
+                if (!prefabCache.ContainsKey(label))
+                {
+                    prefabCache[label] = new List<GameObject>();
+                }
+
                 foreach (var prefab in handle.Result)
                 {
-                    prefabCache[prefab.name] = prefab;
+                    prefabCache[label].Add(prefab);
                 }
-                Debug.Log("All prefabs successfully loaded from Addressables.");
+                Debug.Log($"All prefabs with label '{label}' successfully loaded from Addressables.");
                 onLoaded?.Invoke();
             }
             else
             {
-                Debug.LogError("Failed to load prefabs from Addressables: " + handle.OperationException);
+                Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
             }
         };
     }
 
+
     // Get Prefab by Name
-    public GameObject GetPrefab(string prefabName)
+    public List<GameObject> GetPrefabsByLabel(string label)
     {
-        if (prefabCache.TryGetValue(prefabName, out GameObject prefab))
+        if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
         {
-            return prefab;
+            return prefabs;
         }
-        Debug.LogError("Prefab not found in cache: " + prefabName);
+        Debug.LogError($"No prefabs found with label: {label}");
+        return new List<GameObject>();
+    }
+    public GameObject GetPrefab(string label, string prefabName)
+    {
+        if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
+        {
+            foreach (var prefab in prefabs)
+            {
+                if (prefab.name == prefabName)
+                {
+                    return prefab;
+                }
+            }
+            Debug.LogError($"Prefab '{prefabName}' not found under label '{label}'.");
+            return null;
+        }
+        Debug.LogError($"No prefabs found with label: {label}");
         return null;
     }
 
     // Release a Prefab (optional for memory management)
-    public void ReleasePrefab(string prefabName)
+    public void ReleasePrefabsByLabel(string label)
     {
-        if (prefabCache.TryGetValue(prefabName, out GameObject prefab))
+        if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
         {
-            Addressables.Release(prefab);
-            prefabCache.Remove(prefabName);
-            Debug.Log("Prefab released: " + prefabName);
+            foreach (var prefab in prefabs)
+            {
+                Addressables.Release(prefab);
+            }
+            prefabCache.Remove(label);
+            Debug.Log($"All prefabs with label '{label}' released.");
         }
         else
         {
-            Debug.LogWarning("Attempted to release a prefab that is not in cache: " + prefabName);
+            Debug.LogWarning($"No prefabs found with label: {label} to release.");
         }
     }
+
 }

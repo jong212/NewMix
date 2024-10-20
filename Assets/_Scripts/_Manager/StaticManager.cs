@@ -2,6 +2,7 @@ using BackEnd.Quobject.SocketIoClientDotNet.Client;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class StaticManager : MonoBehaviour
 {
@@ -31,7 +32,28 @@ public class StaticManager : MonoBehaviour
         UI = GetComponentInChildren<UIManager>();
 
         UI.Init(); 
+    }
 
+    // 모바일에서 오브젝트 위치 확인용
+    public void LogHierarchyPath(Transform transform)
+    {
+        if (transform == null)
+        {
+            Debug.LogError("Transform is null. Cannot log hierarchy path.");
+            return;
+        }
 
+        string path = transform.name;
+        Transform currentParent = transform.parent;
+
+        // 부모를 따라 올라가며 전체 경로 생성
+        while (currentParent != null)
+        {
+            path = currentParent.name + "/" + path;
+            currentParent = currentParent.parent;
+        }
+
+        // 이름과 경로를 로그로 출력
+        Debug.Log($"Object name: {transform.name}, Path: {path}");
     }
 }

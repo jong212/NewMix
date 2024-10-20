@@ -53,6 +53,7 @@ public class BackEndSetName : BaseUI
         {
             Debug.Log("닉네임 설정 완료");
             SceneManager.LoadScene("Preloader");
+            int a = LoginSceneManager.Instance.Selecter.selectedCharacter;
         });
     }
 }

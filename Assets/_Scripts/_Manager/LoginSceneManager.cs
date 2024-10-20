@@ -12,8 +12,7 @@ using UnityEngine.SceneManagement;
 public class LoginSceneManager : MonoBehaviour
 {
     private static LoginSceneManager _instance;
-    private GameObject playerPrefab;
-    public static LoginSceneManager Instance
+     public static LoginSceneManager Instance
     {
         get
         {
@@ -22,6 +21,8 @@ public class LoginSceneManager : MonoBehaviour
     }
 
     [SerializeField] private Canvas _loginUICanvas;
+    public CharacterSelection Selecter { get; private set; }
+
     public Canvas LoginUICanvas
     {
         get
@@ -59,38 +60,7 @@ public class LoginSceneManager : MonoBehaviour
         } 
     }
 
-
-    private void OnEnable() // awake 쪽으로 바꿔야 할듯
-    {
-        if (AddressableManager.instance == null)
-        {
-            Debug.LogError("AddressableManager instance is not initialized.");
-        }
-        AddressableManager.instance.LoadPrefabsWithLabel("Init", () =>
-        {
-            playerPrefab = AddressableManager.instance.GetPrefab("Stickman_White");
-
-            if (playerPrefab != null)
-            {
-                var instantiatedPrefab = Instantiate(playerPrefab); // 프리팹 인스턴스화
-                var anim = instantiatedPrefab.GetComponent<Animator>();
-
-                if (anim == null)
-                {
-                    Debug.Log("Animator is null on the instantiated prefab.");
-                }
-                else
-                {
-                    anim.SetFloat("Movement", 1);
-                    Debug.Log("dd");
-                }
-            }
-            else
-            {
-                Debug.LogError("Failed to load playerPrefab: Stickman_White");
-            }
-        });
-    }
+     
     public void StartGoogleLogin()
     {
         TheBackend.ToolKit.GoogleLogin.Android.GoogleLogin(true, GoogleLoginCallback);
@@ -124,6 +94,7 @@ public class LoginSceneManager : MonoBehaviour
             if (string.IsNullOrEmpty(nick))
             {                
                 StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
+                Selecter.gameObject.SetActive(true);
             }
             else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
             {

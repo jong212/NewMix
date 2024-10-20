@@ -41,13 +41,13 @@ public class UIManager : MonoBehaviour
         }
 
         gameObject = Object.Instantiate(loadObject, parent, true);
-        gameObject.transform.localScale = Vector3.one;
-        gameObject.transform.localPosition = Vector3.zero;
-
+        gameObject.transform.localPosition = loadObject.transform.localPosition;
+        gameObject.transform.localRotation = loadObject.transform.localRotation;
         return true;
     }
     public void OpenUI<T>(string folderPath, Transform parent)
     {
+
         if (TryLoadUIObject(folderPath + "/" + typeof(T).Name, parent, out var uiObject) == false)
         {
             Debug.LogError("Prefab No Error");

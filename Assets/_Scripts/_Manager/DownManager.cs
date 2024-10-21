@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class DownManager : MonoBehaviour
 {
@@ -16,19 +17,18 @@ public class DownManager : MonoBehaviour
     public Text downValText;
 
     [Header("Label")]
-    public AssetLabelReference defaultlabel;
     public AssetLabelReference player;
-    public AssetLabelReference init;
+    public AssetLabelReference selecter;
 
     private long patchSize;
-    private Dictionary<string, long>  patchMap = new Dictionary<string, long>();
+    private Dictionary<string, long> patchMap = new Dictionary<string, long>();
     void Start()
     {
         waitMessage.SetActive(true);
         downMessage.SetActive(false);
         // 어드레서블 초기화
         StartCoroutine(InitAddressable());
-        
+
         // 다운 받아야 하는 파일이 있는지 없는지 체크
         StartCoroutine(CheckUpdateFiles());
 
@@ -42,7 +42,7 @@ public class DownManager : MonoBehaviour
 
     IEnumerator CheckUpdateFiles()
     {
-        var labels = new List<string>() { defaultlabel.labelString, player.labelString,init.labelString };
+        var labels = new List<string>() { player.labelString, selecter.labelString };
         patchSize = default;
 
         foreach (var label in labels)
@@ -57,7 +57,7 @@ public class DownManager : MonoBehaviour
             yield return handle;
             patchSize += handle.Result;
         }
-        if(patchSize > decimal.Zero)
+        if (patchSize > decimal.Zero)
         {
             // 업데이트 체크중 팝업 닫기
             waitMessage.SetActive(false);
@@ -70,8 +70,8 @@ public class DownManager : MonoBehaviour
         }
         else // 다운 받을 게 없으면 씬 변경
         {
-                downValText.text = "100 %";
-                downSlider.value = 1f;
+            downValText.text = "100 %";
+            downSlider.value = 1f;
             yield return new WaitForSeconds(2f);
             LoadingManager.LoadScene("4Login");
             //LoadingManager.LoadScene("Preloader"); 4Login으로 하는게 맞는데 4Login씬에암것도 업어서 바로 게임실행 해보고 싶을때만 이 주석으로 교체
@@ -81,10 +81,10 @@ public class DownManager : MonoBehaviour
     private string GetFileSize(long byteCnt)
     {
         string size = "0 Bytes";
-        if(byteCnt >= 1073741824.0)
+        if (byteCnt >= 1073741824.0)
         {
             size = string.Format("{0:##.##}", byteCnt / 1073741824.0 + " GB");
-        } 
+        }
         else if (byteCnt >= 1048576.0)
         {
             size = string.Format("{0:##.##}", byteCnt / 1048576.0 + " MB");
@@ -92,7 +92,8 @@ public class DownManager : MonoBehaviour
         else if (byteCnt >= 1024.0)
         {
             size = string.Format("{0:##.##}", byteCnt / 1024.0 + " KB");
-        } else if(byteCnt > 0 && byteCnt < 1024.0)
+        }
+        else if (byteCnt > 0 && byteCnt < 1024.0)
         {
             size = byteCnt.ToString() + " Bytes";
         }
@@ -110,14 +111,14 @@ public class DownManager : MonoBehaviour
         이 중에서 프리팹 1에만 "default" 라벨이 설정되어 있고, 프리팹 2는 라벨이 설정되지 않은 상태라고 합시다.
         이 경우, Addressables.GetDownloadSizeAsync("default")를 호출하면 "default" 라벨이 설정된 리소스만 다운로드할 크기를 확인하게 됨. 즉, 프리팹 1만 다운로드 대상이 되고, 프리팹 2는 무시.        
         */
-        var labels = new List<string>() { defaultlabel.labelString, player.labelString, init.labelString };
+        var labels = new List<string>() { player.labelString, selecter.labelString };
 
         foreach (var label in labels)
         {
             var handle = Addressables.GetDownloadSizeAsync(label);
 
             yield return handle;
-            if(handle.Result != decimal.Zero)
+            if (handle.Result != decimal.Zero)
             {
                 StartCoroutine(DownLoadLabel(label));
             }
@@ -128,7 +129,7 @@ public class DownManager : MonoBehaviour
     {
         patchMap.Add(label, 0);
         //false는 다운로드 후 리소스를 자동으로 로드하지 않겠다는 설정
-        var handle = Addressables.DownloadDependenciesAsync(label,false);
+        var handle = Addressables.DownloadDependenciesAsync(label, false);
         while (!handle.IsDone)
         {
             patchMap[label] = handle.GetDownloadStatus().DownloadedBytes;
@@ -148,20 +149,35 @@ public class DownManager : MonoBehaviour
     {
         var total = 0f;
         downValText.text = "0 %";
+
         while (true)
         {
-            total += patchMap.Sum(tmp => tmp.Value);
+            total = patchMap.Sum(tmp => tmp.Value);
 
             downSlider.value = total / patchSize;
             downValText.text = (int)(downSlider.value * 100) + " %";
 
-            if(total == patchSize)
+            if (total >= patchSize)
             {
-                LoadingManager.LoadScene("4Login");
-                //LoadingManager.LoadScene("Preloader"); 4Login으로 하는게 맞는데 4Login씬에암것도 업어서 바로 게임실행 해보고 싶을때만 이 주석으로 교체                break;
+                Debug.Log("다운로드 완료");
+
+                // 모든 비동기 작업이 완료되었는지 확인
+
+                // 씬 비동기로 로드
+                yield return StartCoroutine(LoadSceneAsync("4Login"));
+                break;
             }
-            total = 0f;
-            yield return new WaitForEndOfFrame();   
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    IEnumerator LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        while (!asyncLoad.isDone)
+        {
+            yield return null;  // 씬 로드가 완료될 때까지 대기
         }
     }
 }

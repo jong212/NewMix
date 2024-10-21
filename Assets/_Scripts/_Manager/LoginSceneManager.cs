@@ -7,12 +7,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
- 
+
 
 public class LoginSceneManager : MonoBehaviour
 {
     private static LoginSceneManager _instance;
-     public static LoginSceneManager Instance
+    public static LoginSceneManager Instance
     {
         get
         {
@@ -21,7 +21,15 @@ public class LoginSceneManager : MonoBehaviour
     }
 
     [SerializeField] private Canvas _loginUICanvas;
-    public CharacterSelection Selecter { get; private set; }
+    [SerializeField] private CharacterSelection _selector;
+    public CharacterSelection Selecter
+    {
+        get
+        {
+            return _selector;
+        }
+
+    }
 
     public Canvas LoginUICanvas
     {
@@ -39,7 +47,8 @@ public class LoginSceneManager : MonoBehaviour
         }
         //SceneManager.LoadScene("Preloader"); //로그인 생략하고 게임씬으로 입장하는 테스트 하기 위한 임시 주석 Test종료 후 삭제 및 주석처리
 
-        if (FindObjectOfType(typeof(StaticManager)) == null) { 
+        if (FindObjectOfType(typeof(StaticManager)) == null)
+        {
             var obj = Resources.Load<GameObject>("Prefabs/StaticManager");
             Instantiate(obj);
 
@@ -50,17 +59,48 @@ public class LoginSceneManager : MonoBehaviour
 
         if (bro.IsSuccess())
         {
-            StartGoogleLogin();
+            /* ================================================================================
+             * StartGoogleLogin(); // PC로 테스트 하고 싶을 때에는 StartGoogleLogin을 주석처리 하자.
+             * ================================================================================
+             */
+
+            CustomLogin();
+
+
             Debug.Log("[1] 초기화 성공 : " + bro.StatusCode);
 
         }
         else
         {
             Debug.LogError("초기화 실패 : " + bro);
-        } 
+        }
     }
 
-     
+    public void CustomLogin()
+    {
+        string id = "test123"; // 테스트용
+        string password = "123"; // 테스트용
+
+        var bro = Backend.BMember.CustomLogin(id, password);
+        if (bro.StatusCode == 200 || bro.StatusCode == 201) //200 : 기존 회원 로그인 성공, 201 신규 사용자 회원가입 및 로그인 성공
+        {
+            var nickData = Backend.BMember.GetUserInfo();
+            LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
+            string nick = userInfoJson["nickname"]?.ToString();
+
+            // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
+            if (string.IsNullOrEmpty(nick))
+            {
+                StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
+                Selecter.gameObject.SetActive(true);
+            }
+            else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
+            {
+                BackendGameData.Instance.GameDataGet();
+            }
+        }
+    }
+
     public void StartGoogleLogin()
     {
         TheBackend.ToolKit.GoogleLogin.Android.GoogleLogin(true, GoogleLoginCallback);
@@ -92,14 +132,13 @@ public class LoginSceneManager : MonoBehaviour
 
             // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             if (string.IsNullOrEmpty(nick))
-            {                
+            {
                 StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
                 Selecter.gameObject.SetActive(true);
             }
             else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
             {
-              SceneManager.LoadScene("Preloader");
-
+                BackendGameData.Instance.GameDataGet();
             }
         }
 

@@ -18,25 +18,25 @@ MonoBehaviour:
   m_GUID: 94b466ca57349f543acf1e50c196809d
   m_SerializeEntries:
   - m_GUID: 4a9627b58795ce940a971986ff1b8356
-    m_Address: Assets/Prefabs/Networked/Character.prefab
+    m_Address: Characte
     m_ReadOnly: 0
     m_SerializedLabels:
     - player
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a00f35947c22cf14b9b13e919028102c
-    m_Address: Assets/Markus Art/Character/Prefabs/Stickman_White.prefab
+    m_Address: Stickman_White
     m_ReadOnly: 0
     m_SerializedLabels:
     - SelectPlayer
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c946ddf49e957dd4ab976f356152c0b2
-    m_Address: Assets/Markus Art/Character/Prefabs/Stickman_Red.prefab
+    m_Address: Stickman_Red
     m_ReadOnly: 0
     m_SerializedLabels:
     - SelectPlayer
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 34b4a01a70d248e45a483dfe88a3f8b5
-    m_Address: Assets/Markus Art/Character/Prefabs/Stickman_Yellow.prefab
+    m_Address: Stickman_Yellow
     m_ReadOnly: 0
     m_SerializedLabels:
     - SelectPlayer

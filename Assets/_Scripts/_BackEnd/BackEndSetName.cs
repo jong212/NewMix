@@ -52,8 +52,8 @@ public class BackEndSetName : BaseUI
         Backend.BMember.CreateNickname(nickname, (callback) =>
         {
             Debug.Log("닉네임 설정 완료");
-            SceneManager.LoadScene("Preloader");
-            int a = LoginSceneManager.Instance.Selecter.selectedCharacter;
+            int chrIndex = LoginSceneManager.Instance.Selecter.selectedCharacter;
+            BackendGameData.Instance.GameDataInsert(chrIndex);
         });
     }
 }

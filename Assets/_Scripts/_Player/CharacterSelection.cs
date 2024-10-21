@@ -10,6 +10,7 @@ public class CharacterSelection : MonoBehaviour
     // 어드레서블에서 SelectPlayer로 설정 되어있는 것들 모두 메모리에 올린 후 캐싱용으로 딕셔너리에 담아둔다 여기서 라벨을 키로 담아두기 때문에 라벨을 키로 접근해서 GetPrefabByLabel 함수를 사용하면 한 번에 리스트로 가져올 수 있다
     private void Awake()
     {
+        Debug.Log("ddd1");
         if (AddressableManager.instance == null) Debug.LogError("AddressableManager instance is not initialized.");
 
         AddressableManager.instance.LoadPrefabsWithLabel("SelectPlayer", () =>

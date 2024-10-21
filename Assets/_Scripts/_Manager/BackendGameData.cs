@@ -8,10 +8,12 @@ using BackEnd;
 public class UserData
 {
     public int level = 1;
-    public float atk = 3.5f;
-    public string info = string.Empty;
-    public Dictionary<string, int> inventory = new Dictionary<string, int>();
-    public List<string> equipment = new List<string>();
+    public int money = 1;
+    public int ChrType = 0;
+    public int atk = 1;
+    public int hp = 1;
+    public int miss = 1;
+
 
     // 데이터를 디버깅하기 위한 함수입니다.(Debug.Log(UserData);)
     public override string ToString()
@@ -19,20 +21,11 @@ public class UserData
         StringBuilder result = new StringBuilder();
 
         result.AppendLine($"level : {level}");
+        result.AppendLine($"money : {money}");
+        result.AppendLine($"ChrType : {ChrType}");
         result.AppendLine($"atk : {atk}");
-        result.AppendLine($"info : {info}");
-
-        result.AppendLine($"inventory");
-        foreach (var itemKey in inventory.Keys)
-        {
-            result.AppendLine($"| {itemKey} : {inventory[itemKey]}개");
-        }
-
-        result.AppendLine($"equipment");
-        foreach (var equip in equipment)
-        {
-            result.AppendLine($"| {equip}");
-        }
+        result.AppendLine($"hp : {hp}");
+        result.AppendLine($"miss : {miss}");
 
         return result.ToString();
     }
@@ -59,7 +52,7 @@ public class BackendGameData
 
     private string gameDataRowInDate = string.Empty;
 
-    public void GameDataInsert()
+    public void GameDataInsert(int? chrIdx)
     {
         if (userData == null)
         {
@@ -68,28 +61,24 @@ public class BackendGameData
 
         Debug.Log("데이터를 초기화합니다.");
         userData.level = 1;
-        userData.atk = 3.5f;
-        userData.info = "친추는 언제나 환영입니다.";
-
-        userData.equipment.Add("전사의 투구");
-        userData.equipment.Add("강철 갑옷");
-        userData.equipment.Add("헤르메스의 군화");
-
-        userData.inventory.Add("빨간포션", 1);
-        userData.inventory.Add("하얀포션", 1);
-        userData.inventory.Add("파란포션", 1);
+        userData.money = 10000;
+        userData.ChrType = 1;
+        userData.atk = 1;
+        userData.hp = 10;
+        userData.miss = 1;
 
         Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
         param.Add("level", userData.level);
+        param.Add("money", userData.money);
+        param.Add("ChrType", chrIdx ?? userData.ChrType);
         param.Add("atk", userData.atk);
-        param.Add("info", userData.info);
-        param.Add("equipment", userData.equipment);
-        param.Add("inventory", userData.inventory);
+        param.Add("hp", userData.hp);
+        param.Add("miss", userData.miss);
 
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
-        var bro = Backend.GameData.Insert("USER_DATA", param);
+        var bro = Backend.GameData.Insert("Character", param);
 
         if (bro.IsSuccess())
         {
@@ -107,7 +96,7 @@ public class BackendGameData
     public void GameDataGet()
     {
         Debug.Log("게임 정보 조회 함수를 호출합니다.");
-        var bro = Backend.GameData.GetMyData("USER_DATA", new Where());
+        var bro = Backend.GameData.GetMyData("Character", new Where());
         if (bro.IsSuccess())
         {
             Debug.Log("게임 정보 조회에 성공했습니다. : " + bro);
@@ -127,18 +116,11 @@ public class BackendGameData
                 userData = new UserData();
 
                 userData.level = int.Parse(gameDataJson[0]["level"].ToString());
-                userData.atk = float.Parse(gameDataJson[0]["atk"].ToString());
-                userData.info = gameDataJson[0]["info"].ToString();
-
-                foreach (string itemKey in gameDataJson[0]["inventory"].Keys)
-                {
-                    userData.inventory.Add(itemKey, int.Parse(gameDataJson[0]["inventory"][itemKey].ToString()));
-                }
-
-                foreach (LitJson.JsonData equip in gameDataJson[0]["equipment"])
-                {
-                    userData.equipment.Add(equip.ToString());
-                }
+                userData.money = int.Parse(gameDataJson[0]["money"].ToString());
+                userData.ChrType = int.Parse(gameDataJson[0]["ChrType"].ToString());
+                userData.atk = int.Parse(gameDataJson[0]["atk"].ToString());
+                userData.hp = int.Parse(gameDataJson[0]["hp"].ToString());
+                userData.miss = int.Parse(gameDataJson[0]["miss"].ToString());
 
                 Debug.Log(userData.ToString());
             }
@@ -153,8 +135,7 @@ public class BackendGameData
     {
         Debug.Log("레벨을 1 증가시킵니다.");
         userData.level += 1;
-        userData.atk += 3.5f;
-        userData.info = "내용을 변경합니다.";
+        userData.atk += 1;
     }
 
     // 게임 정보 수정하기
@@ -169,9 +150,6 @@ public class BackendGameData
         Param param = new Param();
         param.Add("level", userData.level);
         param.Add("atk", userData.atk);
-        param.Add("info", userData.info);
-        param.Add("equipment", userData.equipment);
-        param.Add("inventory", userData.inventory);
 
         BackendReturnObject bro = null;
 

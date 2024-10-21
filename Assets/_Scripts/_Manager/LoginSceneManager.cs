@@ -60,15 +60,10 @@ public class LoginSceneManager : MonoBehaviour
         if (bro.IsSuccess())
         {
             /* ================================================================================
-             * StartGoogleLogin(); // PC로 테스트 하고 싶을 때에는 StartGoogleLogin을 주석처리 하자.
-             * ================================================================================
-             */
-
+             * StartGoogleLogin(); // PC 테스트는 CustomLogin 함수 사용하고 모바일은 StartGoogleLogin
+             * ================================================================================*/
             CustomLogin();
-
-
-            Debug.Log("[1] 초기화 성공 : " + bro.StatusCode);
-
+            Debug.Log("초기화 성공 : " + bro.StatusCode);
         }
         else
         {
@@ -78,25 +73,28 @@ public class LoginSceneManager : MonoBehaviour
 
     public void CustomLogin()
     {
-        string id = "test123"; // 테스트용
-        string password = "123"; // 테스트용
+        string id = "test123";                                           // 테스트용
+        string password = "123";                                         // 테스트용
 
         var bro = Backend.BMember.CustomLogin(id, password);
-        if (bro.StatusCode == 200 || bro.StatusCode == 201) //200 : 기존 회원 로그인 성공, 201 신규 사용자 회원가입 및 로그인 성공
+        StartCoroutine(CheckChartUpdate());
+
+        if (bro.StatusCode == 200 || bro.StatusCode == 201)              // 200: 기존 회원, 201: 신규 사용자 회원가입 및 로그인 성공
         {
             var nickData = Backend.BMember.GetUserInfo();
             LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
             string nick = userInfoJson["nickname"]?.ToString();
+            BackendGameData.Instance.SetNickname(nick);                  // 캐싱   
 
-            // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
-            if (string.IsNullOrEmpty(nick))
+                                    
+            if (string.IsNullOrEmpty(nick))                              // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             {
-                StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
+                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform, true);
                 Selecter.gameObject.SetActive(true);
             }
-            else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
+            else                                                         // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
             {
-                BackendGameData.Instance.GameDataGet();
+                SetWaitRoom();
             }
         }
     }
@@ -109,8 +107,6 @@ public class LoginSceneManager : MonoBehaviour
     private void GoogleLoginCallback(bool isSuccess, string errorMessage, string token)
     {
 
-
-
         if (isSuccess == false)
         {
             Debug.LogError(errorMessage);
@@ -118,31 +114,31 @@ public class LoginSceneManager : MonoBehaviour
         }
 
         var bro = Backend.BMember.AuthorizeFederation(token, FederationType.Google);
-        Debug.Log("[2] 구글 페데레이션 로그인 결과 : " + bro);
+        Debug.Log("구글 페데레이션 로그인 결과 : " + bro);
 
-        StartCoroutine(CheckChartUpdate());
+        StartCoroutine(CheckChartUpdate());                                              // 다운로드 차트
 
-
-
-        if (bro.StatusCode == 200 || bro.StatusCode == 201) //200 : 기존 회원 로그인 성공, 201 신규 사용자 회원가입 및 로그인 성공
+        if (bro.StatusCode == 200 || bro.StatusCode == 201)                              // 200: 기존 회원, 201: 신규 사용자 회원가입 및 로그인 성공
         {
             var nickData = Backend.BMember.GetUserInfo();
             LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
             string nick = userInfoJson["nickname"]?.ToString();
-
-            // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
-            if (string.IsNullOrEmpty(nick))
+            BackendGameData.Instance.SetNickname(nick);
+           
+            if (string.IsNullOrEmpty(nick))                 // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             {
-                StaticManager.UI.OpenUI<BackEndSetName>("Prefabs/LoginScene/UI", LoginUICanvas.transform);
+                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform, true);                
                 Selecter.gameObject.SetActive(true);
             }
             else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
             {
-                BackendGameData.Instance.GameDataGet();
+                SetWaitRoom();
             }
         }
 
     }
+
+    #region # GetChartData
     public class ChartInfo
     {
         public string chartName;
@@ -187,7 +183,6 @@ public class LoginSceneManager : MonoBehaviour
         // csv 한 줄 = charinfojson
         foreach (JsonData chartInfoJson in newChartManagerJson)
         {
-            Debug.Log(chartInfoJson + "2222");
             ChartInfo chartInfo = new ChartInfo(chartInfoJson);
             chartInfoDic.Add(chartInfo.chartName, chartInfo);
         }
@@ -243,4 +238,18 @@ public class LoginSceneManager : MonoBehaviour
         }
 
     }
+    #endregion
+
+    #region # SetWaitRoom
+    public void SetWaitRoom()
+    {
+        if(Selecter != null && Selecter.gameObject.activeSelf == true)
+        {
+            Selecter.gameObject.SetActive(false);
+        }
+
+        BackendGameData.Instance.GameDataGet();
+        StaticManager.UI.CommonOpen(UIType.CharaterUI, LoginUICanvas.transform,false,true);
+    }
+    #endregion
 }

@@ -54,6 +54,7 @@ public class BackEndSetName : BaseUI
             Debug.Log("닉네임 설정 완료");
             int chrIndex = LoginSceneManager.Instance.Selecter.selectedCharacter;
             BackendGameData.Instance.GameDataInsert(chrIndex);
+            LoginSceneManager.Instance.SetWaitRoom();
         });
     }
 }

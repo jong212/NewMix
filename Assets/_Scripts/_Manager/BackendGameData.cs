@@ -49,9 +49,9 @@ public class BackendGameData
     }
 
     public static UserData userData;
+    public string Nickname { get; private set; }  // 닉네임을 저장하기 위한 프로퍼티
 
     private string gameDataRowInDate = string.Empty;
-
     public void GameDataInsert(int? chrIdx)
     {
         if (userData == null)
@@ -174,5 +174,10 @@ public class BackendGameData
         {
             Debug.LogError("게임 정보 데이터 수정에 실패했습니다. : " + bro);
         }
+    }
+    public void SetNickname(string nickname)
+    {
+        Nickname = nickname;
+        Debug.Log($"닉네임 캐싱: {Nickname}");
     }
 }

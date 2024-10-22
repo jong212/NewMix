@@ -6,7 +6,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class AddressableManager : MonoBehaviour
 {
     public static AddressableManager instance;
-
     private Dictionary<string, List<GameObject>> prefabCache = new Dictionary<string, List<GameObject>>();
 
     private void Awake()
@@ -22,7 +21,7 @@ public class AddressableManager : MonoBehaviour
         }
     }
 
-    // Prefab Load Request with Label
+    // 넣은 라벨값에 해당하는 어드레서블에셋들을 "로드" 및 "캐싱"
     public void LoadPrefabsWithLabel(string label, System.Action onLoaded)
     {
         Addressables.LoadAssetsAsync<GameObject>(label, null).Completed += handle =>
@@ -49,7 +48,7 @@ public class AddressableManager : MonoBehaviour
     }
 
 
-    // Get Prefab by Name
+    // 캐싱 된 List<GameObject> 반환 (라벨값만 넣어주면 됨)
     public List<GameObject> GetPrefabsByLabel(string label)
     {
         if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
@@ -59,6 +58,9 @@ public class AddressableManager : MonoBehaviour
         Debug.LogError($"No prefabs found with label: {label}");
         return new List<GameObject>();
     }
+
+    // 캐싱 된 단일 오브젝트 반환 (라벨값,프리펩이름)
+
     public GameObject GetPrefab(string label, string prefabName)
     {
         if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))

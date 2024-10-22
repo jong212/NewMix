@@ -247,9 +247,18 @@ public class LoginSceneManager : MonoBehaviour
         {
             Selecter.gameObject.SetActive(false);
         }
-
-        BackendGameData.Instance.GameDataGet();
-        StaticManager.UI.CommonOpen(UIType.CharaterUI, LoginUICanvas.transform,false,true);
+         
+        BackendGameData.Instance.GetPlayerData();
+        GameObject infoUI = StaticManager.UI.CommonOpen(UIType.CharaterUI, LoginUICanvas.transform,false,true);
+        PlayerWaitRoomInfo Roominfo = infoUI.GetComponent<PlayerWaitRoomInfo>();
+        Roominfo.NickNameLayout.text = BackendGameData.Instance.Nickname;
+        
+        UserData data = BackendGameData.userData;
+        Roominfo.LvLayout.text = data.level.ToString();
+        Roominfo.AtkLayout.text = data.atk.ToString();
+        Roominfo.HpLayout.text = data.hp.ToString();
+        Roominfo.MissLayout.text = data.miss.ToString();
+        Roominfo.LastLocationLayout.text = data.lastMap.ToString();
     }
     #endregion
 }

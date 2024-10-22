@@ -4,6 +4,7 @@ using UnityEngine;
 
 // 뒤끝 SDK namespace 추가
 using BackEnd;
+using Unity.VisualScripting;
 
 public class UserData
 {
@@ -11,6 +12,7 @@ public class UserData
     public int money = 1;
     public int ChrType = 0;
     public int atk = 1;
+    public string lastMap = "A";
     public int hp = 1;
     public int miss = 1;
 
@@ -24,6 +26,7 @@ public class UserData
         result.AppendLine($"money : {money}");
         result.AppendLine($"ChrType : {ChrType}");
         result.AppendLine($"atk : {atk}");
+        result.AppendLine($"lastMap : {lastMap}");
         result.AppendLine($"hp : {hp}");
         result.AppendLine($"miss : {miss}");
 
@@ -47,7 +50,7 @@ public class BackendGameData
             return _instance;
         }
     }
-
+    
     public static UserData userData;
     public string Nickname { get; private set; }  // 닉네임을 저장하기 위한 프로퍼티
 
@@ -64,6 +67,7 @@ public class BackendGameData
         userData.money = 10000;
         userData.ChrType = 1;
         userData.atk = 1;
+        userData.lastMap = "A";
         userData.hp = 10;
         userData.miss = 1;
 
@@ -73,6 +77,7 @@ public class BackendGameData
         param.Add("money", userData.money);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
         param.Add("atk", userData.atk);
+        param.Add("lastMap", userData.lastMap);
         param.Add("hp", userData.hp);
         param.Add("miss", userData.miss);
 
@@ -85,7 +90,7 @@ public class BackendGameData
             Debug.Log("게임 정보 데이터 삽입에 성공했습니다. : " + bro);
 
             //삽입한 게임 정보의 고유값입니다.  
-            gameDataRowInDate = bro.GetInDate();
+            gameDataRowInDate = bro.GetInDate();            
         }
         else
         {
@@ -93,7 +98,7 @@ public class BackendGameData
         }
     }
 
-    public void GameDataGet()
+    public void GetPlayerData()
     {
         Debug.Log("게임 정보 조회 함수를 호출합니다.");
         var bro = Backend.GameData.GetMyData("Character", new Where());
@@ -119,6 +124,7 @@ public class BackendGameData
                 userData.money = int.Parse(gameDataJson[0]["money"].ToString());
                 userData.ChrType = int.Parse(gameDataJson[0]["ChrType"].ToString());
                 userData.atk = int.Parse(gameDataJson[0]["atk"].ToString());
+                userData.lastMap = gameDataJson[0]["lastMap"].ToString();
                 userData.hp = int.Parse(gameDataJson[0]["hp"].ToString());
                 userData.miss = int.Parse(gameDataJson[0]["miss"].ToString());
 

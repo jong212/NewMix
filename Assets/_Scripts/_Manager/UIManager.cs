@@ -13,12 +13,11 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
+    
+    private Dictionary<UIType, GameObject> _createdUIDic = new Dictionary<UIType, GameObject>(); // _createdUIDic 딕셔너리에 있으면 하이어라키에 존재한단 뜻    
+    private HashSet<UIType> _openedUIDic = new HashSet<UIType>(); // _openedUIDic 여기 담겨있으면 SetActive True인 것임
 
-    // _createdUIDic 딕셔너리에 있으면 하이어라키에 존재한단 뜻
-    private Dictionary<UIType, GameObject> _createdUIDic = new Dictionary<UIType, GameObject>();
-    // _openedUIDic 여기 담겨있으면 SetActive True인 것임
-    private HashSet<UIType> _openedUIDic = new HashSet<UIType>();
-
+    // Popup
     public AlertUI AlertUI
     {
         get
@@ -33,15 +32,16 @@ public class UIManager : MonoBehaviour
             return _confirmUI;
         }
     }
+
+    // Init
     public void Init()
     {
         AlertUI.gameObject.SetActive(false);
         ConfirmUI.gameObject.SetActive(false);
     }
- 
 
-    // 공통 : UI 열어볼래?
-    public void CommonOpen(UIType uiType , Transform parent, bool worldPositionStays)
+    // Common ( Try UI Open )
+    public void CommonOpen(UIType uiType , Transform parent, bool worldPositionStays)           
     {
         var gObj = GetCreatedUI(uiType,  parent, worldPositionStays);
 
@@ -50,6 +50,8 @@ public class UIManager : MonoBehaviour
             OpenUI(uiType, gObj);
         }
     }
+
+    // Common ( Try UI Open ) 오픈한 오브젝트 반환
     public GameObject CommonOpen(UIType uiType, Transform parent, bool worldPositionStays, bool returnObj )
     {
         var gObj = GetCreatedUI(uiType, parent, worldPositionStays);
@@ -60,6 +62,7 @@ public class UIManager : MonoBehaviour
         }
         return returnObj ? gObj : null;
     }
+
     private GameObject GetCreatedUI(UIType uiType, Transform parent, bool worldPositionStays)
     {
         if (_createdUIDic.ContainsKey(uiType) == false)
@@ -68,6 +71,7 @@ public class UIManager : MonoBehaviour
         }
         return _createdUIDic[uiType];
     }
+
     private void CreateUI(UIType uiType, Transform parent, bool worldPositionStays)
     {
         if (_createdUIDic.ContainsKey(uiType) == false)
@@ -86,9 +90,10 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+
     private string GetUIPath(UIType uiType)
     {
-        string path = string.Empty; // "" == string.Empty
+        string path = string.Empty; 
         switch (uiType)
         {
             case UIType.BackEndName:
@@ -100,15 +105,16 @@ public class UIManager : MonoBehaviour
         }
         return path;
     }
+
     private void OpenUI(UIType uiType, GameObject uiObject)
     {
         if (_openedUIDic.Contains(uiType) == false)
         {
-            //OpenUI를 바로 타는 케이스가 있어서 비활성화 되어있는 오브젝트를 활성화 시키고 싶어서
             uiObject.SetActive(true);
             _openedUIDic.Add(uiType);
         }
     }
+
     public void CloseUI(UIType uiType)
     {
         if (_openedUIDic.Contains(uiType))

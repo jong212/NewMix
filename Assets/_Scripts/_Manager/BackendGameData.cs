@@ -1,11 +1,8 @@
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-
-// 뒤끝 SDK namespace 추가
 using BackEnd;
-using Unity.VisualScripting;
 
+// 데이터 맵핑용 클래스
 public class UserData
 {
     public int level = 1;
@@ -17,7 +14,7 @@ public class UserData
     public int miss = 1;
 
 
-    // 데이터를 디버깅하기 위한 함수입니다.(Debug.Log(UserData);)
+    // 디버깅 위한 함수 (Debug.Log(UserData);)
     public override string ToString()
     {
         StringBuilder result = new StringBuilder();

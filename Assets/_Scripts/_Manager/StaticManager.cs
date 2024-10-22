@@ -1,8 +1,20 @@
-using BackEnd.Quobject.SocketIoClientDotNet.Client;
-using System.Collections;
-using System.Collections.Generic;
+using BackEnd;
+using LitJson;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+
+public class EnemyInfo
+{
+    public string Name { get; private set; }
+    public int HP { get; private set; }
+    public int Attack { get; private set; }
+
+    public EnemyInfo(JsonData json)
+    {
+        Name = json["name"].ToString();
+        HP = int.Parse(json["hp"].ToString());
+        Attack = int.Parse(json["attack"].ToString());
+    }
+}
 
 public class StaticManager : MonoBehaviour
 {
@@ -55,5 +67,17 @@ public class StaticManager : MonoBehaviour
 
         // 이름과 경로를 로그로 출력
         Debug.Log($"Object name: {transform.name}, Path: {path}");
+    }
+
+    public void InitSetting()
+    {
+        BackendGameData.Instance.GetPlayerData();   // 서버에서 데이터 새로 받아오기
+        JsonData charJson = JsonMapper.ToObject(Backend.Chart.GetLocalChartData("CharacterSrcChart"));
+        charJson = BackendReturnObject.Flatten(charJson);
+    }
+
+    public void CashData()
+    {
+        UserData cashPlayerData = BackendGameData.userData;
     }
 }

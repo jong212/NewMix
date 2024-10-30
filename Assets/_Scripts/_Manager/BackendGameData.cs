@@ -81,7 +81,7 @@ public class BackendGameData
         }
     }
     
-    public static UserData userData;
+    public static UserData userData; 
     public string Nickname { get; private set; }  // 닉네임을 저장하기 위한 프로퍼티
 
     private string gameDataRowInDate = string.Empty;

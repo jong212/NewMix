@@ -20,8 +20,8 @@ public class AddressableManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     // 넣은 라벨값에 해당하는 어드레서블에셋들을 "로드" 및 "캐싱"
+    // 딕셔너리에 키 = 라벨이름 , 값 = 프리팹 이름 으로 맵핑 해서 오브젝트 추가함
     public void LoadPrefabsWithLabel(string label, System.Action onLoaded)
     {
         Addressables.LoadAssetsAsync<GameObject>(label, null).Completed += handle =>
@@ -48,7 +48,7 @@ public class AddressableManager : MonoBehaviour
     }
 
 
-    // 캐싱 된 List<GameObject> 반환 (라벨값만 넣어주면 됨)
+    // (라벨 값 매게 변수로 받고) 오브젝트들 리스트 형태로 반환 함
     public List<GameObject> GetPrefabsByLabel(string label)
     {
         if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
@@ -59,7 +59,7 @@ public class AddressableManager : MonoBehaviour
         return new List<GameObject>();
     }
 
-    // 캐싱 된 단일 오브젝트 반환 (라벨값,프리펩이름)
+    //(라벨값,프리펩이름 매게 변수로 받고) 캐싱 된 단일 오브젝트를 프리팹 이름으로 찾아서 반환 
 
     public GameObject GetPrefab(string label, string prefabName)
     {

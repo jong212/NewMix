@@ -1,35 +1,55 @@
 using BackEnd;
 using LitJson;
+using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
-public class EnemyInfo
-{
-    public string Name { get; private set; }
-    public int HP { get; private set; }
-    public int Attack { get; private set; }
-
-    public EnemyInfo(JsonData json)
-    {
-        Name = json["name"].ToString();
-        HP = int.Parse(json["hp"].ToString());
-        Attack = int.Parse(json["attack"].ToString());
-    }
-}
 
 public class StaticManager : MonoBehaviour
 {
+    // 싱글톤
     public static StaticManager Instance { get; private set; }
+
+    // 캐싱용 - 로컬에 다운 받아진 사용가능한 차트이름들
+    private List<string> _getCharLocalListname = new List<string>();
+    public List<string>  GetCharLocalListname {
+        get => _getCharLocalListname;
+        set => _getCharLocalListname = value;
+    }
+    
+    // 캐싱용 - 기본 캐릭터 어드레서블 차트
+    private List<CharacterSrcChart> _characterList = new List<CharacterSrcChart>();
+    public List<CharacterSrcChart> CharacterList
+    {
+        get => _characterList;
+        set => _characterList = value;
+    }
+
+    // 캐싱용 - 테스트
+    public List<Test> _test = new List<Test>();
+    public List<Test> Test 
+    { 
+        get => _test; 
+        set => _test = value; 
+    }
 
     public static UIManager UI { get; private set; }
 
-
-    // 모든 씬에서 사용되는 기능들을 모아놓은 클래스.
-    // 각씬메니저가 현재 쌘에 존재하는지 확인 후 생성한다.
     void Awake()
     {
         Init();
     }
-
+    private void Update()
+    {
+        if(CharacterList != null)
+        {
+            foreach(var c in CharacterList)
+            {
+                Debug.Log(c);
+            }
+        }
+    }
     void Init()
     {
         if (Instance != null)
@@ -69,13 +89,43 @@ public class StaticManager : MonoBehaviour
         Debug.Log($"Object name: {transform.name}, Path: {path}");
     }
 
+    #region 차트 데이터 캐싱용 비즈니스 로직
     public void InitSetting()
     {
-        BackendGameData.Instance.GetPlayerData();   // 서버에서 데이터 새로 받아오기
-        JsonData charJson = JsonMapper.ToObject(Backend.Chart.GetLocalChartData("CharacterSrcChart"));
-        charJson = BackendReturnObject.Flatten(charJson);
-    }
+        // 서버에서 데이터 새로 받아오기 위해 중복 초기화?
+        BackendGameData.Instance.GetPlayerData();
 
+        foreach (var chartName in GetCharLocalListname)
+        {
+            LoadChart(chartName);
+        }
+
+    }
+    private void LoadChart (string chartName)
+    {
+        string chartDataString = Backend.Chart.GetLocalChartData(chartName);
+        JsonData chartJson = JsonMapper.ToObject(chartDataString);
+        chartJson = BackendReturnObject.Flatten(chartJson);
+
+        switch (chartName) 
+        {
+            case nameof(CharacterSrcChart):
+                foreach (JsonData row in chartJson["rows"])
+                {
+                    CharacterSrcChart classRef = new CharacterSrcChart(row);
+                    CharacterList.Add(classRef);
+                }
+                break;
+            case nameof(Test):
+                foreach (JsonData row in chartJson["rows"])
+                {
+                    Test classRef = new Test(row);
+                    Test.Add(classRef);
+                }
+                break;
+        }
+    }
+    #endregion
     public void CashData()
     {
         UserData cashPlayerData = BackendGameData.userData;

@@ -1,8 +1,40 @@
 using System.Text;
 using UnityEngine;
 using BackEnd;
+using LitJson;
 
-// 데이터 맵핑용 클래스
+#region 설계도 모음
+
+// 설계도 - 어드레서블 매핑용 (현재 플레이어가 착용중인 캐릭터 ID 등등)
+public class CharacterSrcChart
+{
+    public int charId { get; private set; }
+    public string labName { get; private set; }
+    public string prefName { get; private set; }
+
+    public CharacterSrcChart(JsonData json)
+    {
+        charId = int.Parse(json["charId"].ToString());
+        labName = json["labName"].ToString();
+        prefName = json["prefName"].ToString();
+    }
+}
+
+public class Test
+{
+    public int CharacterId { get; private set; }
+    public string CharacterColor { get; private set; }
+    public string Src { get; private set; }
+
+    public Test(JsonData json)
+    {
+        CharacterId = int.Parse(json["CharacterId"].ToString());
+        CharacterColor = json["CharacterColor"].ToString();
+        Src = json["Src"].ToString();
+    }
+}
+
+// 설계도 - 캐릭터 생성 시 플레이어 정보 DB세팅용 
 public class UserData
 {
     public int level = 1;
@@ -14,8 +46,8 @@ public class UserData
     public int miss = 1;
 
 
-    // 디버깅 위한 함수 (Debug.Log(UserData);)
-    public override string ToString()
+   
+    public override string ToString()  // 디버깅 위한 함수 (Debug.Log(UserData);)
     {
         StringBuilder result = new StringBuilder();
 
@@ -30,6 +62,7 @@ public class UserData
         return result.ToString();
     }
 }
+#endregion
 
 public class BackendGameData
 {
@@ -183,4 +216,5 @@ public class BackendGameData
         Nickname = nickname;
         Debug.Log($"닉네임 캐싱: {Nickname}");
     }
+    
 }

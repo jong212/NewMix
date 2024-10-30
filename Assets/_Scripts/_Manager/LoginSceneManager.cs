@@ -156,7 +156,7 @@ public class LoginSceneManager : MonoBehaviour
     IEnumerator CheckChartUpdate()
     {
         // 차트 매니저 폴더 접근 
-        Debug.Log("CheckChart");
+        Debug.Log("[차트 매니저 접근해서 서버,로컬 차트 비교 후 가져오기]");
         var bro = Backend.Chart.GetChartListByFolder(2056);
 
         // 해당 폴더에는 chartManager 차트 하나만 존재할 것이므로 0으로 접근합니다.
@@ -185,6 +185,7 @@ public class LoginSceneManager : MonoBehaviour
         {
             ChartInfo chartInfo = new ChartInfo(chartInfoJson);
             chartInfoDic.Add(chartInfo.chartName, chartInfo);
+            StaticManager.Instance.GetCharLocalListname.Add(chartInfo.chartName);
         }
 
         // 기기에 저장된 chartManager 차트를 불러옵니다.
@@ -225,7 +226,7 @@ public class LoginSceneManager : MonoBehaviour
             // 차트를 재다운로드하여 기기에 덮어씌웁니다.
             foreach (var downloadChartInfo in chartInfoDic)
             {
-                Debug.Log(downloadChartInfo.Value.chartName + "을 새로운 버전으로 다운받습니다.");
+                Debug.Log("["+downloadChartInfo.Value.chartName + "을 새로운 버전으로 다운받습니다.]");
                 Backend.Chart.GetOneChartAndSave(downloadChartInfo.Value.chartFileId, downloadChartInfo.Value.chartName);
             }
 
@@ -234,7 +235,7 @@ public class LoginSceneManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("업데이트할 내역이 존재하지 않습니다.");
+            Debug.Log("[업데이트할 내역이 존재하지 않습니다.]");
         }
 
     }

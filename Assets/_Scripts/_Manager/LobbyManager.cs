@@ -7,7 +7,7 @@ public class LobbyManager : MonoBehaviour
 {
     public void Button_Start()
     {
-        Debug.Log("[1. ¾À 1lobby => 2Down ]");
+        Debug.Log("[1 LobbyManager : 1lobby => 2Down ]");
         SceneManager.LoadScene("2Down");
         
     }

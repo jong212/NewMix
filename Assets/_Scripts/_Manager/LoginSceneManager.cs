@@ -141,7 +141,6 @@ public class LoginSceneManager : MonoBehaviour
     #region # 서버 차트 비교 후 로드
     IEnumerator ServerCharLoad()
     {
-        Debug.Log("[3. 차트 매니저 접근]");
         
         var bro = Backend.Chart.GetChartListByFolder(2056);                                 // 차트 매니저 폴더 접근 
         string chartManagerFileId = bro.FlattenRows()[0]["selectedChartFileId"].ToString(); // CSV 파일 업로드 할 때 부여 된 고유 파일 ID 값을 가져옴 ex 145150, // 해당 폴더에는 chartManager 차트 하나만 존재할 것이므로 0으로 접근합니다.
@@ -153,7 +152,7 @@ public class LoginSceneManager : MonoBehaviour
             yield break;
         }
 
-        Debug.Log("[3-1. 로컬, 서버 차트 비교 하기 위한 과정]");
+        Debug.Log("[3 LoginSceneManager : 뒤끝에서 차트매니저파일 가져옴 ]");
         JsonData newChartManagerJson = serverChartBro.FlattenRows();                        // 서버에서 불러온 ChartManager을 언마샬하여 JsonData 형태로 캐싱합니다.
         Dictionary<string, ChartInfo> chartInfoDic = new Dictionary<string, ChartInfo>();   // 차트 이름으로 데이터를 검색할 것이기 때문에 Dictnary로 생성합니다, // 해당 Dictnary는 최신 버전으로 업데이트할 차트 리스트로 사용됩니다.(최신 버전이라면 해당 리스트에서 제외)
 
@@ -172,7 +171,7 @@ public class LoginSceneManager : MonoBehaviour
             JsonData deviceChartManagerJson = JsonMapper.ToObject(deviceChartManagerString);// 기기에 저장된 chartManager 차트가 존재한다면 // 기기에 저장된 string형태의 chartManager를 Json 형태로 변경
             deviceChartManagerJson = BackendReturnObject.Flatten(deviceChartManagerJson);
 
-            Debug.Log("[3-1. 로컬, 서버 차트 비교]");
+            Debug.Log("[3-1 LoginSceneManager 로컬, 서버 차트 비교]");
             foreach (JsonData deviceChartJson in deviceChartManagerJson["rows"])            // 기기에 저장된 chartManager 차트 속 차트들을 서버에서 불러온 데이터와 대조합니다.
             {
                 ChartInfo deviceChartInfo = new ChartInfo(deviceChartJson);
@@ -190,14 +189,14 @@ public class LoginSceneManager : MonoBehaviour
         {
             foreach (var downloadChartInfo in chartInfoDic)                                 // 차트를 재다운로드하여 기기에 덮어씌웁니다.
             {
-                Debug.Log("[3-2 : "+downloadChartInfo.Value.chartName + "을 새로운 버전으로 다운받습니다.]");
+                Debug.Log($"[3-2 LoginSceneManager {downloadChartInfo.Value.chartName} 을 새로운 버전으로 다운받습니다.]");
                 Backend.Chart.GetOneChartAndSave(downloadChartInfo.Value.chartFileId, downloadChartInfo.Value.chartName);
             }
             Backend.Chart.GetOneChartAndSave(chartManagerFileId, chartManagerName);         // chartManager 차트를 최신화합니다.(로컬저장)
         }
         else
         {
-            Debug.Log("[3-2 : 업데이트할 내역이 존재하지 않습니다.]");
+            Debug.Log("[3-2 LoginSceneManager 업데이트할 내역이 존재하지 않습니다.]");
         }
 
     }
@@ -206,6 +205,7 @@ public class LoginSceneManager : MonoBehaviour
     #region # SetWaitRoom
     public void SetWaitRoom()
     {
+        Debug.Log("4 LoginSceneManager : 게임 입장 전 대기실 세팅");
         if(Selecter != null && Selecter.gameObject.activeSelf == true)
         {
             Selecter.gameObject.SetActive(false);
@@ -225,24 +225,5 @@ public class LoginSceneManager : MonoBehaviour
     }
     #endregion
 
-    // TEST 후 UPDATE 제거
-
-    private void Update()
-    {
-        if (BackendGameData.Instance.CharacterList != null)
-            foreach (var character in BackendGameData.Instance.CharacterList)
-            {
-                    Debug.Log($"Character ID: {character.charId}, Label Name: {character.labName}, Prefab Name: {character.prefName}");
-            }
-        var userData = BackendGameData.Instance.userData;
-        var properties = userData.GetType().GetProperties(); // 모든 프로퍼티 가져오기
-
-        foreach (var prop in properties)
-        {
-            var propName = prop.Name;                          // 프로퍼티 이름
-            var propValue = prop.GetValue(userData);           // 프로퍼티 값
-            Debug.Log($"{propName}: {propValue}");
-        }
-
-    }
+  
 }

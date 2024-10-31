@@ -127,7 +127,7 @@ public class BackendGameData
     public void SetNickname(string nickname)    // 캐싱 - 버튼 클릭 시 닉넴 캐싱 하는 건데 리펙토링 가능한지 체크해 봐야 할 듯 (중복코드라서)중복 버튼에서 바로 위 코드로 타는거가능한지 체크필요
     {
         NickName = nickname;
-        Debug.Log($"닉네임 캐싱: {NickName}");
+        Debug.Log($"[3-3 BackendGameData : 플레이어 닉네임 얼리 캐싱 {NickName}]");
     }
     // -----------------캐싱 End-------------------------
 
@@ -217,11 +217,10 @@ public class BackendGameData
     // 플레이어 데이터 서버에서 가져와서 userData 변수에 캐싱하는 로직을 작성한 함수
     public void GetPlayerData()
     {
-        Debug.Log("게임 정보 조회 함수를 호출합니다.");
         var bro = Backend.GameData.GetMyData("Character", new Where());
         if (bro.IsSuccess())
         {
-            Debug.Log("게임 정보 조회에 성공했습니다. : " + bro);
+            Debug.Log($"[3-5 BackendGameData : 뒤끝에서 플레이어 정보 가져옴 {bro}]" );
 
 
             LitJson.JsonData gameDataJson = bro.FlattenRows(); // Json으로 리턴된 데이터를 받아옵니다.  
@@ -245,7 +244,7 @@ public class BackendGameData
                 userData.hp = int.Parse(gameDataJson[0]["hp"].ToString());
                 userData.miss = int.Parse(gameDataJson[0]["miss"].ToString());
 
-                Debug.Log(userData.ToString());
+                Debug.Log($"[3-6 BackendGameData : 가져온 데이터 로컬에 캐싱 userData 여기 넣음 {userData.ToString()}]");
             }
         }
         else

@@ -2,6 +2,9 @@ using System.Text;
 using UnityEngine;
 using BackEnd;
 using LitJson;
+using System.Collections.Generic;
+using UnityEngine.PlayerLoop;
+using Unity.VisualScripting;
 
 #region 설계도 모음
 
@@ -44,9 +47,6 @@ public class UserData
     public string lastMap = "A";
     public int hp = 1;
     public int miss = 1;
-
-
-   
     public override string ToString()  // 디버깅 위한 함수 (Debug.Log(UserData);)
     {
         StringBuilder result = new StringBuilder();
@@ -62,10 +62,26 @@ public class UserData
         return result.ToString();
     }
 }
+// 설계도 - 서버, 로컬 차트 비교용 
+public class ChartInfo
+{
+    public string chartName;
+    public string chartFileId;
+    public string updateDate;
+
+    public ChartInfo(JsonData json)
+    {
+        chartName = json["chartName"].ToString();
+        chartFileId = json["chartFileId"].ToString();
+        updateDate = json["updateDate"].ToString();
+    }
+}
 #endregion
 
-public class BackendGameData
+public class BackendGameData 
 {
+ 
+    
     private static BackendGameData _instance = null;
 
     public static BackendGameData Instance
@@ -80,12 +96,81 @@ public class BackendGameData
             return _instance;
         }
     }
-    
-    public static UserData userData; 
-    public string Nickname { get; private set; }  // 닉네임을 저장하기 위한 프로퍼티
+    // -----------------캐싱 Start-------------------------
+    // 캐싱 종류 닉네임, 로컬 차트들, 서버에서 받아온 유저데이터
+    private string _nickname { get; set; }   
+    private List<string> _getCharLocalListname = new List<string>();
+    private List<CharacterSrcChart> _characterList = new List<CharacterSrcChart>();
+    private List<Test> _test = new List<Test>();
+    public UserData userData;
+
+    public string NickName                      // 캐싱 - NickName
+    {
+        get => _nickname;
+        set => _nickname = value;
+    }
+    public List<string> GetCharLocalListname    // 캐싱 - Useable Local Charts
+    {
+        get => _getCharLocalListname;
+        set => _getCharLocalListname = value;
+    }
+    public List<CharacterSrcChart> CharacterList // 캐싱 -기본 캐릭터 어드레서블 차트
+    {
+        get => _characterList;
+        set => _characterList = value;
+    }
+    public List<Test> Test                       // 캐싱 -테스트
+    {
+        get => _test;
+        set => _test = value;
+    }
+    public void SetNickname(string nickname)    // 캐싱 - 버튼 클릭 시 닉넴 캐싱 하는 건데 리펙토링 가능한지 체크해 봐야 할 듯 (중복코드라서)중복 버튼에서 바로 위 코드로 타는거가능한지 체크필요
+    {
+        NickName = nickname;
+        Debug.Log($"닉네임 캐싱: {NickName}");
+    }
+    // -----------------캐싱 End-------------------------
+
+    public void InitSetting()
+    {
+        BackendGameData.Instance.GetPlayerData(); // 서버에서 데이터 새로 받아오기 위해 중복 초기화?
+
+        foreach (var chartName in GetCharLocalListname)
+        {
+            LoadChart(chartName);
+        }
+
+    }
+    // 로컬에 최신화 된 차트 캐싱 작업 하는 메소드
+    private void LoadChart(string chartName)
+    {
+        string chartDataString = Backend.Chart.GetLocalChartData(chartName);
+        JsonData chartJson = JsonMapper.ToObject(chartDataString);
+        chartJson = BackendReturnObject.Flatten(chartJson);
+
+        switch (chartName)
+        {
+            case nameof(CharacterSrcChart):
+                foreach (JsonData row in chartJson["rows"])
+                {
+                    CharacterSrcChart classRef = new CharacterSrcChart(row);
+                    CharacterList.Add(classRef);
+                }
+                break;
+            case nameof(Test):
+                foreach (JsonData row in chartJson["rows"])
+                {
+                    Test classRef = new Test(row);
+                    Test.Add(classRef);
+                }
+                break;
+        }
+    }
 
     private string gameDataRowInDate = string.Empty;
-    public void GameDataInsert(int? chrIdx)
+
+    // 닉네임을 설정하면서 유저 기본 정보 세팅 후 서버에 저장
+    public void GameDataInsert(int? chrIdx) 
     {
         if (userData == null)
         {
@@ -128,6 +213,7 @@ public class BackendGameData
         }
     }
 
+    // 플레이어 데이터 서버에서 가져와서 userData 변수에 캐싱하는 로직을 작성한 함수
     public void GetPlayerData()
     {
         Debug.Log("게임 정보 조회 함수를 호출합니다.");
@@ -139,8 +225,8 @@ public class BackendGameData
 
             LitJson.JsonData gameDataJson = bro.FlattenRows(); // Json으로 리턴된 데이터를 받아옵니다.  
 
-            // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
-            if (gameDataJson.Count <= 0)
+            
+            if (gameDataJson.Count <= 0) // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
             {
                 Debug.LogWarning("데이터가 존재하지 않습니다.");
             }
@@ -211,10 +297,10 @@ public class BackendGameData
             Debug.LogError("게임 정보 데이터 수정에 실패했습니다. : " + bro);
         }
     }
-    public void SetNickname(string nickname)
+    /*public void SetNickname(string nickname)
     {
         Nickname = nickname;
         Debug.Log($"닉네임 캐싱: {Nickname}");
-    }
+    }*/
     
 }

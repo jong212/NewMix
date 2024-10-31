@@ -28,7 +28,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD);
 
         bool isLoaded = false;
-
+        (int test, string test1) = StaticManager.DataSetManager.CharacterDefaultSettings(); // 
         // ÇÁ¸®ÆÕ ·Îµå
         AddressableManager.instance.LoadPrefabsWithLabel("player", () =>
         {

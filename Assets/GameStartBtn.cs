@@ -8,6 +8,6 @@ public class GameStartBtn : MonoBehaviour
     private void Start()
     {
         Button btn = GetComponent<Button>();
-        btn.onClick.AddListener(StaticManager.Instance.InitSetting);
+        btn.onClick.AddListener(BackendGameData.Instance.InitSetting);
     }
 }

@@ -59,22 +59,19 @@ public class DownManager : MonoBehaviour
         }
         if (patchSize > decimal.Zero)
         {
-            // 업데이트 체크중 팝업 닫기
-            waitMessage.SetActive(false);
+            waitMessage.SetActive(false);               // 업데이트 체크중 팝업 닫기
+            downMessage.SetActive(true);                // 다운 받아야 할 파일 있다는 팝업 오픈
+            Debug.Log("[2. 리소스 파일 다운로드 중]");
+            sizeInfoText.text = GetFileSize(patchSize); // 다운 받아야할 크기 UI 표시
 
-            // 다운 받아야 할 파일 있다는 팝업 오픈
-            downMessage.SetActive(true);
-
-            // 다운 받아야할 크기 UI 표시
-            sizeInfoText.text = GetFileSize(patchSize);
         }
         else // 다운 받을 게 없으면 씬 변경
         {
             downValText.text = "100 %";
             downSlider.value = 1f;
             yield return new WaitForSeconds(2f);
+            Debug.Log("[2. 다운 받을 게 없음 ]");
             LoadingManager.LoadScene("4Login");
-            //LoadingManager.LoadScene("Preloader"); 4Login으로 하는게 맞는데 4Login씬에암것도 업어서 바로 게임실행 해보고 싶을때만 이 주석으로 교체
         }
 
     }
@@ -128,8 +125,7 @@ public class DownManager : MonoBehaviour
     IEnumerator DownLoadLabel(string label)
     {
         patchMap.Add(label, 0);
-        //false는 다운로드 후 리소스를 자동으로 로드하지 않겠다는 설정
-        var handle = Addressables.DownloadDependenciesAsync(label, false);
+        var handle = Addressables.DownloadDependenciesAsync(label, false);//false는 다운로드 후 리소스를 자동으로 로드하지 않겠다는 설정
         while (!handle.IsDone)
         {
             patchMap[label] = handle.GetDownloadStatus().DownloadedBytes;
@@ -159,7 +155,8 @@ public class DownManager : MonoBehaviour
 
             if (total >= patchSize)
             {
-                Debug.Log("다운로드 완료");
+                Debug.Log("[2-1 다운 완료]");
+
 
                 // 모든 비동기 작업이 완료되었는지 확인
 

@@ -5,12 +5,21 @@ using UnityEngine;
 
 public class DataSetManager : MonoBehaviour
 {
-    public (int,string) CharacterDefaultSettings()
+    public (string, string) CharacterDefaultSettings()
     {
         int cType = BackendGameData.Instance.userData.ChrType;
 
-        /*CharacterSrcChart getData = BackendGameData.Instance.CharacterList.FirstOrDefault ()*/
-        return (1, "test");
+        foreach(CharacterSrcChart character in BackendGameData.Instance.CharacterList)
+        {
+            if(cType == character.charId)
+            {
+                Debug.Log(character.charId);
+                Debug.Log(character.labName);
+                Debug.Log(character.prefName);
+            }
+        }
+        
+        return ("", "test");
     }
 
 }

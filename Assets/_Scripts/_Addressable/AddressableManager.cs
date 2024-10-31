@@ -36,8 +36,8 @@ public class AddressableManager : MonoBehaviour
                 foreach (var prefab in handle.Result)
                 {
                     prefabCache[label].Add(prefab);
+                    Debug.Log("[ @ Addressable " + prefab.name + " 리소스 로드 및 캐싱 완료]");
                 }
-                Debug.Log($"All prefabs with label '{label}' successfully loaded from Addressables.");
                 onLoaded?.Invoke();
             }
             else

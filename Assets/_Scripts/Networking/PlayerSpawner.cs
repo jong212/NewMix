@@ -12,7 +12,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
     public void PlayerJoined(PlayerRef player)
     {
-        InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
+        //InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers); // 1031 주석
 
         // Start the spawn process for all players (including the local one)
         if (player == Runner.LocalPlayer)
@@ -25,10 +25,10 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     {
         yield return new WaitUntil(() => GameManager.instance != null);
         yield return new WaitForEndOfFrame();
-        yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD);
+        //yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD); 10/31
 
         bool isLoaded = false;
-        (int test, string test1) = StaticManager.DataSetManager.CharacterDefaultSettings(); // 
+       // (string labelName, string prefabName) = StaticManager.DataSetManager.CharacterDefaultSettings(); // 
         // 프리팹 로드
         AddressableManager.instance.LoadPrefabsWithLabel("player", () =>
         {

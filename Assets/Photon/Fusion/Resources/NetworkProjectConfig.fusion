@@ -16,6 +16,7 @@
         "InputDataWordCount": 0,
         "ReplicationFeatures": 1,
         "InputTransferMode": 0,
+        "SimulationUpdateTimeMode": 0,
         "PlayerCount": 4,
         "TickRateSelection": {
             "Client": 64,

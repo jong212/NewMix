@@ -31,15 +31,13 @@ public class Character : NetworkBehaviour
             IsometricCameraFollow cameraFollow = FindObjectOfType<IsometricCameraFollow>();
             cameraFollow.target = this.transform;
 
-            Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
-
+/*            Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
+1031주석*/
         }
-
-        nicknameUI = Instantiate(
-            ResourcesManager.instance.worldNicknamePrefab,
-            InterfaceManager.instance.worldCanvas.transform);
-
-        NicknameChanged();
+        /*nicknameUI = Instantiate(
+          ResourcesManager.instance.worldNicknamePrefab,
+          InterfaceManager.instance.worldCanvas.transform);
+        NicknameChanged();1031 주석*/
         ModifyKCCCollider();
     }
     private void ModifyKCCCollider()

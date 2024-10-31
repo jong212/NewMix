@@ -37,11 +37,13 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void TryConnectShared()
 	{
-		TryConnectSharedSession(
+		_roomCode = "A";
+
+        TryConnectSharedSession(
 			string.IsNullOrWhiteSpace(_roomCode) ? $"FoodFusion{Random.Range(1000, 9999)}" : _roomCode,
 			() =>
 			{
-				UIScreen.Focus(InterfaceManager.instance.gameplayHUD);
+				//UIScreen.Focus(InterfaceManager.instance.gameplayHUD); 10/31 ¡÷ºÆ
 			});
 	}
 

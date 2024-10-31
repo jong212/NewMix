@@ -30,6 +30,7 @@ public class StaticManager : MonoBehaviour
 
         UI = GetComponentInChildren<UIManager>();
         UI.Init();
+        DataSetManager = GetComponentInChildren<DataSetManager>();
         /*DataSetManager = GetComponentInChildren<DataSetManager>(); 필요할 때 사용 아직 스태틱 매니저에서는 뭐 처리할 게 없어 보임*/
     }
 

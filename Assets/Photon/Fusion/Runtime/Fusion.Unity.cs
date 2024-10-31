@@ -972,14 +972,14 @@ namespace Fusion {
 
       switch (logType) {
         case LogType.Error:
-          Debug.LogError(fullMessage, IsInMainThread ? obj : null);
+         Debug.LogError(fullMessage, IsInMainThread ? obj : null);
           break;
         case LogType.Warn:
           Debug.LogWarning(fullMessage, IsInMainThread ? obj : null);
           break;
         default:
-          Debug.Log(fullMessage, IsInMainThread ? obj : null);
-          break;
+        //퓨전 일반 로그 제거 Debug.Log(fullMessage, IsInMainThread ? obj : null);
+        break;
       }
     }
 

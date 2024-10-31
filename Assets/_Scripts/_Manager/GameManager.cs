@@ -59,7 +59,7 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
     public override void Spawned()
     {
         // 방 이름을 인터페이스에 표시
-        InterfaceManager.instance.roomNameText.text = Runner.SessionInfo.Name;
+        //InterfaceManager.instance.roomNameText.text = Runner.SessionInfo.Name;
 
         // 권한이 있는 경우 주문 타이머 설정
         //if (Object.HasStateAuthority) StartCoroutine(PrepareOrderTimer());

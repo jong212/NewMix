@@ -139,6 +139,7 @@ public class BackendGameData
         {
             LoadChart(chartName);
         }
+        Matchmaker.Instance.TryConnectShared();
 
     }
     // 로컬에 최신화 된 차트 캐싱 작업 하는 메소드

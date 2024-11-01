@@ -4,6 +4,7 @@ using UnityEngine;
 using Fusion;
 using Fusion.Addons.SimpleKCC;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class Character : NetworkBehaviour
 {
@@ -15,9 +16,12 @@ public class Character : NetworkBehaviour
     [SerializeField] private Animator anim;
 
     [Networked, OnChangedRender(nameof(NicknameChanged))] public NetworkString<_16> Nickname { get; set; }
+    [Networked] public int _level { get; set; }
+    [Networked] public int _atk { get; set; }
+    [Networked] public int _hp { get; set; }
+    [Networked] public int _miss { get; set; }
     [Networked] public Item HeldItem { get; set; }
     [Networked] public bool WaitingForAuthority { get; set; }
-
 
     private PlayerInput prevInput;
     private WorldNickname nicknameUI = null;
@@ -31,13 +35,23 @@ public class Character : NetworkBehaviour
             IsometricCameraFollow cameraFollow = FindObjectOfType<IsometricCameraFollow>();
             cameraFollow.target = this.transform;
 
-/*            Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname;
-1031주석*/
+            // 1031주석 Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname; 
+           
+            
+            
+            // 데이터 세팅............집 가서 체크
+            //Character playerSettingsRef = playerPrefab.GetComponent<Character>();   //          
+            UserData test = BackendGameData.Instance.userData;                      // 플레이어 데이터 캐싱된 거 가져옴
+            _level = test.level;
+            _atk = test.atk;
+            _hp = test.hp;
+            _miss = test.miss;
+            Debug.Log($"[5 PlayerSpawner : 플레이어 스폰 완료 => 데이터 세팅 완료{"레벨" + test.level}{"힘" + test.atk}{"체력" + test.hp}  ]");
         }
-        /*nicknameUI = Instantiate(
+        /* 1031 주석 nicknameUI = Instantiate(
           ResourcesManager.instance.worldNicknamePrefab,
           InterfaceManager.instance.worldCanvas.transform);
-        NicknameChanged();1031 주석*/
+        NicknameChanged();*/
         ModifyKCCCollider();
     }
     private void ModifyKCCCollider()
@@ -82,16 +96,10 @@ public class Character : NetworkBehaviour
             }
         }
     }
-
+    // kcc.RealSpeed를 사용하여 Movement 애니메이션 파라미터 설정
     public override void Render()
     {
-
-        // kcc.RealSpeed를 사용하여 Movement 애니메이션 파라미터 설정
-        // 캐릭터의 실제 이동 속도에 따라 애니메이션 설정
-        anim.SetFloat("Movement", kcc.RealSpeed > 0 ? kcc.RealSpeed / Specs.MovementSpeed : 0);
-
-        // 위치 보정: 권한 전송 대기 중일 때 heldItem의 위치 조정
-     
+        anim.SetFloat("Movement", kcc.RealSpeed > 0 ? kcc.RealSpeed / Specs.MovementSpeed : 0); // 캐릭터의 실제 이동 속도에 따라 애니메이션 설정
     }
 
     public override void FixedUpdateNetwork()
@@ -100,50 +108,41 @@ public class Character : NetworkBehaviour
         {
             return;
         }
-
-        // 조이스틱 입력 값 받아오기
+        
+        // 조이스틱 이동
         if (joystick != null)
         {
             Vector2 joystickInput = new Vector2(joystick.Horizontal, joystick.Vertical);
-            //Debug.Log($"Joystick Input: {joystickInput}");
 
-            // 조이스틱 입력이 있을 경우 캐릭터 이동 처리
-            if (joystickInput.magnitude > 0)
-            {
-                // 카메라의 회전을 반영한 이동 처리
-                Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y);
-               // Debug.Log($"Move Direction: {moveDirection}");
-
-                // 카메라의 회전 행렬을 가져와서 이동 방향을 변환
-                Vector3 cameraForward = Camera.main.transform.forward;
-                Vector3 cameraRight = Camera.main.transform.right;
-
-                // 카메라의 높이를 무시하고 평면상에서만 이동
-                cameraForward.y = 0;
+            
+            if (joystickInput.magnitude > 0)                                                // 조이스틱 입력이 있을 경우 캐릭터 이동 처리
+            {                                                                               
+                Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y);   // 카메라의 회전을 반영한 이동 처리
+                                                                                            // Debug.Log($"Move Direction: {moveDirection}");
+                                                                                            
+                Vector3 cameraForward = Camera.main.transform.forward;                      // 카메라의 회전 행렬을 가져와서 이동 방향을 변환
+                Vector3 cameraRight = Camera.main.transform.right;                          
+                                                                                            
+                cameraForward.y = 0;                                                        // 카메라의 높이를 무시하고 평면상에서만 이동
                 cameraRight.y = 0;
                 cameraForward.Normalize();
                 cameraRight.Normalize();
 
-                // 카메라 기준으로 조이스틱 방향을 변환
-                Vector3 finalMoveDirection = cameraForward * moveDirection.z + cameraRight * moveDirection.x;
-                //Debug.Log($"Final Move Direction: {finalMoveDirection}");
+                        
+                Vector3 finalMoveDirection = cameraForward * moveDirection.z + cameraRight * moveDirection.x; // 카메라 기준으로 조이스틱 방향을 변환
 
-                // KCC로 캐릭터 이동 처리
-                kcc.Move(finalMoveDirection * Specs.MovementSpeed);
-                //Debug.Log("Character is moving");
+                
+                kcc.Move(finalMoveDirection * Specs.MovementSpeed);                         // KCC로 캐릭터 이동 처리
 
-                // 캐릭터의 회전 설정 (움직이는 방향을 바라보게)
-                if (finalMoveDirection.magnitude > 0)
+
+                if (finalMoveDirection.magnitude > 0)                                       // 캐릭터의 회전 설정 (움직이는 방향을 바라보게)
                 {
                     kcc.SetLookRotation(0, Mathf.Atan2(finalMoveDirection.x, finalMoveDirection.z) * Mathf.Rad2Deg);
-                   // Debug.Log("Character Look Rotation Set");
                 }
             }
             else
             {
-                // 조이스틱 입력이 없으면 이동 정지
-                kcc.Move(Vector3.zero); // 이동을 멈추도록 빈 벡터 전달
-              // Debug.Log("Character Stopped");
+                kcc.Move(Vector3.zero); // 조이스틱 입력이 없으면 이동 정지
             }
         }
         else
@@ -152,53 +151,44 @@ public class Character : NetworkBehaviour
         }
     }
 
+    // 몬스터 공격 메서드
     void TryAttack()
     {
-        // 레이캐스트로 공격 대상(몬스터)을 찾음
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);            // 레이캐스트로 공격 대상(몬스터)을 찾음
         if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
         {
-            // 몬스터가 있는지 확인
-            if (hit.transform.TryGetComponent<Entity>(out var targetMonster))
+            if (hit.transform.TryGetComponent<Entity>(out var targetMonster))   // 몬스터가 있는지 확인
             {
-                targetMonster.DealDamageRpc(10);
-                // 몬스터가 맞으면 밀기 로직 실행
+                targetMonster.DealDamageRpc(10);                                // 몬스터가 맞으면 밀기 로직 실행
                 PushMonster(targetMonster);
             }
         }
     }
 
+    // 플레이어가 몬스터 공격 시 몬스터 밀기
     void PushMonster(Entity monster)
     {
-        // 몬스터의 Rigidbody를 가져옴
-        Rigidbody monsterRb = monster.GetComponent<Rigidbody>();
+        Rigidbody monsterRb = monster.GetComponent<Rigidbody>();                                    // 몬스터의 Rigidbody를 가져옴
 
         if (monsterRb != null)
         {
-            // 플레이어와 몬스터의 위치 차이를 기반으로 방향을 설정
-            Vector3 pushDirection = (monster.transform.position - transform.position).normalized;
-
-            // 뒤로 미는 힘을 적용 (ForceMode.Impulse로 즉시 힘 적용)
-            float pushForce = 50f; // 힘의 크기를 조절
+            Vector3 pushDirection = (monster.transform.position - transform.position).normalized;   // 플레이어와 몬스터의 위치 차이를 기반으로 방향을 설정
+            float pushForce = 50f;                                                                  // 힘의 크기를 조절
             monsterRb.isKinematic = false;
             monsterRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
         }
         else
         {
-            // Rigidbody가 없으면 위치를 직접 조정
-            Vector3 pushDirection = (monster.transform.position - transform.position).normalized;
-            monster.transform.position += pushDirection * 0.5f; // 밀리는 정도를 조절
+            Vector3 pushDirection = (monster.transform.position - transform.position).normalized;  // Rigidbody가 없으면 위치를 직접 조정
+            monster.transform.position += pushDirection * 0.5f;                                    // 밀리는 정도를 조절
         }
     }
 
     #region Change Detection
-
     private void NicknameChanged()
     {
         nicknameUI.SetTarget(uiPoint, Nickname.Value);
     }
-
- 
     #endregion
 
     public void SetHeldItem(Item item)
@@ -238,41 +228,5 @@ public class Character : NetworkBehaviour
                 onUnauthorized: () => WaitingForAuthority = false
             );
         }
-    }
-
-    private void GrabInteractWith(IEnumerable<Interactable> interactables)
-    {
-        foreach (var interactable in interactables)
-        {
-            if (interactable.GrabInteract(this)) return;
-        }
-
-        // Drop held object if it is physical
-      
-    }
-
-    private void UseInteractWith(IEnumerable<Interactable> interactables)
-    {
-        if (interactables.Count() != 0)
-        {
-            foreach (var interactable in interactables)
-            {
-                if (interactable.UseInteract(this)) return;
-            }
-        }
-    }
-
-    private IEnumerable<Interactable> GetNearbyInteractables()
-    {
-        Vector3 p0 = transform.position + transform.forward * Specs.Reach / 2;
-        return Physics.OverlapCapsule(p0, p0 + Vector3.up * 2, Specs.Reach / 2)
-            .Select(c => c.GetComponentInParent<Interactable>())
-            .Where(a => a != null)
-            .OrderBy(h => Vector3.Distance(p0, h.transform.position));
-    }
-
-    private void OnDrawGizmos()
-    {
-
     }
 }

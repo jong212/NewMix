@@ -25,14 +25,22 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     {
         yield return new WaitUntil(() => GameManager.instance != null);
         yield return new WaitForEndOfFrame();
-        //yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD); 10/31
+        //yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD); 1031 주석
 
         bool isLoaded = false;
-       // (string labelName, string prefabName) = StaticManager.DataSetManager.CharacterDefaultSettings(); // 
-        // 프리팹 로드
-        AddressableManager.instance.LoadPrefabsWithLabel("player", () =>
+        (string labelName, string prefabName) = StaticManager.DataSetManager.CharacterDefaultSettings(); 
+        if(string.IsNullOrEmpty(labelName) || string.IsNullOrEmpty(prefabName)){
+            Debug.Log("[플레이어 스포너에서 스폰할 때 플레이어의 캐릭터 어드레서블 라벨 혹은 프리팹 이름 값을 불러오지 못함]");
+            yield break;
+        } else
         {
-            playerPrefab = AddressableManager.instance.GetPrefab("player","defaultPlayer");
+            Debug.Log($"[5 PlayerSpawner : 플레이어 에게 적용할 어드레서블 레이블,프리팹이름 값 정상적으로 가져옴 {labelName}, {prefabName} ]");
+        }
+        // 프리팹 로드
+        AddressableManager.instance.LoadPrefabsWithLabel(labelName, () =>
+        {
+            playerPrefab = AddressableManager.instance.GetPrefab(labelName, prefabName);
+
             isLoaded = true;
         });
 
@@ -56,6 +64,9 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
                         // Send the player info to the master client using a static RPC
                         RPC_NotifyMasterClient(Runner, player, res.Object.GetComponent<NetworkObject>());
+
+
+
                     }
                 }
             );

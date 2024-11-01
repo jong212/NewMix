@@ -70,9 +70,28 @@ public class LoginSceneManager : MonoBehaviour
             Debug.LogError("초기화 실패 : " + bro);
         }
     }
+    private void CheckLogin()
+    {
+        // 실시간 알림 서버에 연결합니다.
+        //실시간 알림 서버에 연결합니다.  
+        Backend.Notification.Connect();
+
+        //"a1"의 닉네임을 가진 유저의 inDate를 찾는다
+        BackendReturnObject bro = Backend.Social.GetUserInfoByNickName("a");
+        string gamerIndate = bro.GetFlattenJSON()["row"]["inDate"].ToString();
+
+        // UserIsConnectByIndate 함수 호출 시 반응하는 OnIsConnectUser 핸들러를 설정한다.  
+        Backend.Notification.OnIsConnectUser = (bool isConnect, string nickName, string gamerIndate) => {
+            Debug.Log($"{nickName} / {gamerIndate} 접속 여부 확인 : " + isConnect);
+        };
+
+        // 함수 호출 시, 위에서 설정한 OnIsConnectUser 핸들러가 호출된다.  
+        Backend.Notification.UserIsConnectByIndate(gamerIndate);
+    }
 
     public void CustomLogin()
     {
+        //CheckLogin();
         string id = "test123";                                           // 테스트용
         string password = "123";                                         // 테스트용
 
@@ -211,7 +230,8 @@ public class LoginSceneManager : MonoBehaviour
             Selecter.gameObject.SetActive(false);
         }
          
-        BackendGameData.Instance.GetPlayerData();
+        BackendGameData.Instance.GetPlayerData();        
+
         GameObject infoUI = StaticManager.UI.CommonOpen(UIType.CharaterUI, LoginUICanvas.transform,false,true);
         PlayerWaitRoomInfo Roominfo = infoUI.GetComponent<PlayerWaitRoomInfo>();
         Roominfo.NickNameLayout.text = BackendGameData.Instance.NickName;

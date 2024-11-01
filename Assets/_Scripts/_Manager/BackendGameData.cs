@@ -133,6 +133,8 @@ public class BackendGameData
 
     public void InitSetting()
     {
+        
+
         BackendGameData.Instance.GetPlayerData(); // 서버에서 데이터 새로 받아오기 위해 중복 초기화?
 
         foreach (var chartName in GetCharLocalListname)
@@ -220,11 +222,8 @@ public class BackendGameData
         var bro = Backend.GameData.GetMyData("Character", new Where());
         if (bro.IsSuccess())
         {
-            Debug.Log($"[3-5 BackendGameData : 뒤끝에서 플레이어 정보 가져옴 {bro}]" );
-
-
+            Debug.Log($"[3-5 BackendGameData : 뒤끝에서 플레이어 정보 가져왔음 {bro}]");
             LitJson.JsonData gameDataJson = bro.FlattenRows(); // Json으로 리턴된 데이터를 받아옵니다.  
-
             
             if (gameDataJson.Count <= 0) // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
             {

@@ -10,6 +10,7 @@ public class StaticManager : MonoBehaviour
 {
     public static StaticManager Instance { get; private set; }      // 싱글톤
     public static UIManager UI { get; private set; }                // 인스펙터 참조하기 위해 public
+    public WorldCanvas WorldCanvas { get; set; }
     public static DataSetManager DataSetManager { get; private set; }                // 인스펙터 참조하기 위해 public
 
 
@@ -31,6 +32,7 @@ public class StaticManager : MonoBehaviour
         UI = GetComponentInChildren<UIManager>();
         UI.Init();
         DataSetManager = GetComponentInChildren<DataSetManager>();
+        WorldCanvas = GetComponentInChildren<WorldCanvas>();
         /*DataSetManager = GetComponentInChildren<DataSetManager>(); 필요할 때 사용 아직 스태틱 매니저에서는 뭐 처리할 게 없어 보임*/
     }
 

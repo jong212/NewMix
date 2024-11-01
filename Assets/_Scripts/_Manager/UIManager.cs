@@ -6,7 +6,8 @@ using UnityEngine;
 public enum UIType
 {
     BackEndName,
-    CharaterUI
+    CharaterUI,
+    NickPanel
 
 }
 public class UIManager : MonoBehaviour
@@ -101,6 +102,9 @@ public class UIManager : MonoBehaviour
                 break;
             case UIType.CharaterUI:
                 path = "Prefabs/LoginScene/UI/CharaterUI";
+                break;            
+            case UIType.NickPanel:
+                path = "Prefabs/LoginScene/UI/WorldNickname";
                 break;
         }
         return path;

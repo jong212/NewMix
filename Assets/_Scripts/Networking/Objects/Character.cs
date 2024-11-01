@@ -35,24 +35,30 @@ public class Character : NetworkBehaviour
             IsometricCameraFollow cameraFollow = FindObjectOfType<IsometricCameraFollow>();
             cameraFollow.target = this.transform;
 
-            // 1031주석 Nickname = string.IsNullOrWhiteSpace(LocalData.nickname) ? $"Chef{Random.Range(1000, 10000)}" : LocalData.nickname; 
-           
-            
-            
-            // 데이터 세팅............집 가서 체크
-            //Character playerSettingsRef = playerPrefab.GetComponent<Character>();   //          
-            UserData test = BackendGameData.Instance.userData;                      // 플레이어 데이터 캐싱된 거 가져옴
-            _level = test.level;
-            _atk = test.atk;
-            _hp = test.hp;
-            _miss = test.miss;
-            Debug.Log($"[5 PlayerSpawner : 플레이어 스폰 완료 => 데이터 세팅 완료{"레벨" + test.level}{"힘" + test.atk}{"체력" + test.hp}  ]");
+            Nickname = BackendGameData.Instance.NickName;
+
+            InitPlayerInfo();
         }
         /* 1031 주석 nicknameUI = Instantiate(
           ResourcesManager.instance.worldNicknamePrefab,
           InterfaceManager.instance.worldCanvas.transform);
-        NicknameChanged();*/
+        */
+
+
+        GameObject obj = StaticManager.UI.CommonOpen(UIType.NickPanel, StaticManager.Instance.WorldCanvas.transform, true,true);
+        nicknameUI = obj.gameObject.GetComponent<WorldNickname>();
+        NicknameChanged();
+
         ModifyKCCCollider();
+    }
+    private void InitPlayerInfo()
+    {
+        UserData test = BackendGameData.Instance.userData;                      // 플레이어 데이터 캐싱된 거 가져옴
+        _level = test.level;
+        _atk = test.atk;
+        _hp = test.hp;
+        _miss = test.miss;
+        Debug.Log($"[5 PlayerSpawner : 플레이어 스폰 완료 => 데이터 세팅 완료{"레벨" + test.level}{"힘" + test.atk}{"체력" + test.hp}  ]");
     }
     private void ModifyKCCCollider()
     {
@@ -187,8 +193,8 @@ public class Character : NetworkBehaviour
     #region Change Detection
     private void NicknameChanged()
     {
-        nicknameUI.SetTarget(uiPoint, Nickname.Value);
-    }
+     nicknameUI.SetTarget(uiPoint, Nickname.Value);
+   }
     #endregion
 
     public void SetHeldItem(Item item)

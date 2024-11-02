@@ -1,4 +1,5 @@
 using Fusion;
+using Fusion.Addons.SimpleKCC;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -235,6 +236,7 @@ public class Entity : NetworkBehaviour
     {
 
     }
+
     protected virtual void Update()
     {
         if (Object.IsValid)

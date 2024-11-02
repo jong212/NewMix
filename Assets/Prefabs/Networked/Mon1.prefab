@@ -56,9 +56,6 @@ MonoBehaviour:
   nearbyPlayerObjects: []
   _NetworkedStateId: 0
   _nearbyPlayers: []
-  knockbackPower: {x: 7, y: 12}
-  knockbackOffset: {x: 0.5, y: 2}
-  knockbackDuration: 0.07
   Obstacle: {fileID: 8082270149814068328}
   ObstacleCheckDistance: 5
   wallCheck: {fileID: 0}
@@ -71,25 +68,14 @@ MonoBehaviour:
   ObstacleLayer:
     serializedVersion: 2
     m_Bits: 256
-  counterImage: {fileID: 0}
-  moveSpeed: 1.5
   attackDistance: 3
   attackCooldown: 0
-  AttackCooldown: 1
+  moveSpeed: 1.5
   idleTime: 2
   moveTime: 3
   battleTime: 7
   lastTimeAttacked: 0
   closestPlayerTransform: {fileID: 0}
-  arrowPrefab: {fileID: 0}
-  arrowSpeed: 0
-  arrowDamage: 0
-  jumpVelocity: {x: 0, y: 0}
-  jumpCooldown: 0
-  safeDistance: 0
-  lastTimeJumped: 0
-  groundBehindCheck: {fileID: 0}
-  groundBehindCheckSize: {x: 0, y: 0}
 --- !u!65 &3901600442813068076
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -2,10 +2,7 @@ using BackEnd;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 
@@ -62,7 +59,7 @@ public class LoginSceneManager : MonoBehaviour
             /* ================================================================================
              * StartGoogleLogin(); // PC 테스트는 CustomLogin 함수 사용하고 모바일은 StartGoogleLogin
              * ================================================================================*/
-            CustomLogin();
+            
             Debug.Log("초기화 성공 : " + bro.StatusCode);
         }
         else
@@ -70,32 +67,20 @@ public class LoginSceneManager : MonoBehaviour
             Debug.LogError("초기화 실패 : " + bro);
         }
     }
-    private void CheckLogin()
+    private void Update()
     {
-        // 실시간 알림 서버에 연결합니다.
-        //실시간 알림 서버에 연결합니다.  
-        Backend.Notification.Connect();
+       
 
-        //"a1"의 닉네임을 가진 유저의 inDate를 찾는다
-        BackendReturnObject bro = Backend.Social.GetUserInfoByNickName("a");
-        string gamerIndate = bro.GetFlattenJSON()["row"]["inDate"].ToString();
-
-        // UserIsConnectByIndate 함수 호출 시 반응하는 OnIsConnectUser 핸들러를 설정한다.  
-        Backend.Notification.OnIsConnectUser = (bool isConnect, string nickName, string gamerIndate) => {
-            Debug.Log($"{nickName} / {gamerIndate} 접속 여부 확인 : " + isConnect);
-        };
-
-        // 함수 호출 시, 위에서 설정한 OnIsConnectUser 핸들러가 호출된다.  
-        Backend.Notification.UserIsConnectByIndate(gamerIndate);
+        if (Input.GetKeyDown(KeyCode.A)) {
+            CustomLogin("test123","123");
+        } else if(Input.GetKeyDown(KeyCode.B))
+        {
+            CustomLogin("test456","456");
+        }
     }
-
-    public void CustomLogin()
+    public void CustomLogin(string id, string pw)
     {
-        //CheckLogin();
-        string id = "test123";                                           // 테스트용
-        string password = "123";                                         // 테스트용
-
-        var bro = Backend.BMember.CustomLogin(id, password);
+        var bro = Backend.BMember.CustomLogin(id, pw);
         StartCoroutine(ServerCharLoad());
 
         if (bro.StatusCode == 200 || bro.StatusCode == 201)              // 200: 기존 회원, 201: 신규 사용자 회원가입 및 로그인 성공
@@ -104,7 +89,6 @@ public class LoginSceneManager : MonoBehaviour
             LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
             string nick = userInfoJson["nickname"]?.ToString();
             BackendGameData.Instance.SetNickname(nick);                  // 캐싱   
-
                                     
             if (string.IsNullOrEmpty(nick))                              // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             {
@@ -117,7 +101,6 @@ public class LoginSceneManager : MonoBehaviour
             }
         }
     }
-
     public void StartGoogleLogin()
     {
         TheBackend.ToolKit.GoogleLogin.Android.GoogleLogin(true, GoogleLoginCallback);
@@ -125,7 +108,6 @@ public class LoginSceneManager : MonoBehaviour
 
     private void GoogleLoginCallback(bool isSuccess, string errorMessage, string token)
     {
-
         if (isSuccess == false)
         {
             Debug.LogError(errorMessage);

@@ -1096,6 +1096,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _alertUI: {fileID: 8733340191980203292}
   _confirmUI: {fileID: 8521343273500405856}
+  _worldNicknameUI: {fileID: 6409792631830009774, guid: 553a27002faed4147bb438d39701e961, type: 3}
 --- !u!1 &6622233351140473043
 GameObject:
   m_ObjectHideFlags: 0

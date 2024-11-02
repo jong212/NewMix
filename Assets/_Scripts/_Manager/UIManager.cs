@@ -12,11 +12,16 @@ public enum UIType
 }
 public class UIManager : MonoBehaviour
 {
+    [Header("------ Common UI Prefabs -----")]
+
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
-    
+
     private Dictionary<UIType, GameObject> _createdUIDic = new Dictionary<UIType, GameObject>(); // _createdUIDic 딕셔너리에 있으면 하이어라키에 존재한단 뜻    
     private HashSet<UIType> _openedUIDic = new HashSet<UIType>(); // _openedUIDic 여기 담겨있으면 SetActive True인 것임
+    
+    [Header("------ UI Prefabs -----")]
+    [SerializeField] private WorldNickname _worldNicknameUI;
 
     // Popup
     public AlertUI AlertUI
@@ -31,6 +36,13 @@ public class UIManager : MonoBehaviour
         get
         {
             return _confirmUI;
+        }
+    }
+    public WorldNickname WorldNickNameUI
+    {
+        get
+        {
+            return _worldNicknameUI;
         }
     }
 

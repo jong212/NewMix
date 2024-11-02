@@ -20,7 +20,7 @@ public class MonsterManager : NetworkBehaviour
     private void SpawnMonsters()
     {
         // 예: 10개의 몬스터를 스폰
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1; i++)
         {
             NetworkObject monster = GetMonsterFromPool();
             if (monster != null)

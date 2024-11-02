@@ -44,9 +44,9 @@ public class Character : NetworkBehaviour
           InterfaceManager.instance.worldCanvas.transform);
         */
 
-
-        GameObject obj = StaticManager.UI.CommonOpen(UIType.NickPanel, StaticManager.Instance.WorldCanvas.transform, true,true);
-        nicknameUI = obj.gameObject.GetComponent<WorldNickname>();
+        nicknameUI = Instantiate(
+            StaticManager.UI.WorldNickNameUI,
+            StaticManager.Instance.WorldCanvas.transform);
         NicknameChanged();
 
         ModifyKCCCollider();

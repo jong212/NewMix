@@ -69,7 +69,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   attackDistance: 3
-  attackCooldown: 0
+  attackCooldown: 0.5
   moveSpeed: 1.5
   idleTime: 2
   moveTime: 3

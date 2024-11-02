@@ -98,8 +98,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
     public void PlayerLeft(PlayerRef player)
     {
-        InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers);
-
         if (Runner.IsSharedModeMasterClient)
         {
             Debug.Log("Master client handling player left: " + player);

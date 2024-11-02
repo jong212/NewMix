@@ -105,8 +105,8 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 		if (shutdownReason == ShutdownReason.Ok)
 		{
 			SceneManager.LoadScene("Menu");
-            UIScreen.activeScreen.BackTo(InterfaceManager.instance.kitchenConnectScreen);
-		}
+/*            UIScreen.activeScreen.BackTo(InterfaceManager.instance.kitchenConnectScreen);
+*/		}
 		else
 		{
 			Debug.LogWarning(shutdownReason);

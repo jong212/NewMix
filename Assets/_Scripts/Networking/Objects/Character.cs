@@ -115,17 +115,13 @@ public class Character : NetworkBehaviour
             return;
         }
         
-        // 조이스틱 이동
-        if (joystick != null)
+        // 조이스틱 이동 잠시 중지
+        /*if (joystick != null)
         {
             Vector2 joystickInput = new Vector2(joystick.Horizontal, joystick.Vertical);
-
-            
             if (joystickInput.magnitude > 0)                                                // 조이스틱 입력이 있을 경우 캐릭터 이동 처리
             {                                                                               
                 Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y);   // 카메라의 회전을 반영한 이동 처리
-                                                                                            // Debug.Log($"Move Direction: {moveDirection}");
-                                                                                            
                 Vector3 cameraForward = Camera.main.transform.forward;                      // 카메라의 회전 행렬을 가져와서 이동 방향을 변환
                 Vector3 cameraRight = Camera.main.transform.right;                          
                                                                                             
@@ -133,13 +129,9 @@ public class Character : NetworkBehaviour
                 cameraRight.y = 0;
                 cameraForward.Normalize();
                 cameraRight.Normalize();
-
-                        
                 Vector3 finalMoveDirection = cameraForward * moveDirection.z + cameraRight * moveDirection.x; // 카메라 기준으로 조이스틱 방향을 변환
-
                 
                 kcc.Move(finalMoveDirection * Specs.MovementSpeed);                         // KCC로 캐릭터 이동 처리
-
 
                 if (finalMoveDirection.magnitude > 0)                                       // 캐릭터의 회전 설정 (움직이는 방향을 바라보게)
                 {
@@ -150,11 +142,7 @@ public class Character : NetworkBehaviour
             {
                 kcc.Move(Vector3.zero); // 조이스틱 입력이 없으면 이동 정지
             }
-        }
-        else
-        {
-            Debug.LogWarning("Joystick not found in the scene.", gameObject);
-        }
+        }*/
     }
 
     // 몬스터 공격 메서드

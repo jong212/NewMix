@@ -239,13 +239,6 @@ public class Entity : NetworkBehaviour
 
     protected virtual void Update()
     {
-        if (Object.IsValid)
-        {
-            Debug.Log("true");
-        } else
-        {
-            Debug.Log("false");            
-        }
         for (int i = nearbyPlayers.Count - 1; i >= 0; i--)
         {
             PlayerRef player = nearbyPlayers[i];
@@ -255,8 +248,6 @@ public class Entity : NetworkBehaviour
                 nearbyPlayers.Remove(player);
             }
         }
-
-  
     }
 
     private void OnEnable()

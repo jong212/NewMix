@@ -36,7 +36,27 @@ public class Test
         Src = json["Src"].ToString();
     }
 }
+public class Node
+{
+    public bool walkable;         // 해당 노드를 지나갈 수 있는지 여부
+    public Vector3 worldPosition; // 노드의 월드 좌표
+    public int gridX;             // 그리드 상의 X 인덱스
+    public int gridY;             // 그리드 상의 Y 인덱스
 
+    public int gCost;             // 시작 노드로부터의 비용
+    public int hCost;             // 목표 노드까지의 예상 비용
+    public int fCost { get { return gCost + hCost; } } // 총 비용
+
+    public Node parent;           // 경로 추적을 위한 부모 노드
+
+    public Node(bool _walkable, Vector3 _worldPos, int _gridX, int _gridY)
+    {
+        walkable = _walkable;
+        worldPosition = _worldPos;
+        gridX = _gridX;
+        gridY = _gridY;
+    }
+}
 // 설계도 - 캐릭터 생성 시 플레이어 정보 DB세팅용 
 public class UserData
 {

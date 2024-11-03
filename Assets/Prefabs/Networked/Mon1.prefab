@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -6880436890373463894}
   - component: {fileID: 6715843726876892681}
   - component: {fileID: 1843352663235160571}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mon1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8082270149814068328}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ObstacleCheckObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5540129283598187711}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3545357213934708329, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3545357213934708329, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
       propertyPath: m_LocalPosition.z
@@ -308,10 +308,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3545357213934942793, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6387767192830171094}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
 --- !u!95 &1257087489836784590 stripped
 Animator:
@@ -323,20 +320,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3545357213934708329, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
   m_PrefabInstance: {fileID: 2324334541976343111}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1257087489846175758 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3545357213934942793, guid: 8bc76e4542a5795498ba55db013e67fe, type: 3}
-  m_PrefabInstance: {fileID: 2324334541976343111}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6387767192830171094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1257087489846175758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df04f91932e820a45a6d31a57f31c009, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -78,6 +78,14 @@ public class LoginSceneManager : MonoBehaviour
             CustomLogin("test456","456");
         }
     }
+    public void testbuttonA()
+    {
+        CustomLogin("test123", "123");
+    }
+    public void testbuttonB()
+    {
+        CustomLogin("test456", "456");
+    }
     public void CustomLogin(string id, string pw)
     {
         var bro = Backend.BMember.CustomLogin(id, pw);

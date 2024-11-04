@@ -33,8 +33,7 @@ public class EnemyAi : Enemy
 
     protected override void Update()
     {
-        Debug.Log($"[몬스터 상태 : {stateMachine.currentState.ToString()}]");
-        Debug.Log("몬스터 쿨타임" + attackCooldown + " 초 ");
+        Debug.Log($"[몬스터 현재 상태 : {stateMachine.currentState.ToString()}]");
 
         if (Object.HasStateAuthority)
         {
@@ -53,7 +52,7 @@ public class EnemyAi : Enemy
     public override void DealDamageRpc(float damage)
     {
         base.DealDamageRpc(damage);
-        Debug.Log("overrideTest");
+        Debug.Log("오버라이드 테스트");
     }
     public override void OnTriggerEnter(Collider col)
     {

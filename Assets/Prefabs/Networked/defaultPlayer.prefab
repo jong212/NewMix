@@ -1026,6 +1026,8 @@ MonoBehaviour:
   kcc: {fileID: 7563667420301727312}
   uiPoint: {fileID: 2751545850251974669}
   anim: {fileID: 2251369991952374563}
+  playerMovement: {fileID: -5873419986301967839}
+  mouseManager: {fileID: 3759263505613020067}
   _Nickname:
     _length: 0
     _data:

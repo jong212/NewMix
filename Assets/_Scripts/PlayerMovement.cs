@@ -13,6 +13,8 @@ public class PlayerMovement : NetworkBehaviour
     private int targetIndex;                             // 현재 목표 노드 인덱스
     private Grid grid;
     [SerializeField] Pathfinding pathfinding;
+    public Pathfinding Pathfinding => pathfinding;
+
     [SerializeField] private SimpleKCC simpleKCC;         // Simple KCC 컴포넌트 참조
 
     // 이동 관련 변수
@@ -21,28 +23,28 @@ public class PlayerMovement : NetworkBehaviour
 
     public override void Spawned()
     {
-        // 그리드와 Pathfinding 컴포넌트 참조
-        grid = FindObjectOfType<Grid>();
-        // pathfinding = GetComponent<Pathfinding>();
-        //simpleKCC = GetComponent<SimpleKCC>();           // Simple KCC 컴포넌트 참조
+        if (!Object.HasInputAuthority) return;
 
         if (simpleKCC == null)
         {
             Debug.LogError("Simple KCC 컴포넌트를 찾을 수 없습니다. 플레이어 오브젝트에 Simple KCC를 추가하세요.");
+            return;
         }
 
-        // 네트워크 권한이 있는 클라이언트에서만 경로 업데이트를 시작합니다.
-        if (Object.HasInputAuthority)
+        grid = FindObjectOfType<Grid>();
+        if (grid == null) {
+            Debug.LogError("grid 컴포넌트를 찾을 수 없습니다.");
+            return;
+        }
+
+        // Pathfinding의 경로 업데이트를 위한 이벤트 구독
+        if (pathfinding != null)
         {
-            // Pathfinding의 경로 업데이트를 위한 이벤트 구독
-            if (pathfinding != null)
-            {
-                pathfinding.OnPathUpdated += OnPathUpdated;
-            }
-            else
-            {
-                Debug.LogError("Pathfinding 컴포넌트를 찾을 수 없습니다.");
-            }
+            pathfinding.OnPathUpdated += OnPathUpdated;
+        }
+        else
+        {
+            Debug.LogError("Pathfinding 컴포넌트를 찾을 수 없습니다.");
         }
     }
 
@@ -74,10 +76,8 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     // FixedUpdateNetwork는 네트워크 틱마다 호출됩니다.
-    public override void FixedUpdateNetwork()
+    public void Movement()
     {
-        if (!Object.HasInputAuthority)
-            return; // 입력 권한이 없는 클라이언트는 이동하지 않음
 
         if (isFollowingPath && path != null && path.Count > 0)
         {

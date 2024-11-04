@@ -52,9 +52,9 @@ public class Entity : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            float angleY = UnityEngine.Random.Range(0f, 360f);     // 
-            Quaternion rotation = Quaternion.Euler(0, angleY, 0f); // 
-            moveDirection = rotation * Vector3.forward;            //  
+            float angleY = UnityEngine.Random.Range(0f, 360f);    
+            Quaternion rotation = Quaternion.Euler(0, angleY, 0f); 
+            moveDirection = rotation * Vector3.forward;           
         }
     }
 
@@ -70,32 +70,21 @@ public class Entity : NetworkBehaviour
     {
         // Y 축 회전을 고정하여 충돌 시 떨림 현상을 방지
         rb.constraints = rb.constraints | RigidbodyConstraints.FreezeRotationY;
-
-        // 기타 이동 상태로 진입 시 필요한 로직
     }
 
     public virtual void OnExitMoveState()
     {
-        // 다른 상태로 전환 시 회전 고정을 해제 (필요시)
-        rb.constraints = RigidbodyConstraints.None;
+        rb.constraints = RigidbodyConstraints.None; // 다른 상태로 전환 시 회전 고정을 해제 (필요시)
     }
     private void OnNearbyPlayersChanged()
-    {
-        Debug.Log("???");
+    {        
         nearbyPlayerObjects.Clear();
-
-        // 모든 PlayerRef를 처리
-        foreach (var playerRef in nearbyPlayers)
+        foreach (var playerRef in nearbyPlayers) // 모든 PlayerRef를 처리
         {
-            
-                Debug.Log(playerRef + "Reset");
-            
             StartCoroutine(AddPlayerObjectToList(playerRef));
         }
     }
-
-    // 네트워크 객체가 유효할 때까지 대기 후 리스트에 추가
-    private IEnumerator AddPlayerObjectToList(PlayerRef playerRef)
+    private IEnumerator AddPlayerObjectToList(PlayerRef playerRef) // 네트워크 객체가 유효할 때까지 대기 후 리스트에 추가
     {
         NetworkObject playerNetworkObject = null;
 

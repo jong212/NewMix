@@ -14,35 +14,34 @@ public class Character : NetworkBehaviour
     [SerializeField] private SimpleKCC kcc;
     [SerializeField] private Transform uiPoint;
     [SerializeField] private Animator anim;
-
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private MouseManager mouseManager;
     [Networked, OnChangedRender(nameof(NicknameChanged))] public NetworkString<_16> Nickname { get; set; }
     [Networked] public int _level { get; set; }
     [Networked] public int _atk { get; set; }
     [Networked] public int _hp { get; set; }
     [Networked] public int _miss { get; set; }
-    [Networked] public Item HeldItem { get; set; }
     [Networked] public bool WaitingForAuthority { get; set; }
+    [Networked] public Item HeldItem { get; set; }
 
     private PlayerInput prevInput;
     private WorldNickname nicknameUI = null;
-
+    private Vector2 joystickInput;
+    private bool isMoveAble { get; set; }
+    
     public override void Spawned()
     {
         joystick = FindObjectOfType<VariableJoystick>();
 
         if (Object.HasInputAuthority && Object.HasStateAuthority)
         {
+            StaticManager.UI.CommonOpen(UIType.BtnAttack, StaticManager.UI.MainUI.Layout_BottomRight, true, ChangeMoveProperty);
             IsometricCameraFollow cameraFollow = FindObjectOfType<IsometricCameraFollow>();
             cameraFollow.target = this.transform;
 
             Nickname = BackendGameData.Instance.NickName;
-
             InitPlayerInfo();
         }
-        /* 1031 주석 nicknameUI = Instantiate(
-          ResourcesManager.instance.worldNicknamePrefab,
-          InterfaceManager.instance.worldCanvas.transform);
-        */
 
         nicknameUI = Instantiate(
             StaticManager.UI.WorldNickNameUI,
@@ -77,7 +76,6 @@ public class Character : NetworkBehaviour
                 // Collider의 크기 등 다른 속성 변경
                 //kccCollider.radius = 0.97f; // 원하는 값으로 설정
                 //kccCollider.height = 0.37f;    // 원하는 값으로 설정
-
                 // 추가로 필요한 설정이 있다면 여기에 추가
             }
             else
@@ -92,9 +90,19 @@ public class Character : NetworkBehaviour
     }
     private void Update()
     {
+        
         // 입력 권한이 있는 클라이언트에서만 입력 처리
         if (Object.HasInputAuthority)
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                mouseManager.ClickCheck();
+                if(playerMovement.Pathfinding.target && !(joystickInput.magnitude > 0))
+                {
+                    isMoveAble = false;
+                }
+            }
+
             if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
                 Debug.Log("Space bar pressed");
@@ -116,11 +124,12 @@ public class Character : NetworkBehaviour
         }
         
         // 조이스틱 이동 잠시 중지
-        /*if (joystick != null)
+        if (joystick != null)
         {
-            Vector2 joystickInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+             joystickInput = new Vector2(joystick.Horizontal, joystick.Vertical);
             if (joystickInput.magnitude > 0)                                                // 조이스틱 입력이 있을 경우 캐릭터 이동 처리
-            {                                                                               
+            {
+                isMoveAble = true;
                 Vector3 moveDirection = new Vector3(joystickInput.x, 0, joystickInput.y);   // 카메라의 회전을 반영한 이동 처리
                 Vector3 cameraForward = Camera.main.transform.forward;                      // 카메라의 회전 행렬을 가져와서 이동 방향을 변환
                 Vector3 cameraRight = Camera.main.transform.right;                          
@@ -137,14 +146,19 @@ public class Character : NetworkBehaviour
                 {
                     kcc.SetLookRotation(0, Mathf.Atan2(finalMoveDirection.x, finalMoveDirection.z) * Mathf.Rad2Deg);
                 }
-            }
+            }  
             else
             {
+
+                if (playerMovement.Pathfinding.target && !isMoveAble)
+                {
+                    playerMovement.Movement();
+                    return;
+                }                
                 kcc.Move(Vector3.zero); // 조이스틱 입력이 없으면 이동 정지
             }
-        }*/
+        }
     }
-
     // 몬스터 공격 메서드
     void TryAttack()
     {
@@ -158,7 +172,6 @@ public class Character : NetworkBehaviour
             }
         }
     }
-
     // 플레이어가 몬스터 공격 시 몬스터 밀기
     void PushMonster(Entity monster)
     {
@@ -177,14 +190,12 @@ public class Character : NetworkBehaviour
             monster.transform.position += pushDirection * 0.5f;                                    // 밀리는 정도를 조절
         }
     }
-
     #region Change Detection
     private void NicknameChanged()
     {
      nicknameUI.SetTarget(uiPoint, Nickname.Value);
    }
     #endregion
-
     public void SetHeldItem(Item item)
     {
         if (item == null)
@@ -222,5 +233,9 @@ public class Character : NetworkBehaviour
                 onUnauthorized: () => WaitingForAuthority = false
             );
         }
+    }
+    private void ChangeMoveProperty()
+    {
+        isMoveAble = false;
     }
 }

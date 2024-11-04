@@ -48,10 +48,6 @@ public class EnemyBattleState : EnemyState
 
                 }
             }
-            
-                Debug.Log("GoodAttack");
-
-
         }  
         else
         {

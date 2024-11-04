@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 public enum UIType
 {
     BackEndName,
     CharaterUI,
-    NickPanel
+    NickPanel,
+    BtnAttack,
 
 }
 public class UIManager : MonoBehaviour
@@ -16,6 +19,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
+    [SerializeField] private MainUI _mainUI;
 
     private Dictionary<UIType, GameObject> _createdUIDic = new Dictionary<UIType, GameObject>(); // _createdUIDic 딕셔너리에 있으면 하이어라키에 존재한단 뜻    
     private HashSet<UIType> _openedUIDic = new HashSet<UIType>(); // _openedUIDic 여기 담겨있으면 SetActive True인 것임
@@ -38,6 +42,13 @@ public class UIManager : MonoBehaviour
             return _confirmUI;
         }
     }
+    public MainUI MainUI
+    {
+        get
+        {
+            return _mainUI;
+        }
+    }
     public WorldNickname WorldNickNameUI
     {
         get
@@ -54,24 +65,32 @@ public class UIManager : MonoBehaviour
     }
 
     // Common ( Try UI Open )
-    public void CommonOpen(UIType uiType , Transform parent, bool worldPositionStays)           
+    public void CommonOpen(UIType uiType , Transform parent, bool worldPositionStays, UnityAction callback = null)           
     {
         var gObj = GetCreatedUI(uiType,  parent, worldPositionStays);
 
         if (gObj != null)
         {
             OpenUI(uiType, gObj);
+            if (callback != null)
+            {
+                RegisterButtonCallback(gObj, callback);
+            }
         }
     }
 
     // Common ( Try UI Open ) 오픈한 오브젝트 반환
-    public GameObject CommonOpen(UIType uiType, Transform parent, bool worldPositionStays, bool returnObj )
+    public GameObject CommonOpen(UIType uiType, Transform parent, bool worldPositionStays, bool returnObj , UnityAction callback = null)
     {
         var gObj = GetCreatedUI(uiType, parent, worldPositionStays);
 
         if (gObj != null)
         {
             OpenUI(uiType, gObj);
+            if (callback != null)
+            {
+                RegisterButtonCallback(gObj, callback);
+            }
         }
         return returnObj ? gObj : null;
     }
@@ -117,6 +136,9 @@ public class UIManager : MonoBehaviour
                 break;            
             case UIType.NickPanel:
                 path = "Prefabs/LoginScene/UI/WorldNickname";
+                break;            
+            case UIType.BtnAttack:
+                path = "Prefabs/LoginScene/UI/BtnAttack";
                 break;
         }
         return path;
@@ -139,5 +161,23 @@ public class UIManager : MonoBehaviour
             uiObject.SetActive(false);
             _openedUIDic.Remove(uiType);
         }
+    }
+
+    void RegisterButtonCallback (GameObject obj, UnityAction action)
+    {
+        string baseName = obj.name.Replace("(Clone)", "").Trim();
+
+        switch (baseName)
+        {
+            case nameof(UIType.BtnAttack) : {
+                Button attackButton = obj.GetComponent<Button>();
+                if (attackButton != null)
+                {
+                    attackButton.onClick.AddListener(action);
+                }
+                    break;
+                }
+        }
+
     }
 }

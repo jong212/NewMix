@@ -794,7 +794,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5322786096230580569}
-  - component: {fileID: 2251369991952374563}
   m_Layer: 0
   m_Name: Stickman_White
   m_TagString: Untagged
@@ -819,27 +818,6 @@ Transform:
   - {fileID: 8147153058466088314}
   m_Father: {fileID: 6090409360686411211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &2251369991952374563
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4797887678203173859}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: eda0f1d9e30c2784c97520b601d7cf74, type: 3}
-  m_Controller: {fileID: 9100000, guid: adaa0c503d1ed47459b9905601783ba8, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4869123645682761906
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,6 +964,7 @@ GameObject:
   - component: {fileID: 6934442192306028961}
   - component: {fileID: 4044871258828981338}
   - component: {fileID: 7830859497705297337}
+  - component: {fileID: 6918437905952539738}
   m_Layer: 6
   m_Name: defaultPlayer
   m_TagString: Player
@@ -1023,21 +1002,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Specs>k__BackingField: {fileID: 11400000, guid: c58d325ab294b7a448d73e28b88ba63e, type: 2}
-  kcc: {fileID: 7563667420301727312}
-  uiPoint: {fileID: 2751545850251974669}
-  anim: {fileID: 2251369991952374563}
-  playerMovement: {fileID: -5873419986301967839}
-  mouseManager: {fileID: 3759263505613020067}
+  _kcc: {fileID: 7563667420301727312}
+  _uiPoint: {fileID: 2751545850251974669}
+  _anim: {fileID: 6918437905952539738}
+  _playerMovement: {fileID: -5873419986301967839}
+  _mouseManager: {fileID: 3759263505613020067}
+  attackRange: 2
+  monsterLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   _Nickname:
     _length: 0
     _data:
       Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  __level: 0
-  __atk: 0
-  __hp: 0
-  __miss: 0
-  _HeldItem: {fileID: 0}
+  _Level: 0
+  _Attack: 0
+  _Health: 0
+  _MissChance: 0
   _WaitingForAuthority: 0
+  _HeldItem: {fileID: 0}
 --- !u!114 &7563667420301727312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1105,6 +1088,7 @@ MonoBehaviour:
   rotationSpeed: 3600
   pathfinding: {fileID: 6467737335739438436}
   simpleKCC: {fileID: 7563667420301727312}
+  character: {fileID: 3195247357856794338}
 --- !u!114 &6467737335739438436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1179,6 +1163,27 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 4
   m_CollisionDetection: 2
+--- !u!95 &6918437905952539738
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5496097370047470657}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: eda0f1d9e30c2784c97520b601d7cf74, type: 3}
+  m_Controller: {fileID: 9100000, guid: adaa0c503d1ed47459b9905601783ba8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5547575181134246381
 GameObject:
   m_ObjectHideFlags: 0

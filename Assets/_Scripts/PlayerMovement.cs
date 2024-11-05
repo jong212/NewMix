@@ -19,8 +19,13 @@ public class PlayerMovement : NetworkBehaviour
 
     // 이동 관련 변수
     private Vector3 currentWaypoint;
-    private bool isFollowingPath = false;
 
+    private bool isFollowingPath = false;
+    public bool IsFollowingPath => isFollowingPath;
+
+    // 공격 관련 변수
+
+    [SerializeField] private Character character;         // Character 클래스 참조 (인스펙터에서 할당)
     public override void Spawned()
     {
         if (!Object.HasInputAuthority) return;
@@ -45,6 +50,15 @@ public class PlayerMovement : NetworkBehaviour
         else
         {
             Debug.LogError("Pathfinding 컴포넌트를 찾을 수 없습니다.");
+        }
+
+        if (character == null)
+        {
+            character = GetComponent<Character>();
+            if (character == null)
+            {
+                Debug.LogError("Character 컴포넌트를 찾을 수 없습니다.");
+            }
         }
     }
 
@@ -83,7 +97,7 @@ public class PlayerMovement : NetworkBehaviour
         {
             // 현재 웨이포인트에 도달했는지 확인
             Debug.Log("플레이어 몬스터 거리" + (Vector3.Distance(simpleKCC.transform.position, currentWaypoint)));
-            if (Vector3.Distance(simpleKCC.transform.position, currentWaypoint) < 0.5f)
+            if (Vector3.Distance(simpleKCC.transform.position, currentWaypoint) < 1f)
             {
                 targetIndex++;
                 if (targetIndex >= path.Count)
@@ -91,9 +105,10 @@ public class PlayerMovement : NetworkBehaviour
                     Debug.Log("경로 이동 완료");
                     simpleKCC.Move(Vector3.zero);
                     isFollowingPath = false;
-                    if (pathfinding != null)
+                  
+                    if(!character.IsAttack)
                     {
-                        pathfinding.target = null;
+                        character.PerformAttack();
                     }
                     return;
                 }

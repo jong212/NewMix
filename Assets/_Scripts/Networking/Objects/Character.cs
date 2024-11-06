@@ -163,6 +163,7 @@ public class Character : NetworkBehaviour
 
     private void ProcessMovement()
     {
+        if (IsAttack) return;
         if (_joystick != null)
         {
             _joystickInput = new Vector2(_joystick.Horizontal, _joystick.Vertical);

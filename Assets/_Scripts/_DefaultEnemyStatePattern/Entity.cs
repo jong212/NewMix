@@ -42,7 +42,6 @@ public class Entity : NetworkBehaviour
     public System.Action onFlipped;
 
     #region MyNetwork
-    
     [Networked, OnChangedRender(nameof(HealthChanged))] public float NetworkedHealth { get; set; } = 100;// 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
     [Networked] protected Vector3 moveDirection { get; set; }
     public Transform target = null;

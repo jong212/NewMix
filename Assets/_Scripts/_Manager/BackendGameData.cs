@@ -23,19 +23,30 @@ public class CharacterSrcChart
     }
 }
 
-public class Test
+public class ItemChart
 {
-    public int CharacterId { get; private set; }
-    public string CharacterColor { get; private set; }
-    public string Src { get; private set; }
+    public int Itemid { get; private set; }
+    public string ItemName { get; private set; }
+    public int Damage { get; private set; }
+    public int MoveSpeed { get; private set; }
+    public int SetLevel { get; private set; }
+    public string Description { get; private set; }
+    public string Label { get; private set; }
+    public string Prefabname { get; private set; }
 
-    public Test(JsonData json)
+    public ItemChart(JsonData json)
     {
-        CharacterId = int.Parse(json["CharacterId"].ToString());
-        CharacterColor = json["CharacterColor"].ToString();
-        Src = json["Src"].ToString();
+        Itemid = int.Parse(json["ItemId"].ToString());
+        ItemName = json["ItemName"].ToString();
+        Damage = int.Parse(json["Damage"].ToString());
+        MoveSpeed = int.Parse(json["MoveSpeed"].ToString());
+        SetLevel = int.Parse(json["SetLevel"].ToString());
+        Description = json["Description"].ToString();
+        Label = json["Label"].ToString();
+        Prefabname = json["PrefabName"].ToString();
     }
 }
+
 public class Node
 {
     public bool walkable;         // 해당 노드를 지나갈 수 있는지 여부
@@ -57,6 +68,7 @@ public class Node
         gridY = _gridY;
     }
 }
+
 // 설계도 - 캐릭터 생성 시 플레이어 정보 DB세팅용 
 public class UserData
 {
@@ -67,6 +79,8 @@ public class UserData
     public string lastMap = "A";
     public int hp = 1;
     public int miss = 1;
+    public List<int> setPlayerItems = new List<int>();
+
     public override string ToString()  // 디버깅 위한 함수 (Debug.Log(UserData);)
     {
         StringBuilder result = new StringBuilder();
@@ -78,10 +92,15 @@ public class UserData
         result.AppendLine($"lastMap : {lastMap}");
         result.AppendLine($"hp : {hp}");
         result.AppendLine($"miss : {miss}");
+        foreach(var _value in setPlayerItems)
+        {
+            result.AppendLine($"setPlayerItems : {_value}");
+        }
 
         return result.ToString();
     }
 }
+
 // 설계도 - 서버, 로컬 차트 비교용 
 public class ChartInfo
 {
@@ -100,8 +119,6 @@ public class ChartInfo
 
 public class BackendGameData 
 {
- 
-    
     private static BackendGameData _instance = null;
 
     public static BackendGameData Instance
@@ -120,8 +137,8 @@ public class BackendGameData
     // 캐싱 종류 닉네임, 로컬 차트들, 서버에서 받아온 유저데이터
     private string _nickname { get; set; }   
     private List<string> _getCharLocalListname = new List<string>();
-    private List<CharacterSrcChart> _characterList = new List<CharacterSrcChart>();
-    private List<Test> _test = new List<Test>();
+    private List<CharacterSrcChart> _characterChartList = new List<CharacterSrcChart>();
+    private List<ItemChart> _itemChartList = new List<ItemChart>();
     public UserData userData;
 
     public string NickName                      // 캐싱 - NickName
@@ -136,13 +153,13 @@ public class BackendGameData
     }
     public List<CharacterSrcChart> CharacterList // 캐싱 -기본 캐릭터 어드레서블 차트
     {
-        get => _characterList;
-        set => _characterList = value;
+        get => _characterChartList;
+        set => _characterChartList = value;
     }
-    public List<Test> Test                       // 캐싱 -테스트
+    public List<ItemChart> ItemChartList                       // 캐싱 -테스트
     {
-        get => _test;
-        set => _test = value;
+        get => _itemChartList;
+        set => _itemChartList = value;
     }
     public void SetNickname(string nickname)    // 캐싱 - 버튼 클릭 시 닉넴 캐싱 하는 건데 리펙토링 가능한지 체크해 봐야 할 듯 (중복코드라서)중복 버튼에서 바로 위 코드로 타는거가능한지 체크필요
     {
@@ -164,7 +181,7 @@ public class BackendGameData
         Matchmaker.Instance.TryConnectShared();
 
     }
-    // 로컬에 최신화 된 차트 캐싱 작업 하는 메소드
+    // 로컬에 최신화 된 차트들 캐싱 작업 하는 메소드
     private void LoadChart(string chartName)
     {
         string chartDataString = Backend.Chart.GetLocalChartData(chartName);
@@ -180,11 +197,11 @@ public class BackendGameData
                     CharacterList.Add(classRef);
                 }
                 break;
-            case nameof(Test):
+            case nameof(ItemChart):
                 foreach (JsonData row in chartJson["rows"])
                 {
-                    Test classRef = new Test(row);
-                    Test.Add(classRef);
+                    ItemChart classRef = new ItemChart(row);
+                    ItemChartList.Add(classRef);
                 }
                 break;
         }
@@ -208,6 +225,7 @@ public class BackendGameData
         userData.lastMap = "A";
         userData.hp = 10;
         userData.miss = 1;
+        userData.setPlayerItems = new List<int>() { 1,4};//1,4는 
 
         Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
@@ -218,7 +236,7 @@ public class BackendGameData
         param.Add("lastMap", userData.lastMap);
         param.Add("hp", userData.hp);
         param.Add("miss", userData.miss);
-
+        param.Add("setPlayerItems", userData.setPlayerItems);
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("Character", param);
@@ -263,6 +281,11 @@ public class BackendGameData
                 userData.hp = int.Parse(gameDataJson[0]["hp"].ToString());
                 userData.miss = int.Parse(gameDataJson[0]["miss"].ToString());
 
+                userData.setPlayerItems.Clear();
+                foreach (JsonData item in gameDataJson[0]["setPlayerItems"])
+                {
+                    userData.setPlayerItems.Add(int.Parse(item.ToString()));
+                }
                 Debug.Log($"[3-6 BackendGameData : 가져온 데이터 로컬에 캐싱 userData 여기 넣음 {userData.ToString()}]");
             }
         }

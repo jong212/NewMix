@@ -7,6 +7,8 @@ using Unity.VisualScripting;
 
 public class Character : NetworkBehaviour
 {
+    private bool _isInitialized = false;
+
     // Private Fields
     private VariableJoystick _joystick;
     private PlayerInput _prevInput;
@@ -24,6 +26,8 @@ public class Character : NetworkBehaviour
     [field: SerializeField]
     public CharacterSpecs Specs { get; private set; }
 
+    [SerializeField] private List<Transform> itemList;
+
     [SerializeField] private SimpleKCC _kcc;
     [SerializeField] private Transform _uiPoint;
     [SerializeField] private Animator _anim;
@@ -36,6 +40,10 @@ public class Character : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnNicknameChanged))]
     public NetworkString<_16> Nickname { get; set; }
 
+    [Networked, Capacity(2), OnChangedRender(nameof(OnSetitemList))]
+    public NetworkArray<int> setItemIndexs { get; }
+
+
     [Networked] public int Level { get; set; }
     [Networked] public int Attack { get; set; }
     [Networked] public int Health { get; set; }
@@ -46,30 +54,29 @@ public class Character : NetworkBehaviour
     // Unity Callbacks
     public override void Spawned()
     {
-        if (Object.HasInputAuthority && Object.HasStateAuthority)
+        if (Object.HasInputAuthority)
         {
             InitializeJoystick();
-            SetupAuthority();
-            InitializeNicknameUI();
+            InitUI();
+            InitPlayer();
             ModifyKCCCollider();
         }
+        if (Object.HasStateAuthority)
+        {
+            Debug.Log($"[Client {Runner.LocalPlayer.PlayerId}] ???444");
+            InitItem(); // State Authority에서 네트워크 속성 초기값 설정
+        }
+        
+        //OnSetitemList();
     }
 
     private void InitializeJoystick()
     {
         _joystick = FindObjectOfType<VariableJoystick>();
     }
-
-    private void SetupAuthority()
-    {
-
-            StaticManager.UI.CommonOpen(UIType.BtnAttack, StaticManager.UI.MainUI.Layout_BottomRight, true, ChangeMoveProperty);
-            SetupCameraFollow();
-            SetInitialNickname();
-            InitializePlayerStats();
-        
+    private void InitUI() {
+        StaticManager.UI.CommonOpen(UIType.BtnAttack, StaticManager.UI.MainUI.Layout_BottomRight, true, ChangeMoveProperty);
     }
-
     private void SetupCameraFollow()
     {
         var cameraFollow = FindObjectOfType<IsometricCameraFollow>();
@@ -88,7 +95,14 @@ public class Character : NetworkBehaviour
         Nickname = BackendGameData.Instance.NickName;
     }
 
-    private void InitializePlayerStats()
+    private void InitPlayer()
+    {
+        SetupCameraFollow();
+        SetInitialNickname();
+        InitStat();
+        InitializeNicknameUI();
+    }
+    private void InitStat()
     {
         var userData = BackendGameData.Instance.userData;
         Level = userData.level;
@@ -97,7 +111,13 @@ public class Character : NetworkBehaviour
         MissChance = userData.miss;
         Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
+    private void InitItem() // 이 함수에다가는 캐싱 된 아이템 인덱스 넣고 onrender 통해타는 함수에서 장착 해제 하는 코드 작성 ㄱ
+    {
+        List<int> playerItemsList = BackendGameData.Instance.userData.setPlayerItems;
+        setItemIndexs.Clear();
+        setItemIndexs.CopyFrom(playerItemsList, 0, playerItemsList.Count);
 
+    }
     private void InitializeNicknameUI()
     {
         _nicknameUI = Instantiate(StaticManager.UI.WorldNickNameUI, StaticManager.Instance.WorldCanvas.transform);
@@ -149,6 +169,12 @@ public class Character : NetworkBehaviour
 
     public override void Render()
     {
+        if (!_isInitialized && setItemIndexs.Length > 0)
+        {
+            _isInitialized = true;
+            OnSetitemList();
+        }
+
         float movementSpeed = _kcc.RealSpeed > 0 ? _kcc.RealSpeed / Specs.MovementSpeed : 0;
         _anim.SetFloat("Movement", movementSpeed);
     }
@@ -278,6 +304,12 @@ public class Character : NetworkBehaviour
         {
             _nicknameUI.SetTarget(_uiPoint, Nickname.Value);
         }
+    }
+    private void OnSetitemList()
+    {
+        Debug.Log($"[Client {Runner.LocalPlayer.PlayerId}] OnSetitemList called for Character with InputAuthority {Object.InputAuthority.PlayerId}");
+
+        StaticManager.DataSetManager.SetCharacterItem(setItemIndexs, itemList);
     }
 
     // Item Handling

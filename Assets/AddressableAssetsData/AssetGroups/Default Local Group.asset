@@ -41,6 +41,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - SelectPlayer
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 25b4ee956cf817247999579a1e6de4b9
+    m_Address: Assets/Markus Art/Props/Weapons/Fantasy_Weapons/Prefab/Sword1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1bdb9762e30d7fc48a183cf9c7c23df5
+    m_Address: Assets/Markus Art/Props/Weapons/Fantasy_Weapons/Prefab/Sword2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a8a6b13627a4444e9ff34b1b59dfdc8
+    m_Address: Assets/Markus Art/Props/Weapons/Fantasy_Weapons/Prefab/Sword3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
   m_SchemaSet:

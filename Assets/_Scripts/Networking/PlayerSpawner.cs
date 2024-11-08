@@ -25,9 +25,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     {
         yield return new WaitUntil(() => GameManager.instance != null);
         yield return new WaitForEndOfFrame();
-        //yield return new WaitUntil(() => UIScreen.activeScreen == InterfaceManager.instance.gameplayHUD); 1031 주석
-
-        bool isLoaded = false;
+       
         (string labelName, string prefabName) = StaticManager.DataSetManager.CharacterDefaultSettings(); 
         if(string.IsNullOrEmpty(labelName) || string.IsNullOrEmpty(prefabName)){
             Debug.Log("[플레이어 스포너에서 스폰할 때 플레이어의 캐릭터 어드레서블 라벨 혹은 프리팹 이름 값을 불러오지 못함]");
@@ -36,17 +34,35 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         {
             Debug.Log($"[5 PlayerSpawner : 플레이어 에게 적용할 어드레서블 레이블,프리팹이름 값 정상적으로 가져옴 {labelName}, {prefabName} ]");
         }
-        // 프리팹 로드
+        // 로드 완료 여부를 추적하는 변수들
+        bool isInventoryLoaded = false;
+        bool isPlayerPrefabLoaded = false;
+        bool isLoaded = false;
+
+        // 어드레서블 로드 시작
+        AddressableManager.instance.LoadPrefabsWithLabel("Inventory", () =>
+        {
+            isInventoryLoaded = true;
+            CheckIfAllLoaded();
+        });
+
         AddressableManager.instance.LoadPrefabsWithLabel(labelName, () =>
         {
             playerPrefab = AddressableManager.instance.GetPrefab(labelName, prefabName);
-
-            isLoaded = true;
+            isPlayerPrefabLoaded = true;
+            CheckIfAllLoaded();
         });
 
-        // 프리팹 로드가 완료될 때까지 대기
-        yield return new WaitUntil(() => isLoaded);
 
+        // 내부 함수: 두 로드 완료 여부를 확인
+        void CheckIfAllLoaded()
+        {
+            if (isInventoryLoaded && isPlayerPrefabLoaded)
+            {
+                isLoaded = true;
+            }
+        }        // 프리팹 로드가 완료될 때까지 대기
+        yield return new WaitUntil(() => isLoaded);
 
         if (SpawnpointManager.GetSpawnpoint(out Vector3 location, out Quaternion orientation))
         {

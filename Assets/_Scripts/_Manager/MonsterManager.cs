@@ -5,12 +5,11 @@ using Fusion;
 public class MonsterManager : NetworkBehaviour
 {
     [SerializeField] private GameObject monsterPrefab;
-    private List<NetworkObject> activeMonsters = new List<NetworkObject>();
-    private Queue<NetworkObject> monsterPool = new Queue<NetworkObject>();
+    [SerializeField] List<NetworkObject> activeMonsters = new List<NetworkObject>();
+    [SerializeField] Queue<NetworkObject> monsterPool = new Queue<NetworkObject>();
 
     public override void Spawned()
     {
-        // 필드 입장 시 몬스터 스폰
         if (Object.HasStateAuthority)
         {
             SpawnMonsters();
@@ -19,8 +18,7 @@ public class MonsterManager : NetworkBehaviour
 
     private void SpawnMonsters()
     {
-        // 예: 10개의 몬스터를 스폰
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 1; i++) // 조건에 따라 스폰할 몬스터 수 조정 가능
         {
             NetworkObject monster = GetMonsterFromPool();
             if (monster != null)
@@ -28,6 +26,10 @@ public class MonsterManager : NetworkBehaviour
                 // 몬스터 위치 설정 및 활성화
                 monster.transform.position = GetRandomSpawnPosition();
                 monster.gameObject.SetActive(true);
+
+                // 활성 몬스터 리스트에 추가
+                activeMonsters.Add(monster);
+                monster.GetComponent<Entity>().InitMonsterManager(this);
             }
         }
     }
@@ -41,8 +43,7 @@ public class MonsterManager : NetworkBehaviour
         else
         {
             // 풀에 없으면 새로 생성
-            NetworkObject newMonster = Runner.Spawn(monsterPrefab).GetComponent<NetworkObject>();
-            activeMonsters.Add(newMonster);
+            NetworkObject newMonster = Runner.Spawn(monsterPrefab);
             return newMonster;
         }
     }
@@ -55,8 +56,50 @@ public class MonsterManager : NetworkBehaviour
 
     public void DespawnMonster(NetworkObject monster)
     {
-        // 몬스터 제거 및 풀에 반환
-        monster.gameObject.SetActive(false);
-        monsterPool.Enqueue(monster);
+        if (Object.HasStateAuthority)
+        {
+            // 몬스터 비활성화
+            monster.gameObject.SetActive(false);
+
+            // 활성 몬스터 리스트에서 제거
+            activeMonsters.Remove(monster);
+
+            // 몬스터를 풀에 반환
+            monsterPool.Enqueue(monster);
+
+            // 5초 후에 몬스터 재스폰 코루틴 실행
+            Runner.StartCoroutine(RespawnMonsterAfterDelay(monster, 5f));
+        }
+    }
+
+    private IEnumerator<WaitForSeconds> RespawnMonsterAfterDelay(NetworkObject monster, float delay)
+    {
+        // 5초 대기
+        yield return new WaitForSeconds(delay);
+
+        if (Object.HasStateAuthority)
+        {
+            // 몬스터 재스폰
+            SpawnMonsterFromPool(monster);
+        }
+    }
+
+    private void SpawnMonsterFromPool(NetworkObject monster)
+    {
+        if (monsterPool.Contains(monster))
+        {
+            // 풀에서 제거
+            monsterPool = new Queue<NetworkObject>(monsterPool);
+            monsterPool.Dequeue();
+
+            // 몬스터 위치 설정 및 활성화
+            monster.transform.position = GetRandomSpawnPosition();
+            monster.gameObject.SetActive(true);
+
+            // 활성 몬스터 리스트에 추가
+            activeMonsters.Add(monster);
+            monster.GetComponent<Entity>().InitMonsterManager(this);
+
+        }
     }
 }

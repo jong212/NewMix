@@ -1018,6 +1018,7 @@ MonoBehaviour:
     _length: 0
     _data:
       Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  _setItemIndexs: 
   _Level: 0
   _Attack: 0
   _Health: 0
@@ -1038,7 +1039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _settings:
     Shape: 1
-    IsTrigger: 1
+    IsTrigger: 0
     Radius: 0.35
     Height: 1.8
     Extent: 0.035

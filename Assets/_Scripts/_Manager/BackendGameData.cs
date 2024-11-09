@@ -72,26 +72,110 @@ public class Node
 // 설계도 - 캐릭터 생성 시 플레이어 정보 DB세팅용 
 public class UserData
 {
-    public int level = 1;
-    public int money = 1;
-    public int ChrType = 0;
-    public int atk = 1;
-    public string lastMap = "A";
-    public int hp = 1;
-    public int miss = 1;
+    private int _level = 1;
+    public int Level
+    {
+        get { return _level; }
+        set
+        {
+            if (_level != value)
+            {
+                _level = value;
+                BackendGameData.Instance.GameDataUpdate<int>("level", value);
+            }
+        }
+    }
+    private int _money = 1;
+    public int Money
+    {
+        get { return _money; }
+        set
+        {
+            if (_money != value)
+            {
+                _money = value;
+                BackendGameData.Instance.GameDataUpdate<int>("money", value);
+            }
+        }
+    }
+    private int _chrType = 0;
+    public int ChrType
+    {
+        get { return _chrType; }
+        set
+        {
+            if (_chrType != value)
+            {
+                _chrType = value;
+                BackendGameData.Instance.GameDataUpdate<int>("ChrType", value);
+            }
+        }
+    }
+    private int _atk = 1;
+    public int Atk
+    {
+        get { return _atk; }
+        set
+        {
+            if (_atk != value)
+            {
+                _atk = value;
+                BackendGameData.Instance.GameDataUpdate<int>("atk", value);
+            }
+        }
+    }
+    private string _lastMap = "A";
+    public string LastMap
+    {
+        get { return _lastMap; }
+        set
+        {
+            if (_lastMap != value)
+            {
+                _lastMap = value;
+                BackendGameData.Instance.GameDataUpdate<string>("lastMap", value);
+            }
+        }
+    }
+    private int _hp = 1;
+    public int Hp
+    {
+        get { return _hp; }
+        set
+        {
+            if (_hp != value)
+            {
+                _hp = value;
+                BackendGameData.Instance.GameDataUpdate<int>("hp", value);
+            }
+        }
+    }
+    private int _miss = 1;
+    public int Miss
+    {
+        get { return _miss; }
+        set
+        {
+            if (_miss != value)
+            {
+                _miss = value;
+                BackendGameData.Instance.GameDataUpdate<int>("miss", value);
+            }
+        }
+    }
     public List<int> setPlayerItems = new List<int>();
 
     public override string ToString()  // 디버깅 위한 함수 (Debug.Log(UserData);)
     {
         StringBuilder result = new StringBuilder();
 
-        result.AppendLine($"level : {level}");
-        result.AppendLine($"money : {money}");
+        result.AppendLine($"level : {_level}");
+        result.AppendLine($"money : {_money}");
         result.AppendLine($"ChrType : {ChrType}");
-        result.AppendLine($"atk : {atk}");
-        result.AppendLine($"lastMap : {lastMap}");
-        result.AppendLine($"hp : {hp}");
-        result.AppendLine($"miss : {miss}");
+        result.AppendLine($"atk : {_atk}");
+        result.AppendLine($"lastMap : {_lastMap}");
+        result.AppendLine($"hp : {_hp}");
+        result.AppendLine($"miss : {_miss}");
         foreach(var _value in setPlayerItems)
         {
             result.AppendLine($"setPlayerItems : {_value}");
@@ -99,6 +183,7 @@ public class UserData
 
         return result.ToString();
     }
+    
 }
 
 // 설계도 - 서버, 로컬 차트 비교용 
@@ -218,24 +303,24 @@ public class BackendGameData
         }
 
         Debug.Log("데이터를 초기화합니다.");
-        userData.level = 1;
-        userData.money = 10000;
+        userData.Level = 1;
+        userData.Money = 10000;
         userData.ChrType = 1;
-        userData.atk = 1;
-        userData.lastMap = "A";
-        userData.hp = 10;
-        userData.miss = 1;
+        userData.Atk = 1;
+        userData.LastMap = "A";
+        userData.Hp = 10;
+        userData.Miss = 1;
         userData.setPlayerItems = new List<int>() { 1,4};//1,4는 
 
         Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
-        param.Add("level", userData.level);
-        param.Add("money", userData.money);
+        param.Add("level", userData.Level);
+        param.Add("money", userData.Money);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
-        param.Add("atk", userData.atk);
-        param.Add("lastMap", userData.lastMap);
-        param.Add("hp", userData.hp);
-        param.Add("miss", userData.miss);
+        param.Add("atk", userData.Atk);
+        param.Add("lastMap", userData.LastMap);
+        param.Add("hp", userData.Hp);
+        param.Add("miss", userData.Miss);
         param.Add("setPlayerItems", userData.setPlayerItems);
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
@@ -273,13 +358,13 @@ public class BackendGameData
 
                 userData = new UserData();
 
-                userData.level = int.Parse(gameDataJson[0]["level"].ToString());
-                userData.money = int.Parse(gameDataJson[0]["money"].ToString());
+                userData.Level = int.Parse(gameDataJson[0]["level"].ToString());
+                userData.Miss = int.Parse(gameDataJson[0]["money"].ToString());
                 userData.ChrType = int.Parse(gameDataJson[0]["ChrType"].ToString());
-                userData.atk = int.Parse(gameDataJson[0]["atk"].ToString());
-                userData.lastMap = gameDataJson[0]["lastMap"].ToString();
-                userData.hp = int.Parse(gameDataJson[0]["hp"].ToString());
-                userData.miss = int.Parse(gameDataJson[0]["miss"].ToString());
+                userData.Atk = int.Parse(gameDataJson[0]["atk"].ToString());
+                userData.LastMap = gameDataJson[0]["lastMap"].ToString();
+                userData.Hp = int.Parse(gameDataJson[0]["hp"].ToString());
+                userData.Miss = int.Parse(gameDataJson[0]["miss"].ToString());
 
                 userData.setPlayerItems.Clear();
                 foreach (JsonData item in gameDataJson[0]["setPlayerItems"])
@@ -293,17 +378,9 @@ public class BackendGameData
         {
             Debug.LogError("게임 정보 조회에 실패했습니다. : " + bro);
         }
+        
     }
-
-    public void LevelUp()
-    {
-        Debug.Log("레벨을 1 증가시킵니다.");
-        userData.level += 1;
-        userData.atk += 1;
-    }
-
-    // 게임 정보 수정하기
-    public void GameDataUpdate()
+    public void GameDataUpdate<T>(string columName, T Parameter)
     {
         if (userData == null)
         {
@@ -312,23 +389,10 @@ public class BackendGameData
         }
 
         Param param = new Param();
-        param.Add("level", userData.level);
-        param.Add("atk", userData.atk);
+        param.Add(columName, Parameter);
 
-        BackendReturnObject bro = null;
+        var bro = Backend.GameData.UpdateV2("Character", gameDataRowInDate, Backend.UserInDate, param);
 
-        if (string.IsNullOrEmpty(gameDataRowInDate))
-        {
-            Debug.Log("내 제일 최신 게임 정보 데이터 수정을 요청합니다.");
-
-            bro = Backend.GameData.Update("USER_DATA", new Where(), param);
-        }
-        else
-        {
-            Debug.Log($"{gameDataRowInDate}의 게임 정보 데이터 수정을 요청합니다.");
-
-            bro = Backend.GameData.UpdateV2("USER_DATA", gameDataRowInDate, Backend.UserInDate, param);
-        }
 
         if (bro.IsSuccess())
         {
@@ -339,10 +403,11 @@ public class BackendGameData
             Debug.LogError("게임 정보 데이터 수정에 실패했습니다. : " + bro);
         }
     }
+
     /*public void SetNickname(string nickname)
     {
         Nickname = nickname;
         Debug.Log($"닉네임 캐싱: {Nickname}");
     }*/
-    
+
 }

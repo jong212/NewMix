@@ -105,10 +105,10 @@ public class Character : NetworkBehaviour
     private void InitStat()
     {
         var userData = BackendGameData.Instance.userData;
-        Level = userData.level;
-        Attack = userData.atk;
-        Health = userData.hp;
-        MissChance = userData.miss;
+        Level = userData.Level;
+        Attack = userData.Atk;
+        Health = userData.Hp;
+        MissChance = userData.Miss;
         Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
     private void InitItem() // 이 함수에다가는 캐싱 된 아이템 인덱스 넣고 onrender 통해타는 함수에서 장착 해제 하는 코드 작성 ㄱ
@@ -267,10 +267,17 @@ public class Character : NetworkBehaviour
     public void AttackRpc(Entity targetMonster)
     {
         
+        if(targetMonster.NetworkedHealth <= 0)
+        {
+            _playerMovement.path.Clear();
+            _playerMovement.Pathfinding.target = null;
+        } else
+        {
         targetMonster.DealDamageRpc(10);
+            PlayAttackAnimationRpc();
+        }
         //PushMonster(targetMonster);
-        PlayAttackAnimationRpc();
-        // 공격 범위 내인지 재확인
+        
     }
     private void PushMonster(Entity monster)
     {

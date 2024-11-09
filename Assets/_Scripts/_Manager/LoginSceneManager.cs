@@ -227,11 +227,11 @@ public class LoginSceneManager : MonoBehaviour
         Roominfo.NickNameLayout.text = BackendGameData.Instance.NickName;
         
         UserData data = BackendGameData.Instance.userData;
-        Roominfo.LvLayout.text = data.level.ToString();
-        Roominfo.AtkLayout.text = data.atk.ToString();
-        Roominfo.HpLayout.text = data.hp.ToString();
-        Roominfo.MissLayout.text = data.miss.ToString();
-        Roominfo.LastLocationLayout.text = data.lastMap.ToString();
+        Roominfo.LvLayout.text = data.Level.ToString();
+        Roominfo.AtkLayout.text = data.Atk.ToString();
+        Roominfo.HpLayout.text = data.Hp.ToString();
+        Roominfo.MissLayout.text = data.Miss.ToString();
+        Roominfo.LastLocationLayout.text = data.LastMap.ToString();
     }
     #endregion
 

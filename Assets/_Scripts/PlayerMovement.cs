@@ -9,7 +9,7 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private float speed = 5f;             // 플레이어 이동 속도 (units per second)
     [SerializeField] private float rotationSpeed = 3600f;  // 플레이어 회전 속도 (degrees per second)
 
-    private List<Node> path;                             // 현재 경로
+    public List<Node> path;                             // 현재 경로
     private int targetIndex;                             // 현재 목표 노드 인덱스
     private Grid grid;
     [SerializeField] Pathfinding pathfinding;

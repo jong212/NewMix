@@ -15,7 +15,11 @@ public enum EnemyStateID
 }
 public class Entity : NetworkBehaviour
 {
-
+    private MonsterManager _monsterManager;
+    public void InitMonsterManager(MonsterManager refV)
+    {
+        _monsterManager = refV;
+    }
     public List<GameObject> nearbyPlayerObjects = new List<GameObject>();
     [Networked] public int NetworkedStateId { get; set; }
 
@@ -265,15 +269,16 @@ public class Entity : NetworkBehaviour
         // 이 코드는 State Authority 클라이언트에서만 실행됨
         if (Object.HasStateAuthority)
         {
-            // 체력을 감소시킴
-            NetworkedHealth -= damage;
-            Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
 
-            // 체력이 0 이하가 되면 몬스터를 죽임
-            if (NetworkedHealth <= 0)
+            if(NetworkedHealth - damage <= 0)
             {
+                NetworkedHealth = 0;
                 Die();
+            } else
+            {
+                NetworkedHealth -= damage;
             }
+            Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
         }
     }
     public void DestroyThis()
@@ -302,7 +307,8 @@ public class Entity : NetworkBehaviour
     {
         Debug.Log("Monster died.");
         // 사망 처리 로직 (예: 몬스터 제거)
-        Destroy(gameObject);
+        if(_monsterManager == null) _monsterManager = FindObjectOfType<MonsterManager>();
+        _monsterManager.DespawnMonster(gameObject.GetComponent<NetworkObject>());
     }
     #endregion
 

@@ -37,7 +37,9 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void TryConnectShared()
 	{
-		_roomCode = "A";
+
+        _roomCode = BackendGameData.Instance.userData.LastMap;
+
 
         TryConnectSharedSession(
 			string.IsNullOrWhiteSpace(_roomCode) ? $"FoodFusion{Random.Range(1000, 9999)}" : _roomCode,

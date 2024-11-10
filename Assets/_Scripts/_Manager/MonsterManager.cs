@@ -7,15 +7,19 @@ public class MonsterManager : NetworkBehaviour
     [SerializeField] private GameObject monsterPrefab;
     [SerializeField] List<NetworkObject> activeMonsters = new List<NetworkObject>();
     [SerializeField] Queue<NetworkObject> monsterPool = new Queue<NetworkObject>();
-
     public override void Spawned()
     {
+        Debug.Log("test11111");
         if (Object.HasStateAuthority)
         {
+            Debug.Log("test22222");
+
             SpawnMonsters();
         }
     }
-
+    private void Update()
+    {
+    }
     private void SpawnMonsters()
     {
         for (int i = 0; i < 1; i++) // 조건에 따라 스폰할 몬스터 수 조정 가능

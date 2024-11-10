@@ -89,7 +89,6 @@ public class Enemy : Entity
         {
             stateMachine.currentState.FixedUpdate();
         }
-            
     }
     public virtual void AssignLastAnimName(string _animBoolName) => lastAnimBoolName = _animBoolName;
     public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
@@ -164,5 +163,9 @@ public class Enemy : Entity
         
         currentRayIndex = (currentRayIndex + 1) % rayDirections.Length;
         return false; // 장애물이 없는 경우
+    }
+    public virtual void OnEnable()
+    {
+        
     }
 }

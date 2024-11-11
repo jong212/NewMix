@@ -48,11 +48,13 @@ public class ItemChart
 }
 public class MonsterInfoChart
 {
-    public class DropItems {
+    public class DropItems
+    {
 
         public int Id { get; private set; }
         public int Percent { get; private set; }
-        public DropItems (int id, int percent) {
+        public DropItems(int id, int percent)
+        {
             Id = id;
             Percent = percent;
         }
@@ -90,9 +92,7 @@ public class MonsterInfoChart
         foreach (JsonData item in dropItemListJson)
         {
             int id = int.Parse(item["id"].ToString());
-            Debug.Log(id + "id value");
             int percent = int.Parse(item["percent"].ToString());
-            Debug.Log(percent + "percent value");
             Dropitem.Add(new DropItems(id, percent));
         }
         LabelName = json["LabelName"].ToString();
@@ -138,7 +138,8 @@ public class UserData
             if (_level != value)
             {
                 _level = value;
-                if (!_isInitializing) {
+                if (!_isInitializing)
+                {
                     BackendGameData.Instance.GameDataUpdate<int>("level", value);
                 }
             }
@@ -202,7 +203,7 @@ public class UserData
             {
                 _lastMap = value;
                 if (!_isInitializing)
-                { 
+                {
                     BackendGameData.Instance.GameDataUpdate<string>("lastMap", value);
                 }
             }
@@ -253,7 +254,7 @@ public class UserData
         result.AppendLine($"lastMap : {_lastMap}");
         result.AppendLine($"hp : {_hp}");
         result.AppendLine($"miss : {_miss}");
-        foreach(var _value in setPlayerItems)
+        foreach (var _value in setPlayerItems)
         {
             result.AppendLine($"setPlayerItems : {_value}");
         }
@@ -288,7 +289,7 @@ public class ChartInfo
 }
 #endregion
 
-public class BackendGameData 
+public class BackendGameData
 {
     private static BackendGameData _instance = null;
 
@@ -306,10 +307,10 @@ public class BackendGameData
     }
     // -----------------캐싱 Start-------------------------
     // 캐싱 종류 닉네임, 로컬 차트들, 서버에서 받아온 유저데이터
-    private string _nickname { get; set; }   
+    private string _nickname { get; set; }
     private List<string> _getCharLocalListname = new List<string>();
     private List<CharacterSrcChart> _characterChartList = new List<CharacterSrcChart>();
-    private List<ItemChart> _itemChartList = new List<ItemChart>();  
+    private List<ItemChart> _itemChartList = new List<ItemChart>();
     private List<MonsterInfoChart> _monsterInfoList = new List<MonsterInfoChart>();
     public UserData userData { get; set; }
 
@@ -332,7 +333,7 @@ public class BackendGameData
     {
         get => _itemChartList;
         set => _itemChartList = value;
-    }    
+    }
     public List<MonsterInfoChart> MonsterInfoList                       // 캐싱 -테스트
     {
         get => _monsterInfoList;
@@ -341,7 +342,7 @@ public class BackendGameData
     public void SetNickname(string nickname)    // 캐싱 - 버튼 클릭 시 닉넴 캐싱 하는 건데 리펙토링 가능한지 체크해 봐야 할 듯 (중복코드라서)중복 버튼에서 바로 위 코드로 타는거가능한지 체크필요
     {
         NickName = nickname;
-        Debug.Log($"[3-3 BackendGameData : 플레이어 닉네임 얼리 캐싱 {NickName}]");
+        Debug.Log($"[3-2] 캐싱완료 플레이어 닉네임 {NickName}");
     }
     // -----------------캐싱 End-------------------------
 
@@ -392,7 +393,7 @@ public class BackendGameData
     private string gameDataRowInDate = string.Empty;
 
     // 닉네임을 설정하면서 유저 기본 정보 세팅 후 서버에 저장
-    public void GameDataInsert(int? chrIdx) 
+    public void GameDataInsert(int? chrIdx)
     {
 
         if (userData == null)
@@ -408,7 +409,7 @@ public class BackendGameData
         userData.LastMap = "A";
         userData.Hp = 10;
         userData.Miss = 1;
-        userData.setPlayerItems = new List<int>() { 1,4};//1,4는 
+        userData.setPlayerItems = new List<int>() { 1, 4 };//1,4는 
 
         Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
@@ -429,7 +430,7 @@ public class BackendGameData
             Debug.Log("게임 정보 데이터 삽입에 성공했습니다. : " + bro);
 
             //삽입한 게임 정보의 고유값입니다.  
-            gameDataRowInDate = bro.GetInDate();            
+            gameDataRowInDate = bro.GetInDate();
         }
         else
         {
@@ -443,9 +444,8 @@ public class BackendGameData
         var bro = Backend.GameData.GetMyData("Character", new Where());
         if (bro.IsSuccess())
         {
-            Debug.Log($"[3-5 BackendGameData : 뒤끝에서 플레이어 정보 가져왔음 {bro}]");
             LitJson.JsonData gameDataJson = bro.FlattenRows(); // Json으로 리턴된 데이터를 받아옵니다.  
-            
+
             if (gameDataJson.Count <= 0) // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
             {
                 Debug.LogWarning("데이터가 존재하지 않습니다.");
@@ -470,7 +470,7 @@ public class BackendGameData
                 {
                     userData.setPlayerItems.Add(int.Parse(item.ToString()));
                 }
-                Debug.Log($"[3-6 BackendGameData : 가져온 데이터 로컬에 캐싱 userData 여기 넣음 {userData.ToString()}]");
+                Debug.Log($"[3-4] 캐싱완료 userData 여기 넣음 {userData.ToString()}]");
 
                 userData.EndInit();
             }
@@ -479,9 +479,9 @@ public class BackendGameData
         {
             Debug.LogError("게임 정보 조회에 실패했습니다. : " + bro);
         }
-        
+
     }
-   
+
 
     public void GameDataUpdate<T>(string columName, T Parameter)
     {

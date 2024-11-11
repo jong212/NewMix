@@ -14,23 +14,42 @@ public class MonsterManager : NetworkBehaviour
 
     public override void Spawned()
     {
+
         if (Object.HasStateAuthority)
         {
-            LoadAddressableMonsterPrefab();
-            SpawnMonsters();
+            StartCoroutine(LoadAndSpawnMonsters());
         }
     }
-    private void LoadAddressableMonsterPrefab()
+    private IEnumerator LoadAndSpawnMonsters()
     {
-        
+        yield return StartCoroutine(AddressableManager.instance.LoadPrefabsWithLabels("Enemy"));
 
+        // 캐싱된 프리팹을 가져와서 몬스터 리스트에 추가
         foreach (MonsterInfoChart row in BackendGameData.Instance.MonsterInfoList)
         {
-            if(row.SceneName == BackendGameData.Instance.userData.LastMap.ToString())
+            if (row.SceneName == BackendGameData.Instance.userData.LastMap.ToString())
             {
-                monsterPrefab.Add(AddressableManager.instance.GetPrefab(row.LabelName, row.PrafabName));
+                GameObject prefab = AddressableManager.instance.GetPrefab(row.LabelName, row.PrafabName);
+                if (prefab != null)
+                {
+                    monsterPrefab.Add(prefab);
+                    Debug.Log($"[로드 후 캐싱 완료]: {row.PrafabName}");
+                }
+                else
+                {
+                    Debug.LogError($"Failed to load prefab: {row.PrafabName}");
+                }
             }
         }
+
+        if (monsterPrefab.Count == 0)
+        {
+            Debug.LogError("No prefabs loaded for spawning.");
+            yield break;
+        }
+
+        Debug.Log("[4-3] 적 모델 로드 완료");
+        SpawnMonsters();
     }
     private void SpawnMonsters()
     {
@@ -41,6 +60,7 @@ public class MonsterManager : NetworkBehaviour
                 Vector3 spawnPosition = GetRandomSpawnPosition();
                 // 번갈아 가면서 프리팹 선택
                 GameObject selectedPrefab = monsterPrefab[currentPrefabIndex];
+                selectedPrefab.transform.position = spawnPosition;
                 currentPrefabIndex = (currentPrefabIndex + 1) % monsterPrefab.Count; // 인덱스를 순환시킴
                 NetworkObject newMonster = Runner.Spawn(selectedPrefab, spawnPosition, Quaternion.identity, Object.InputAuthority);
 
@@ -79,4 +99,5 @@ public class MonsterManager : NetworkBehaviour
     {
         return new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
     }
+
 }

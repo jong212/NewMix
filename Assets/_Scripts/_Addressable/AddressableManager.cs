@@ -38,7 +38,7 @@ public class AddressableManager : MonoBehaviour
                 foreach (var prefab in handle.Result)
                 {
                     prefabCache[label].Add(prefab);
-                    Debug.Log("[ @ Addressable " + prefab.name + " 리소스 로드 및 캐싱 완료]");
+                    Debug.Log(" [어드레서블 로드 후 캐싱 완료] :" + prefab.name);
                 }
                 onLoaded?.Invoke();
             }
@@ -48,9 +48,7 @@ public class AddressableManager : MonoBehaviour
             }
         };
     }
-
-    //TEST
-    public IEnumerator LoadPrefabsWithLabelCoroutine(string label, Action<bool> onCompleted)
+    public IEnumerator LoadPrefabsWithLabels(string label)
     {
         var handle = Addressables.LoadAssetsAsync<GameObject>(label, null);
         yield return handle;
@@ -65,16 +63,40 @@ public class AddressableManager : MonoBehaviour
             foreach (var prefab in handle.Result)
             {
                 prefabCache[label].Add(prefab);
-                Debug.Log($"[AddressableManager] {prefab.name} 리소스 로드 및 캐싱 완료 under label {label}");
+                Debug.Log(" [어드레서블 로드 후 캐싱 완료] :" + prefab.name);
             }
-            onCompleted?.Invoke(true);
         }
         else
         {
             Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
-            onCompleted?.Invoke(false);
         }
     }
+    //TEST
+    /* public IEnumerator LoadPrefabsWithLabelCoroutine(string label, Action<bool> onCompleted)
+     {
+         var handle = Addressables.LoadAssetsAsync<GameObject>(label, null);
+         yield return handle;
+
+         if (handle.Status == AsyncOperationStatus.Succeeded)
+         {
+             if (!prefabCache.ContainsKey(label))
+             {
+                 prefabCache[label] = new List<GameObject>();
+             }
+
+             foreach (var prefab in handle.Result)
+             {
+                 prefabCache[label].Add(prefab);
+                 Debug.Log($"[AddressableManager] {prefab.name} 리소스 로드 및 캐싱 완료 under label {label}");
+             }
+             onCompleted?.Invoke(true);
+         }
+         else
+         {
+             Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
+             onCompleted?.Invoke(false);
+         }
+     }*/
 
     // (라벨 값 매게 변수로 받고) 오브젝트들 리스트 형태로 반환 함
     public List<GameObject> GetPrefabsByLabel(string label)

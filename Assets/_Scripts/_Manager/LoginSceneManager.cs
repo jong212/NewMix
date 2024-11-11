@@ -42,24 +42,21 @@ public class LoginSceneManager : MonoBehaviour
         {
             _instance = this;
         }
-        //SceneManager.LoadScene("Preloader"); //로그인 생략하고 게임씬으로 입장하는 테스트 하기 위한 임시 주석 Test종료 후 삭제 및 주석처리
 
         if (FindObjectOfType(typeof(StaticManager)) == null)
         {
             var obj = Resources.Load<GameObject>("Prefabs/StaticManager");
             Instantiate(obj);
-
         }
         var bro = Backend.Initialize(); // 뒤끝 초기화
 
         // 뒤끝 초기화에 대한 응답값
-
         if (bro.IsSuccess())
         {
             /* ================================================================================
              * StartGoogleLogin(); // PC 테스트는 CustomLogin 함수 사용하고 모바일은 StartGoogleLogin
              * ================================================================================*/
-            
+
             Debug.Log("초기화 성공 : " + bro.StatusCode);
         }
         else
@@ -69,13 +66,13 @@ public class LoginSceneManager : MonoBehaviour
     }
     private void Update()
     {
-       
-
-        if (Input.GetKeyDown(KeyCode.A)) {
-            CustomLogin("test123","123");
-        } else if(Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            CustomLogin("test456","456");
+            CustomLogin("test123", "123");
+        }
+        else if (Input.GetKeyDown(KeyCode.B))
+        {
+            CustomLogin("test456", "456");
         }
     }
     public void testbuttonA()
@@ -97,7 +94,7 @@ public class LoginSceneManager : MonoBehaviour
             LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
             string nick = userInfoJson["nickname"]?.ToString();
             BackendGameData.Instance.SetNickname(nick);                  // 캐싱   
-                                    
+
             if (string.IsNullOrEmpty(nick))                              // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             {
                 StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform, true);
@@ -133,10 +130,10 @@ public class LoginSceneManager : MonoBehaviour
             LitJson.JsonData userInfoJson = nickData.GetReturnValuetoJSON()["row"];
             string nick = userInfoJson["nickname"]?.ToString();
             BackendGameData.Instance.SetNickname(nick);
-           
+
             if (string.IsNullOrEmpty(nick))                 // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             {
-                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform, true);                
+                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform, true);
                 Selecter.gameObject.SetActive(true);
             }
             else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
@@ -150,7 +147,7 @@ public class LoginSceneManager : MonoBehaviour
     #region # 서버 차트 비교 후 로드
     IEnumerator ServerCharLoad()
     {
-        
+
         var bro = Backend.Chart.GetChartListByFolder(2056);                                 // 차트 매니저 폴더 접근 
         string chartManagerFileId = bro.FlattenRows()[0]["selectedChartFileId"].ToString(); // CSV 파일 업로드 할 때 부여 된 고유 파일 ID 값을 가져옴 ex 145150, // 해당 폴더에는 chartManager 차트 하나만 존재할 것이므로 0으로 접근합니다.
         string chartManagerName = bro.FlattenRows()[0]["chartName"].ToString();
@@ -161,11 +158,11 @@ public class LoginSceneManager : MonoBehaviour
             yield break;
         }
 
-        Debug.Log("[3 LoginSceneManager : 뒤끝에서 차트매니저파일 가져옴 ]");
+        Debug.Log("[3] 차트파일 업데이트 해야하는지 체크");
         JsonData newChartManagerJson = serverChartBro.FlattenRows();                        // 서버에서 불러온 ChartManager을 언마샬하여 JsonData 형태로 캐싱합니다.
         Dictionary<string, ChartInfo> chartInfoDic = new Dictionary<string, ChartInfo>();   // 차트 이름으로 데이터를 검색할 것이기 때문에 Dictnary로 생성합니다, // 해당 Dictnary는 최신 버전으로 업데이트할 차트 리스트로 사용됩니다.(최신 버전이라면 해당 리스트에서 제외)
 
-        
+
         foreach (JsonData chartInfoJson in newChartManagerJson)                             // csv 한 줄 = charinfojson
         {
             ChartInfo chartInfo = new ChartInfo(chartInfoJson);
@@ -175,12 +172,11 @@ public class LoginSceneManager : MonoBehaviour
         string deviceChartManagerString = Backend.Chart.GetLocalChartData(chartManagerName);// 기기에 저장된 chartManager 차트를 불러옵니다.
         if (string.IsNullOrEmpty(deviceChartManagerString) == false)                        // 기기에는 string 형태로 저장이 되며, 저장되어있지 않을 경우 string.Empty가 반환됩니다.
         {
-            
-            
+
+
             JsonData deviceChartManagerJson = JsonMapper.ToObject(deviceChartManagerString);// 기기에 저장된 chartManager 차트가 존재한다면 // 기기에 저장된 string형태의 chartManager를 Json 형태로 변경
             deviceChartManagerJson = BackendReturnObject.Flatten(deviceChartManagerJson);
 
-            Debug.Log("[3-1 LoginSceneManager 로컬, 서버 차트 비교]");
             foreach (JsonData deviceChartJson in deviceChartManagerJson["rows"])            // 기기에 저장된 chartManager 차트 속 차트들을 서버에서 불러온 데이터와 대조합니다.
             {
                 ChartInfo deviceChartInfo = new ChartInfo(deviceChartJson);
@@ -198,14 +194,14 @@ public class LoginSceneManager : MonoBehaviour
         {
             foreach (var downloadChartInfo in chartInfoDic)                                 // 차트를 재다운로드하여 기기에 덮어씌웁니다.
             {
-                Debug.Log($"[3-2 LoginSceneManager {downloadChartInfo.Value.chartName} 을 새로운 버전으로 다운받습니다.]");
+                Debug.Log($"[3-1] {downloadChartInfo.Value.chartName} 차트를 새로운 버전으로 다운받습니다.");
                 Backend.Chart.GetOneChartAndSave(downloadChartInfo.Value.chartFileId, downloadChartInfo.Value.chartName);
             }
             Backend.Chart.GetOneChartAndSave(chartManagerFileId, chartManagerName);         // chartManager 차트를 최신화합니다.(로컬저장)
         }
         else
         {
-            Debug.Log("[3-2 LoginSceneManager 업데이트할 내역이 존재하지 않습니다.]");
+            Debug.Log("[3-1] 업이트할 차트 내역이 존재하지 않습니다.");
         }
 
     }
@@ -214,18 +210,18 @@ public class LoginSceneManager : MonoBehaviour
     #region # SetWaitRoom
     public void SetWaitRoom()
     {
-        Debug.Log("4 LoginSceneManager : 게임 입장 전 대기실 세팅");
-        if(Selecter != null && Selecter.gameObject.activeSelf == true)
+        Debug.Log("[3-3] 캐릭터 선택창 화면 진입");
+        if (Selecter != null && Selecter.gameObject.activeSelf == true)
         {
             Selecter.gameObject.SetActive(false);
         }
-         
-        BackendGameData.Instance.GetPlayerData();        
 
-        GameObject infoUI = StaticManager.UI.CommonOpen(UIType.CharaterUI, LoginUICanvas.transform,false,true);
+        BackendGameData.Instance.GetPlayerData();
+
+        GameObject infoUI = StaticManager.UI.CommonOpen(UIType.CharaterUI, LoginUICanvas.transform, false, true);
         PlayerWaitRoomInfo Roominfo = infoUI.GetComponent<PlayerWaitRoomInfo>();
         Roominfo.NickNameLayout.text = BackendGameData.Instance.NickName;
-        
+
         UserData data = BackendGameData.Instance.userData;
         Roominfo.LvLayout.text = data.Level.ToString();
         Roominfo.AtkLayout.text = data.Atk.ToString();
@@ -235,5 +231,5 @@ public class LoginSceneManager : MonoBehaviour
     }
     #endregion
 
-  
+
 }

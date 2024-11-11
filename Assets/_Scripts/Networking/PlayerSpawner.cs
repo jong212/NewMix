@@ -7,14 +7,10 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 {
     public event Action<PlayerRef> OnPlayerJoined;
     public event Action<PlayerRef> OnPlayerLeft;
-
     private GameObject playerPrefab;
 
     public void PlayerJoined(PlayerRef player)
     {
-        //InterfaceManager.instance.PrintPlayerCount(Runner.SessionInfo.PlayerCount, Runner.SessionInfo.MaxPlayers); // 1031 주석
-
-        // Start the spawn process for all players (including the local one)
         if (player == Runner.LocalPlayer)
         {
             StartCoroutine(SpawnRoutine(player));
@@ -44,6 +40,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         {
             isInventoryLoaded = true;
             CheckIfAllLoaded();
+            Debug.Log("Inventory loaded");
         });
 
         AddressableManager.instance.LoadPrefabsWithLabel(labelName, () =>
@@ -53,7 +50,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
             CheckIfAllLoaded();
         });
 
-
         // 내부 함수: 두 로드 완료 여부를 확인
         void CheckIfAllLoaded()
         {
@@ -61,7 +57,9 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
             {
                 isLoaded = true;
             }
-        }        // 프리팹 로드가 완료될 때까지 대기
+        }        
+        
+        // 프리팹 로드가 완료될 때까지 대기
         yield return new WaitUntil(() => isLoaded);
 
         if (SpawnpointManager.GetSpawnpoint(out Vector3 location, out Quaternion orientation))

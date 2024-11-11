@@ -120,3 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87af88294d32ab944bc0df91929b741c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _selectMapName: 1

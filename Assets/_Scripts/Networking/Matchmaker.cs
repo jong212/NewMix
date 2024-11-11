@@ -37,16 +37,8 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void TryConnectShared()
 	{
-
         _roomCode = BackendGameData.Instance.userData.LastMap;
-
-
-        TryConnectSharedSession(
-			string.IsNullOrWhiteSpace(_roomCode) ? $"FoodFusion{Random.Range(1000, 9999)}" : _roomCode,
-			() =>
-			{
-				//UIScreen.Focus(InterfaceManager.instance.gameplayHUD); 10/31 ¡÷ºÆ
-			});
+        TryConnectSharedSession(_roomCode);
 	}
 
     public void TryConnectSharedSession(string sessionCode, System.Action successCallback = null)
@@ -97,9 +89,6 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
             DisconnectUI.OnShutdown(result.ShutdownReason);
         }
     }
-
-
-    // -------
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
 	{

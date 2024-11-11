@@ -207,6 +207,8 @@ public class Entity : NetworkBehaviour
             }
 
             enemyAi.stateMachine.ChangeState(enemyAi.idleState); // 상태 변경
+            enemyAi.gameObject.SetActive(false);
+            enemyAi.gameObject.SetActive(true);
         }
         // Wait until this client has state authority
         while (!Object.HasStateAuthority || !Object.IsValid)

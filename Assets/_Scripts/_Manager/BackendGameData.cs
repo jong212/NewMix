@@ -95,8 +95,11 @@ public class MonsterInfoChart
             Debug.Log(percent + "percent value");
             Dropitem.Add(new DropItems(id, percent));
         }
+        LabelName = json["LabelName"].ToString();
+        PrafabName = json["PrafabName"].ToString();
+
     }
-    
+
 }
 
 public class Node
@@ -344,8 +347,6 @@ public class BackendGameData
 
     public void InitSetting()
     {
-        
-
         BackendGameData.Instance.GetPlayerData(); // 서버에서 데이터 새로 받아오기 위해 중복 초기화?
 
         foreach (var chartName in GetCharLocalListname)

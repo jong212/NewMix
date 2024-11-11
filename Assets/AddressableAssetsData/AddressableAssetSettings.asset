@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 94b466ca57349f543acf1e50c196809d
   m_currentHash:
     serializedVersion: 2
-    Hash: cbf2cd036192b470acdc300cd9299ad7
+    Hash: 8155db76e20c789e1ad7f6fe48bd6350
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -91,6 +91,7 @@ MonoBehaviour:
     - player
     - SelectPlayer
     - Inventory
+    - Enemy
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 31a8327a75b471e4b9eb0d53d5f3dc00, type: 2}

@@ -5,7 +5,8 @@ using Fusion;
 
 public class MonsterManager : NetworkBehaviour
 {
-    [SerializeField] private GameObject monsterPrefab;
+    [SerializeField] private List<GameObject> monsterPrefab;
+    private int currentPrefabIndex = 0; // 현재 사용할 프리팹 인덱스
 
     // 최대 몬스터 수를 설정하고 Networked Array로 관리
     [Networked, Capacity(30)] // Capacity는 최대 몬스터 수를 설정
@@ -15,10 +16,22 @@ public class MonsterManager : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
+            LoadAddressableMonsterPrefab();
             SpawnMonsters();
         }
     }
+    private void LoadAddressableMonsterPrefab()
+    {
+        
 
+        foreach (MonsterInfoChart row in BackendGameData.Instance.MonsterInfoList)
+        {
+            if(row.SceneName == BackendGameData.Instance.userData.LastMap.ToString())
+            {
+                monsterPrefab.Add(AddressableManager.instance.GetPrefab(row.LabelName, row.PrafabName));
+            }
+        }
+    }
     private void SpawnMonsters()
     {
         for (int i = 0; i < networkedMonsters.Length; i++)
@@ -26,7 +39,10 @@ public class MonsterManager : NetworkBehaviour
             if (networkedMonsters.Get(i) == null)
             {
                 Vector3 spawnPosition = GetRandomSpawnPosition();
-                NetworkObject newMonster = Runner.Spawn(monsterPrefab, spawnPosition, Quaternion.identity, Object.InputAuthority);
+                // 번갈아 가면서 프리팹 선택
+                GameObject selectedPrefab = monsterPrefab[currentPrefabIndex];
+                currentPrefabIndex = (currentPrefabIndex + 1) % monsterPrefab.Count; // 인덱스를 순환시킴
+                NetworkObject newMonster = Runner.Spawn(selectedPrefab, spawnPosition, Quaternion.identity, Object.InputAuthority);
 
                 // 네트워크ed 배열에 추가
                 networkedMonsters.Set(i, newMonster);

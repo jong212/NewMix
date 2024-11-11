@@ -20,6 +20,7 @@ public class DownManager : MonoBehaviour
     public AssetLabelReference player;
     public AssetLabelReference selecter;
     public AssetLabelReference items;
+    public AssetLabelReference enemy;
 
     private long patchSize;
     private Dictionary<string, long> patchMap = new Dictionary<string, long>();
@@ -43,7 +44,7 @@ public class DownManager : MonoBehaviour
 
     IEnumerator CheckUpdateFiles()
     {
-        var labels = new List<string>() { player.labelString, selecter.labelString,items.labelString };
+        var labels = new List<string>() { player.labelString, selecter.labelString,items.labelString, enemy.labelString };
         patchSize = default;
 
         foreach (var label in labels)
@@ -109,7 +110,7 @@ public class DownManager : MonoBehaviour
         이 중에서 프리팹 1에만 "default" 라벨이 설정되어 있고, 프리팹 2는 라벨이 설정되지 않은 상태라고 합시다.
         이 경우, Addressables.GetDownloadSizeAsync("default")를 호출하면 "default" 라벨이 설정된 리소스만 다운로드할 크기를 확인하게 됨. 즉, 프리팹 1만 다운로드 대상이 되고, 프리팹 2는 무시.        
         */
-        var labels = new List<string>() { player.labelString, selecter.labelString,items.labelString };
+        var labels = new List<string>() { player.labelString, selecter.labelString,items.labelString, enemy.labelString };
 
         foreach (var label in labels)
         {

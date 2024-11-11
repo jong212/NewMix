@@ -33,6 +33,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         // 로드 완료 여부를 추적하는 변수들
         bool isInventoryLoaded = false;
         bool isPlayerPrefabLoaded = false;
+        bool isEnemyPrefabLoad = false;
         bool isLoaded = false;
 
         // 어드레서블 로드 시작
@@ -40,20 +41,27 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         {
             isInventoryLoaded = true;
             CheckIfAllLoaded();
-            Debug.Log("Inventory loaded");
+            Debug.Log("InventoryItem loaded!");
         });
-
+        AddressableManager.instance.LoadPrefabsWithLabel("Enemy", () =>
+        {
+            isEnemyPrefabLoad = true;
+            CheckIfAllLoaded();
+            Debug.Log("Enemy loaded!");
+        });
         AddressableManager.instance.LoadPrefabsWithLabel(labelName, () =>
         {
             playerPrefab = AddressableManager.instance.GetPrefab(labelName, prefabName);
             isPlayerPrefabLoaded = true;
             CheckIfAllLoaded();
+            Debug.Log("PlayerPrefab loaded!");
+
         });
 
         // 내부 함수: 두 로드 완료 여부를 확인
         void CheckIfAllLoaded()
         {
-            if (isInventoryLoaded && isPlayerPrefabLoaded)
+            if (isInventoryLoaded && isPlayerPrefabLoaded && isEnemyPrefabLoad)
             {
                 isLoaded = true;
             }

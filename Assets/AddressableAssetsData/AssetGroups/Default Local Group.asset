@@ -59,6 +59,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Inventory
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8149af304ff52204eaf0ab5611a46fb1
+    m_Address: Assets/Prefabs/Networked/Mon1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b73ded4382bb8774993bf129b5dbbc6e
+    m_Address: Assets/Prefabs/Networked/Mon2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
   m_SchemaSet:

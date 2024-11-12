@@ -54,7 +54,7 @@ public class Character : NetworkBehaviour
     // Unity Callbacks
     public override void Spawned()
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasStateAuthority)
         {
             InitializeJoystick();
             InitUI();
@@ -76,8 +76,10 @@ public class Character : NetworkBehaviour
     }
     private void InitUI() {
         StaticManager.UI.CommonOpen(UIType.BtnAttack, StaticManager.UI.MainUI.Layout_BottomRight, true, ChangeMoveProperty);
+        SetCameraUIFollowPlayer();
     }
-    private void SetupCameraFollow()
+
+    private void SetCameraUIFollowPlayer()
     {
         var cameraFollow = FindObjectOfType<IsometricCameraFollow>();
         if (cameraFollow != null)
@@ -89,25 +91,23 @@ public class Character : NetworkBehaviour
             Debug.LogWarning("IsometricCameraFollow component not found in the scene.");
         }
     }
-
-    private void SetInitialNickname()
+    private void InitPlayer()
+    {
+        InitPlayerName();
+        InitStat();
+        InitializeNicknameUI();
+    }
+    private void InitPlayerName()
     {
         Nickname = BackendGameData.Instance.NickName;
     }
 
-    private void InitPlayer()
-    {
-        SetupCameraFollow();
-        SetInitialNickname();
-        InitStat();
-        InitializeNicknameUI();
-    }
     private void InitStat()
     {
         var userData = BackendGameData.Instance.userData;
         Level = userData.Level;
         Attack = userData.Atk;
-        Health = userData.Hp;
+        Health = userData.Acc;
         MissChance = userData.Miss;
         Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
     }

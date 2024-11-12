@@ -40,7 +40,7 @@ public class EnemyBattleState : EnemyState
         if (enemy.CheckAgroDistance())
         {
             stateTimer = enemy.battleTime;
-            if (enemy.GetHorizontalDistance(enemy.transform.position, enemy.closestPlayerTransform.position) < enemy.attackDistance)
+            if (enemy.GetHorizontalDistance(enemy.transform.position, enemy.closestPlayerTransform.position) < enemy.atkDistance)
             {
                 if (CanAttack())
                 {
@@ -88,7 +88,7 @@ public class EnemyBattleState : EnemyState
     }
     private bool CanAttack()
     {
-        if (Time.time >= enemy.lastTimeAttacked + enemy.attackCooldown)
+        if (Time.time >= enemy.lastTimeAttacked + enemy.atkCooldown)
         {
             enemy.lastTimeAttacked = Time.time;
             return true;

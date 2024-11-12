@@ -11,6 +11,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
     public void PlayerJoined(PlayerRef player)
     {
+        Debug.Log("test1");
         if (player == Runner.LocalPlayer)
         {
             StartCoroutine(SpawnRoutine(player));
@@ -41,6 +42,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         {
             isInventoryLoaded = true;
             CheckIfAllLoaded();
+            Debug.Log("??");
             Debug.Log("InventoryItem loaded!");
         });
         AddressableManager.instance.LoadPrefabsWithLabel("Enemy", () =>
@@ -51,6 +53,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         });
         AddressableManager.instance.LoadPrefabsWithLabel(labelName, () =>
         {
+            
             playerPrefab = AddressableManager.instance.GetPrefab(labelName, prefabName);
             isPlayerPrefabLoaded = true;
             CheckIfAllLoaded();
@@ -86,9 +89,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
                         // Send the player info to the master client using a static RPC
                         RPC_NotifyMasterClient(Runner, player, res.Object.GetComponent<NetworkObject>());
-
-
-
                     }
                 }
             );

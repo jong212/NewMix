@@ -70,6 +70,16 @@ public class MonsterInfoChart
     public List<DropItems> Dropitem { get; private set; }
     public string LabelName { get; private set; }
     public string PrafabName { get; private set; }
+    public int Atk { get; private set; }
+    public int Miss { get; private set; }
+    public int Lucky { get; private set; }
+    public int AgroDistance { get; private set; }
+    public int AtkDistance { get; private set; }
+    public int AtkCooldown { get; private set; }
+    public float MoveSpeed { get; private set; }
+    public int IdleTime { get; private set; }
+    public int MoveTime { get; private set; }
+    public int BattleTime { get; private set; }
 
     public MonsterInfoChart(JsonData json)
     {
@@ -97,7 +107,17 @@ public class MonsterInfoChart
         }
         LabelName = json["LabelName"].ToString();
         PrafabName = json["PrafabName"].ToString();
-
+        Atk = int.Parse(json["Atk"].ToString());
+        Miss = int.Parse(json["Miss"].ToString());
+        Lucky = int.Parse(json["Lucky"].ToString());
+        AgroDistance = int.Parse(json["AgroDistance"].ToString());
+        AtkDistance = int.Parse(json["AtkDistance"].ToString());
+        AtkCooldown = int.Parse(json["AtkCooldown"].ToString());
+        MoveSpeed = float.Parse(json["MoveSpeed"].ToString());
+        IdleTime = int.Parse(json["IdleTime"].ToString());
+        MoveTime = int.Parse(json["MoveTime"].ToString());
+        BattleTime = int.Parse(json["BattleTime"].ToString());
+        
     }
 
 }
@@ -129,7 +149,7 @@ public class UserData
 {
     private bool _isInitializing = false; // 초기화 여부를 나타내는 플래그
 
-    private int _level = 1;
+    private int _level;
     public int Level
     {
         get { return _level; }
@@ -140,12 +160,12 @@ public class UserData
                 _level = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.GameDataUpdate<int>("level", value);
+                    BackendGameData.Instance.GameDataUpdate<int>("Level", value);
                 }
             }
         }
     }
-    private int _money = 1;
+    private int _money;
     public int Money
     {
         get { return _money; }
@@ -156,12 +176,12 @@ public class UserData
                 _money = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.GameDataUpdate<int>("money", value);
+                    BackendGameData.Instance.GameDataUpdate<int>("Money", value);
                 }
             }
         }
     }
-    private int _chrType = 0;
+    private int _chrType;
     public int ChrType
     {
         get { return _chrType; }
@@ -177,7 +197,7 @@ public class UserData
             }
         }
     }
-    private int _atk = 1;
+    private int _atk;
     public int Atk
     {
         get { return _atk; }
@@ -188,12 +208,12 @@ public class UserData
                 _atk = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.GameDataUpdate<int>("atk", value);
+                    BackendGameData.Instance.GameDataUpdate<int>("Atk", value);
                 }
             }
         }
     }
-    private string _lastMap = "A";
+    private string _lastMap;
     public string LastMap
     {
         get { return _lastMap; }
@@ -204,28 +224,12 @@ public class UserData
                 _lastMap = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.GameDataUpdate<string>("lastMap", value);
+                    BackendGameData.Instance.GameDataUpdate<string>("LastMap", value);
                 }
             }
         }
     }
-    private int _hp = 1;
-    public int Hp
-    {
-        get { return _hp; }
-        set
-        {
-            if (_hp != value)
-            {
-                _hp = value;
-                if (!_isInitializing)
-                {
-                    BackendGameData.Instance.GameDataUpdate<int>("hp", value);
-                }
-            }
-        }
-    }
-    private int _miss = 1;
+    private int _miss;
     public int Miss
     {
         get { return _miss; }
@@ -236,7 +240,39 @@ public class UserData
                 _miss = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.GameDataUpdate<int>("miss", value);
+                    BackendGameData.Instance.GameDataUpdate<int>("Miss", value);
+                }
+            }
+        }
+    }
+    private int _acc;
+    public int Acc
+    {
+        get { return _acc; }
+        set
+        {
+            if (_acc != value)
+            {
+                _acc = value;
+                if (!_isInitializing)
+                {
+                    BackendGameData.Instance.GameDataUpdate<int>("Acc", value);
+                }
+            }
+        }
+    }
+    private int _lucky;
+    public int Lucky
+    {
+        get { return _lucky; }
+        set
+        {
+            if (_lucky != value)
+            {
+                _lucky = value;
+                if (!_isInitializing)
+                {
+                    BackendGameData.Instance.GameDataUpdate<int>("Lucky", value);
                 }
             }
         }
@@ -247,16 +283,17 @@ public class UserData
     {
         StringBuilder result = new StringBuilder();
 
-        result.AppendLine($"level : {_level}");
+        result.AppendLine($"LV : {_level}");
         result.AppendLine($"money : {_money}");
+        result.AppendLine($"LastMap : {_lastMap}");
         result.AppendLine($"ChrType : {ChrType}");
-        result.AppendLine($"atk : {_atk}");
-        result.AppendLine($"lastMap : {_lastMap}");
-        result.AppendLine($"hp : {_hp}");
-        result.AppendLine($"miss : {_miss}");
+        result.AppendLine($"공격력 : {_atk}");
+        result.AppendLine($"민첩 : {_miss}");
+        result.AppendLine($"정확도 : {_acc}");
+        result.AppendLine($"행운 : {_lucky}");
         foreach (var _value in setPlayerItems)
         {
-            result.AppendLine($"setPlayerItems : {_value}");
+            result.AppendLine($"보유아이템 : {_value}");
         }
 
         return result.ToString();
@@ -405,22 +442,24 @@ public class BackendGameData
         userData.Level = 1;
         userData.Money = 10000;
         userData.ChrType = 1;
-        userData.Atk = 1;
         userData.LastMap = "A";
-        userData.Hp = 10;
-        userData.Miss = 1;
         userData.setPlayerItems = new List<int>() { 1, 4 };//1,4는 
+        userData.Atk = 1;
+        userData.Acc = 10;
+        userData.Miss = 1;
+        userData.Lucky = 1;
 
         Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
-        param.Add("level", userData.Level);
-        param.Add("money", userData.Money);
+        param.Add("Level", userData.Level);
+        param.Add("Money", userData.Money);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
-        param.Add("atk", userData.Atk);
-        param.Add("lastMap", userData.LastMap);
-        param.Add("hp", userData.Hp);
-        param.Add("miss", userData.Miss);
-        param.Add("setPlayerItems", userData.setPlayerItems);
+        param.Add("LastMap", userData.LastMap);
+        param.Add("SetPlayerItems", userData.setPlayerItems);
+        param.Add("Atk", userData.Atk);
+        param.Add("Miss", userData.Miss);
+        param.Add("Acc", userData.Acc);
+        param.Add("Lucky", userData.Lucky);
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("Character", param);
@@ -449,6 +488,8 @@ public class BackendGameData
             if (gameDataJson.Count <= 0) // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
             {
                 Debug.LogWarning("데이터가 존재하지 않습니다.");
+                GameDataInsert(0);
+                GetPlayerData();
             }
             else
             {
@@ -457,16 +498,17 @@ public class BackendGameData
                 userData = new UserData();
                 userData.BeginInit();
 
-                userData.Level = int.Parse(gameDataJson[0]["level"].ToString());
-                userData.Miss = int.Parse(gameDataJson[0]["money"].ToString());
+                userData.Level = int.Parse(gameDataJson[0]["Level"].ToString());
+                userData.Money = int.Parse(gameDataJson[0]["Money"].ToString());
                 userData.ChrType = int.Parse(gameDataJson[0]["ChrType"].ToString());
-                userData.Atk = int.Parse(gameDataJson[0]["atk"].ToString());
-                userData.LastMap = gameDataJson[0]["lastMap"].ToString();
-                userData.Hp = int.Parse(gameDataJson[0]["hp"].ToString());
-                userData.Miss = int.Parse(gameDataJson[0]["miss"].ToString());
+                userData.LastMap = gameDataJson[0]["LastMap"].ToString();
+                userData.Atk = int.Parse(gameDataJson[0]["Atk"].ToString());
+                userData.Miss = int.Parse(gameDataJson[0]["Miss"].ToString());
+                userData.Acc = int.Parse(gameDataJson[0]["Acc"].ToString());
+                userData.Lucky = int.Parse(gameDataJson[0]["Lucky"].ToString());
 
                 userData.setPlayerItems.Clear();
-                foreach (JsonData item in gameDataJson[0]["setPlayerItems"])
+                foreach (JsonData item in gameDataJson[0]["SetPlayerItems"])
                 {
                     userData.setPlayerItems.Add(int.Parse(item.ToString()));
                 }
@@ -479,9 +521,7 @@ public class BackendGameData
         {
             Debug.LogError("게임 정보 조회에 실패했습니다. : " + bro);
         }
-
     }
-
 
     public void GameDataUpdate<T>(string columName, T Parameter)
     {

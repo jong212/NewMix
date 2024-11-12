@@ -225,8 +225,9 @@ public class LoginSceneManager : MonoBehaviour
         UserData data = BackendGameData.Instance.userData;
         Roominfo.LvLayout.text = data.Level.ToString();
         Roominfo.AtkLayout.text = data.Atk.ToString();
-        Roominfo.HpLayout.text = data.Hp.ToString();
+        Roominfo.AccLayout.text = data.Acc.ToString();
         Roominfo.MissLayout.text = data.Miss.ToString();
+        Roominfo.LuckyLayout.text = data.Lucky.ToString();
         Roominfo.LastLocationLayout.text = data.LastMap.ToString();
     }
     #endregion

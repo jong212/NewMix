@@ -50,11 +50,11 @@ public class AddressableManager : MonoBehaviour
     }
     public IEnumerator LoadPrefabsWithLabels(string label)
     {
-        Debug.Log("3");
+        Debug.Log("[몬스터 스폰 과정 순서 메모 3]");
 
         var handle = Addressables.LoadAssetsAsync<GameObject>(label, null);
         yield return handle;
-        Debug.Log("5");
+        Debug.Log("[몬스터 스폰 과정 순서 메모 5]");
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
@@ -116,6 +116,7 @@ public class AddressableManager : MonoBehaviour
 
     public GameObject GetPrefab(string label, string prefabName)
     {
+        Debug.Log("test2");
         if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
         {
             foreach (var prefab in prefabs)

@@ -9,7 +9,7 @@ public class MonsterManager : NetworkBehaviour
     private int currentPrefabIndex = 0; // 현재 사용할 프리팹 인덱스
 
     // 최대 몬스터 수를 설정하고 Networked Array로 관리
-    [Networked, Capacity(30)] // Capacity는 최대 몬스터 수를 설정
+    [Networked, Capacity(2)] // Capacity는 최대 몬스터 수를 설정
     [SerializeField] NetworkArray<NetworkObject> networkedMonsters => default;
 
     public override void Spawned()
@@ -17,12 +17,18 @@ public class MonsterManager : NetworkBehaviour
 
         if (Object.HasStateAuthority)
         {
+            Debug.Log("1");
             StartCoroutine(LoadAndSpawnMonsters());
+            Debug.Log("4");
+
         }
     }
     private IEnumerator LoadAndSpawnMonsters()
     {
+        Debug.Log("2");
+
         yield return StartCoroutine(AddressableManager.instance.LoadPrefabsWithLabels("Enemy"));
+        Debug.Log("6");
 
         // 캐싱된 프리팹을 가져와서 몬스터 리스트에 추가
         foreach (MonsterInfoChart row in BackendGameData.Instance.MonsterInfoList)

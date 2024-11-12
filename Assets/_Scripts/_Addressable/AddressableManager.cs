@@ -50,8 +50,11 @@ public class AddressableManager : MonoBehaviour
     }
     public IEnumerator LoadPrefabsWithLabels(string label)
     {
+        Debug.Log("3");
+
         var handle = Addressables.LoadAssetsAsync<GameObject>(label, null);
         yield return handle;
+        Debug.Log("5");
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {

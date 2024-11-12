@@ -290,7 +290,6 @@ public class Entity : NetworkBehaviour
     public virtual void OnTriggerEnter(Collider col)
     {
         // 충돌한 객체의 상위(루트) 객체에서 태그 확인
-        Debug.Log("test");
         NetworkObject networkObject = col.GetComponentInParent<NetworkObject>();
         if (networkObject != null)
         {

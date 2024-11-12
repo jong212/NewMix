@@ -44,6 +44,8 @@ public class EnemyBattleState : EnemyState
             {
                 if (CanAttack())
                 {
+                    enemy.anim.SetFloat("xVelocity", 0);
+
                     stateMachine.ChangeState(enemy.attackState);
 
                 }

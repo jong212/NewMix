@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 2350303833550570012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.305626, y: -0.26515007, z: 2.9939775}
+  m_LocalPosition: {x: -8, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -76,6 +76,7 @@ MonoBehaviour:
   battleTime: 7
   lastTimeAttacked: 0
   closestPlayerTransform: {fileID: 0}
+  ischeck: 0
 --- !u!65 &3901600442813068076
 BoxCollider:
   m_ObjectHideFlags: 0

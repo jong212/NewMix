@@ -72,7 +72,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         
         // 프리팹 로드가 완료될 때까지 대기
         yield return new WaitUntil(() => isLoaded);
-
+        StaticManager.Instance.AllLoad = true;
         if (SpawnpointManager.GetSpawnpoint(out Vector3 location, out Quaternion orientation))
         {
             Debug.Log("Spawning player");

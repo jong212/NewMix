@@ -9,8 +9,9 @@ public class Memo
     // 2. 프리팹을 어드레서블 해놓은 
     // 3. Statu Authoriy 권한 변경 : 방장 클라가 나가면 자동으로 기존 클라중 한 명이 마스터 클라이언트가 되지만 오브젝트의 StatuAtuthority 옵션은 자동으로 체크 되지 않는다 GameManager.cs에서 AssignMasterClientAuthority 에 등록한 클래스에 한해서만 권한이 바뀜 따라서 방장 클라에서만 StatuAuthoiry가 필요한 경우 방장이 나가는 경울를 대비하여 GameManager AssignMasterClientAuthority 메서드에 클래스를 등록한다.
 
-
-
+    // 인벤토리 구현
+    // https://www.youtube.com/watch?v=74vxsqQsFHE
+    // 스프라이트 어드레서블 구현 해놨음
 
 
     // ------Scene Info--------

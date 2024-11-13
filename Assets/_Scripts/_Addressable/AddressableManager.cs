@@ -9,6 +9,8 @@ public class AddressableManager : MonoBehaviour
 {
     public static AddressableManager instance;
     private Dictionary<string, List<GameObject>> prefabCache = new Dictionary<string, List<GameObject>>();
+    private Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+
 
     private void Awake()
     {
@@ -74,33 +76,7 @@ public class AddressableManager : MonoBehaviour
             Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
         }
     }
-    //TEST
-    /* public IEnumerator LoadPrefabsWithLabelCoroutine(string label, Action<bool> onCompleted)
-     {
-         var handle = Addressables.LoadAssetsAsync<GameObject>(label, null);
-         yield return handle;
-
-         if (handle.Status == AsyncOperationStatus.Succeeded)
-         {
-             if (!prefabCache.ContainsKey(label))
-             {
-                 prefabCache[label] = new List<GameObject>();
-             }
-
-             foreach (var prefab in handle.Result)
-             {
-                 prefabCache[label].Add(prefab);
-                 Debug.Log($"[AddressableManager] {prefab.name} 리소스 로드 및 캐싱 완료 under label {label}");
-             }
-             onCompleted?.Invoke(true);
-         }
-         else
-         {
-             Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
-             onCompleted?.Invoke(false);
-         }
-     }*/
-
+     
     // (라벨 값 매게 변수로 받고) 오브젝트들 리스트 형태로 반환 함
     public List<GameObject> GetPrefabsByLabel(string label)
     {
@@ -132,7 +108,6 @@ public class AddressableManager : MonoBehaviour
         Debug.LogError($"No prefabs found with label: {label}");
         return null;
     }
-
     // Release a Prefab (optional for memory management)
     public void ReleasePrefabsByLabel(string label)
     {
@@ -150,5 +125,55 @@ public class AddressableManager : MonoBehaviour
             Debug.LogWarning($"No prefabs found with label: {label} to release.");
         }
     }
-
+    public void LoadSpritesWithLabel(string label, Action onLoaded)
+    {
+        Addressables.LoadAssetsAsync<Sprite>(label, null).Completed += handle =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                foreach (var sprite in handle.Result)
+                {
+                    if (!spriteCache.ContainsKey(sprite.name))
+                    {
+                        spriteCache[sprite.name] = sprite;
+                        Debug.Log($"[스프라이트 로드 및 캐싱 완료] : {sprite.name}");
+                    }
+                }
+                onLoaded?.Invoke();
+            }
+            else
+            {
+                Debug.LogError($"Failed to load sprites with label '{label}': {handle.OperationException}");
+            }
+        };
+    }
+    public Sprite GetSprite(string spriteName)
+    {
+        if (spriteCache.TryGetValue(spriteName, out Sprite sprite))
+        {
+            return sprite;
+        }
+        Debug.LogError($"Sprite '{spriteName}' not found in cache.");
+        return null;
+    }
+    public void ReleaseSprites()
+    {
+        foreach (var sprite in spriteCache.Values)
+        {
+            Addressables.Release(sprite);
+        }
+        spriteCache.Clear();
+        Debug.Log("All cached sprites released.");
+    }
+/*
+    SpriteManager.instance.LoadSpritesWithLabel("MyLabel", () =>
+{
+    Debug.Log("모든 스프라이트 로드 및 캐싱 완료");
+});
+Sprite mySprite = SpriteManager.instance.GetSprite("SpriteName");
+if (mySprite != null)
+{
+    // 스프라이트를 사용할 수 있습니다.
+}
+*/
 }

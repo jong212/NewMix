@@ -12,13 +12,13 @@ public class Enemy : Entity
     private int currentRayIndex = 0;                             // 현재 레이를 쏠 방향 인덱스
     public EnemyStateMachine stateMachine { get; private set; }
 
-    public float agroDistance { get; set; }  // 플레이어 감지 거리 5
-    public float atkDistance  { get; set; }  // 근접 원거리 따라 다르게 설정할 것 ,기본 값 3
-    public float atkCooldown { get; set; }   // 몬스터 공격 쿨타임, 기본 값 1
-    public float moveSpeed   { get; set; }   // 몬스터 이속 1.5f
-    public float idleTime    { get; set; }   // 상태 지속 시간 2
-    public float moveTime    { get; set; }   // 상태 지속 시간 3
-    public float battleTime  { get; set; }   // 상태 지속 시간 7
+    [Networked] public float agroDistance { get; set; }  // 플레이어 감지 거리 5
+    [Networked] public float atkDistance  { get; set; }  // 근접 원거리 따라 다르게 설정할 것 ,기본 값 3
+    [Networked] public float atkCooldown { get; set; }   // 몬스터 공격 쿨타임, 기본 값 1
+    [Networked] public float moveSpeed   { get; set; }   // 몬스터 이속 1.5f
+    [Networked] public float idleTime    { get; set; }   // 상태 지속 시간 2
+    [Networked] public float moveTime    { get; set; }   // 상태 지속 시간 3
+    [Networked] public float battleTime  { get; set; }   // 상태 지속 시간 7
     [HideInInspector] public float lastTimeAttacked;
     public string lastAnimBoolName { get; private set; }
 

@@ -60,10 +60,6 @@ public class Character : NetworkBehaviour
             InitUI();
             InitPlayer();
             ModifyKCCCollider();
-        }
-        if (Object.HasStateAuthority)
-        {
-            Debug.Log($"[Client {Runner.LocalPlayer.PlayerId}] ???444");
             InitItem(); // State Authority에서 네트워크 속성 초기값 설정
         }
         
@@ -111,7 +107,7 @@ public class Character : NetworkBehaviour
         MissChance = userData.Miss;
         Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
-    private void InitItem() // 이 함수에다가는 캐싱 된 아이템 인덱스 넣고 onrender 통해타는 함수에서 장착 해제 하는 코드 작성 ㄱ
+    private void InitItem() 
     {
         List<int> playerItemsList = BackendGameData.Instance.userData.setPlayerItems;
         setItemIndexs.Clear();
@@ -154,7 +150,6 @@ public class Character : NetworkBehaviour
             HandleMouseInput();
         }
     }
-
     private void HandleMouseInput()
     {
         if (Input.GetMouseButtonDown(0))
@@ -167,9 +162,10 @@ public class Character : NetworkBehaviour
         }
     }
 
+
     public override void Render()
     {
-        if (!_isInitialized && setItemIndexs.Length > 0)
+        if (!_isInitialized && setItemIndexs.Length > 0 && StaticManager.Instance.AllLoad == true) 
         {
             _isInitialized = true;
             OnSetitemList();

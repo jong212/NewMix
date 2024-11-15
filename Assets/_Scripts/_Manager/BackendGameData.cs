@@ -6,51 +6,72 @@ using System.Collections.Generic;
 using UnityEngine.PlayerLoop;
 using Unity.VisualScripting;
 
-#region 설계도 모음
+/// <summary>
+/// 뒤끝 Insert 용 인벤토리 슬롯 설계도
+/// 계정 생성 시점에 사용
+/// </summary>
+[System.Serializable]
+public class InventorySlot
+{
+    public int  SlotId { get; set; }
+    public int? ItemId { get; set; }
+    public int  Quantity { get; set; }
 
-// 설계도 - 어드레서블 매핑용 (현재 플레이어가 착용중인 캐릭터 ID 등등)
+    public InventorySlot(int slotId, int? itemId, int quantity)
+    {
+        SlotId = slotId;
+        ItemId = itemId;
+        Quantity = quantity;
+    }
+}
+
+/// <summary>
+/// 뒤끝에서 받아 온 플레이어 차트 담는 캐싱용 설계도
+/// </summary>
 public class CharacterSrcChart
 {
-    public int charId { get; private set; }
+    public int    charId { get; private set; }
     public string labName { get; private set; }
     public string prefName { get; private set; }
 
     public CharacterSrcChart(JsonData json)
     {
-        charId = int.Parse(json["charId"].ToString());
-        labName = json["labName"].ToString();
+        charId   = int.Parse(json["charId"].ToString());
+        labName  = json["labName"].ToString();
         prefName = json["prefName"].ToString();
     }
 }
 
+/// <summary>
+/// 뒤끝에서 받아 온 아이템 관련 설계도
+/// </summary>
 public class ItemChart
 {
-    public int Itemid { get; private set; }
+    public int    Itemid { get; private set; }
     public string ItemName { get; private set; }
-    public int Damage { get; private set; }
-    public int MoveSpeed { get; private set; }
-    public int SetLevel { get; private set; }
+    public int    Damage { get; private set; }
+    public int    MoveSpeed { get; private set; }
+    public int    SetLevel { get; private set; }
     public string Description { get; private set; }
     public string Label { get; private set; }
     public string Prefabname { get; private set; }
 
     public ItemChart(JsonData json)
     {
-        Itemid = int.Parse(json["ItemId"].ToString());
-        ItemName = json["ItemName"].ToString();
-        Damage = int.Parse(json["Damage"].ToString());
-        MoveSpeed = int.Parse(json["MoveSpeed"].ToString());
-        SetLevel = int.Parse(json["SetLevel"].ToString());
+        Itemid      = int.Parse(json["ItemId"].ToString());
+        ItemName    = json["ItemName"].ToString();
+        Damage      = int.Parse(json["Damage"].ToString());
+        MoveSpeed   = int.Parse(json["MoveSpeed"].ToString());
+        SetLevel    = int.Parse(json["SetLevel"].ToString());
         Description = json["Description"].ToString();
-        Label = json["Label"].ToString();
-        Prefabname = json["PrefabName"].ToString();
+        Label       = json["Label"].ToString();
+        Prefabname  = json["PrefabName"].ToString();
     }
 }
 public class MonsterInfoChart
 {
     public class DropItems
     {
-
         public int Id { get; private set; }
         public int Percent { get; private set; }
         public DropItems(int id, int percent)
@@ -60,26 +81,26 @@ public class MonsterInfoChart
         }
     }
 
-    public int MonsterId { get; private set; }
+    public int    MonsterId { get; private set; }
     public string MonsterName { get; private set; }
     public string SceneName { get; private set; }
-    public int Lv { get; private set; }
-    public int Exp { get; private set; }
-    public int Money { get; private set; }
-    public int MonsterDropPercent { get; private set; }
+    public int    Lv { get; private set; }
+    public int    Exp { get; private set; }
+    public int    Money { get; private set; }
+    public int    MonsterDropPercent { get; private set; }
     public List<DropItems> Dropitem { get; private set; }
     public string LabelName { get; private set; }
     public string PrafabName { get; private set; }
-    public int Atk { get; private set; }
-    public int Miss { get; private set; }
-    public int Lucky { get; private set; }
-    public int AgroDistance { get; private set; }
-    public int AtkDistance { get; private set; }
-    public int AtkCooldown { get; private set; }
-    public float MoveSpeed { get; private set; }
-    public int IdleTime { get; private set; }
-    public int MoveTime { get; private set; }
-    public int BattleTime { get; private set; }
+    public int    Atk { get; private set; }
+    public int    Miss { get; private set; }
+    public int    Lucky { get; private set; }
+    public int    AgroDistance { get; private set; }
+    public int    AtkDistance { get; private set; }
+    public int    AtkCooldown { get; private set; }
+    public float  MoveSpeed { get; private set; }
+    public int    IdleTime { get; private set; }
+    public int    MoveTime { get; private set; }
+    public int    BattleTime { get; private set; }
 
     public MonsterInfoChart(JsonData json)
     {
@@ -145,6 +166,7 @@ public class Node
 }
 
 // 설계도 - 캐릭터 생성 시 플레이어 정보 DB세팅용 
+[System.Serializable]
 public class UserData
 {
     private bool _isInitializing = false; // 초기화 여부를 나타내는 플래그
@@ -278,7 +300,9 @@ public class UserData
         }
     }
     public List<int> setPlayerItems = new List<int>();
+    public List<InventorySlot> InventorySlots { get; set; } = new List<InventorySlot>();
 
+    
     public override string ToString()  // 디버깅 위한 함수 (Debug.Log(UserData);)
     {
         StringBuilder result = new StringBuilder();
@@ -293,9 +317,12 @@ public class UserData
         result.AppendLine($"행운 : {_lucky}");
         foreach (var _value in setPlayerItems)
         {
-            result.AppendLine($"보유아이템 : {_value}");
+            result.AppendLine($"장착아이템 : {_value}");
         }
-
+        foreach (var _value in InventorySlots)
+        {
+            result.AppendLine($"인벤토리 SloatId: {_value.SlotId} ItemId: {_value.ItemId}, Quantity:,  {_value.Quantity}"); 
+        }
         return result.ToString();
     }
     public void BeginInit()
@@ -324,7 +351,6 @@ public class ChartInfo
         updateDate = json["updateDate"].ToString();
     }
 }
-#endregion
 
 public class BackendGameData
 {
@@ -439,27 +465,28 @@ public class BackendGameData
         }
         userData.BeginInit();
         Debug.Log("데이터를 초기화합니다.");
-        userData.Level = 1;
-        userData.Money = 10000;
-        userData.ChrType = 1;
-        userData.LastMap = "A";
-        userData.setPlayerItems = new List<int>() { 1, 4 };//1,4는 
-        userData.Atk = 1;
-        userData.Acc = 10;
-        userData.Miss = 1;
-        userData.Lucky = 1;
+
+        List<InventorySlot> inventorySlots = new List<InventorySlot>();
+
+        for (int i = 1; i <= 20; i++) // Assuming 30 slots
+        {
+            inventorySlots.Add(new InventorySlot(i, null, 0)); // Empty slot
+        }
+        string inventoryJson = JsonMapper.ToJson(new { slots = inventorySlots });
+     
 
         Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
-        param.Add("Level", userData.Level);
-        param.Add("Money", userData.Money);
+        param.Add("Level", 1);
+        param.Add("Money", 10000);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
-        param.Add("LastMap", userData.LastMap);
-        param.Add("SetPlayerItems", userData.setPlayerItems);
-        param.Add("Atk", userData.Atk);
-        param.Add("Miss", userData.Miss);
-        param.Add("Acc", userData.Acc);
-        param.Add("Lucky", userData.Lucky);
+        param.Add("LastMap", "A");
+        param.Add("SetPlayerItems", new List<int> { 1,4});
+        param.Add("Atk", 10);
+        param.Add("Miss", 10);
+        param.Add("Acc", 10);
+        param.Add("Lucky", 10);
+        param.Add("Inventory", inventoryJson); // Add inventory JSON to database
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("Character", param);
@@ -488,8 +515,8 @@ public class BackendGameData
             if (gameDataJson.Count <= 0) // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
             {
                 Debug.LogWarning("데이터가 존재하지 않습니다.");
-                GameDataInsert(0);
-                GetPlayerData();
+               // GameDataInsert(0);
+                //GetPlayerData();
             }
             else
             {
@@ -507,11 +534,44 @@ public class BackendGameData
                 userData.Acc = int.Parse(gameDataJson[0]["Acc"].ToString());
                 userData.Lucky = int.Parse(gameDataJson[0]["Lucky"].ToString());
 
+
+                userData.InventorySlots.Clear();
+                string inventoryJsonString = gameDataJson[0]["Inventory"].ToString();
+
+                JsonData inventoryJsonData = JsonMapper.ToObject(inventoryJsonString);
+
+                foreach (JsonData slot in inventoryJsonData["slots"])
+                {
+                    int slotId = int.Parse(slot["SlotId"].ToString());
+                    int? itemId;
+
+                    if (slot.Keys.Contains("ItemId") && slot["ItemId"] != null)
+                    {
+                        string itemIdString = slot["ItemId"].ToString();
+
+                        if (!string.IsNullOrEmpty(itemIdString))
+                        {
+                            itemId = int.Parse(itemIdString);
+                        }
+                        else
+                        {
+                            itemId = null;
+                        }
+                    }
+                    else
+                    {
+                        itemId = null;
+                    }
+                    int quantity = int.Parse(slot["Quantity"].ToString());
+                    userData.InventorySlots.Add(new InventorySlot(slotId, itemId, quantity));
+                }
+
                 userData.setPlayerItems.Clear();
                 foreach (JsonData item in gameDataJson[0]["SetPlayerItems"])
                 {
                     userData.setPlayerItems.Add(int.Parse(item.ToString()));
                 }
+
                 Debug.Log($"[3-4] 캐싱완료 userData 여기 넣음 {userData.ToString()}]");
 
                 userData.EndInit();

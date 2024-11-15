@@ -61,6 +61,7 @@ public class Character : NetworkBehaviour
             InitPlayer();
             ModifyKCCCollider();
             InitItem(); // State Authority에서 네트워크 속성 초기값 설정
+            StaticManager.UI.ContentsUI.gameObject.SetActive(true);
         }
         
         //OnSetitemList();

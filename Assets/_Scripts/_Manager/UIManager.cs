@@ -19,7 +19,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
+    [SerializeField] private ContentsUI _contentsUI;
     [SerializeField] private MainUI _mainUI;
+
 
     private Dictionary<UIType, GameObject> _createdUIDic = new Dictionary<UIType, GameObject>(); // _createdUIDic 딕셔너리에 있으면 하이어라키에 존재한단 뜻    
     private HashSet<UIType> _openedUIDic = new HashSet<UIType>(); // _openedUIDic 여기 담겨있으면 SetActive True인 것임
@@ -47,6 +49,13 @@ public class UIManager : MonoBehaviour
         get
         {
             return _mainUI;
+        }
+    }
+    public ContentsUI ContentsUI
+    {
+        get
+        {
+            return _contentsUI;
         }
     }
     public WorldNickname WorldNickNameUI

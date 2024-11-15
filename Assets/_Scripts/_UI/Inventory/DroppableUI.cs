@@ -4,9 +4,10 @@ using UnityEngine.UI;
 
 public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
-	private	Image			image;
-	private	RectTransform	rect;
-
+	private Image image;
+	private RectTransform rect;
+	[SerializeField] int idx;
+	public int Idx { get => idx; }
 	private void Awake()
 	{
 		image	= GetComponent<Image>();

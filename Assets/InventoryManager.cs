@@ -3,33 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
-    // 슬롯 데이터 클래스
-    [System.Serializable]
-    public class InventoryData
-    {
-        public int slotID;
-        public string itemName;
-        public Sprite itemIcon;
-        public bool isEquipped;
-    }
 
-    // 슬롯 데이터 리스트
-    [SerializeField]
-    public List<InventoryData> inventoryDataList = new List<InventoryData>();
 
     // 탭 부모 리스트 (Inspector에서 할당)
     [SerializeField]
-    private List<GameObject> tabParents; // 예: Tab1, Tab2, Tab3
+    private List<Transform> tabParents; // 예: Tab1, Tab2, Tab3
 
     // 아이템 프리팹 (Inspector에서 할당)
     [SerializeField]
     private GameObject itemPrefab;
 
     // 모든 슬롯을 저장할 리스트
-    private List<GameObject> allSlots = new List<GameObject>();
+    private List<Transform> allSlots = new List<Transform>();
 
     // 클릭 카운트 및 코루틴 관리를 위한 딕셔너리
     private Dictionary<int, int> slotClickCounts = new Dictionary<int, int>();
@@ -40,20 +29,24 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
+        InitMergeSloat();
         InitializeSlots();
+    }
+
+    private void InitMergeSloat()
+    {
+       allSlots = tabParents.SelectMany(tab => tab.Cast<Transform>()).ToList();
     }
 
     // 슬롯 초기화 및 아이템 프리팹 추가 메서드
     private void InitializeSlots()
     {
-        int slotID = 0;
-
-        foreach (GameObject tabParent in tabParents)
+        List<InventorySlot> sData = BackendGameData.Instance.userData.InventorySlots;
+        foreach (InventorySlot slotClass in sData)
         {
-            foreach (Transform slotTransform in tabParent.transform)
+           
+            foreach( var slotTransform in allSlots)
             {
-                // 슬롯 이름 설정 (선택 사항)
-                slotTransform.gameObject.name = $"Slot_{slotID}";
 
                 // 아이템 프리팹을 슬롯의 자식으로 인스턴스화
                 GameObject itemInstance = Instantiate(itemPrefab, slotTransform);
@@ -61,44 +54,17 @@ public class InventoryManager : MonoBehaviour
                 itemInstance.transform.localScale = Vector3.one;     // 스케일 초기화
 
                 // 슬롯을 리스트에 추가
-                allSlots.Add(slotTransform.gameObject);
-
-                // 슬롯 데이터 초기화 및 추가
-                InventoryData data = new InventoryData
+                if (itemInstance.TryGetComponent(out Btn component))
                 {
-                    slotID = slotID,
-                    itemName = $"Item {slotID + 1}",
-                    itemIcon = null, // 필요한 경우 아이콘 설정
-                    isEquipped = false
-                };
-                inventoryDataList.Add(data);
-
-                // 아이템 프리팹에 클릭 이벤트 등록
-                AddClickEventListener(itemInstance, slotID);
-
-                slotID++;
+                    //component.str = slotID.ToString() + "test중";
+                    component.ivtmanager = this; // Pass the InventoryManager reference
+                }
             }
         }
     }
 
-    // 아이템 프리팹에 클릭 이벤트 리스너 추가
-    private void AddClickEventListener(GameObject itemInstance, int slotID)
-    {
-        EventTrigger trigger = itemInstance.GetComponent<EventTrigger>();
-        if (trigger == null)
-        {
-            trigger = itemInstance.AddComponent<EventTrigger>();
-        }
-
-        // 클릭 이벤트 등록
-        EventTrigger.Entry entry = new EventTrigger.Entry();
-        entry.eventID = EventTriggerType.PointerClick;
-        entry.callback.AddListener((eventData) => { OnItemClicked((PointerEventData)eventData, slotID); });
-        trigger.triggers.Add(entry);
-    }
-
     // 아이템이 클릭되었을 때 호출되는 메서드
-    private void OnItemClicked(PointerEventData eventData, int slotID)
+    public void OnItemClicked(PointerEventData eventData, int slotID)
     {
         if (!slotClickCounts.ContainsKey(slotID))
         {
@@ -161,41 +127,12 @@ public class InventoryManager : MonoBehaviour
     // 아이템 장착 메서드
     private void EquipItem(int slotID)
     {
-        if (slotID >= 0 && slotID < inventoryDataList.Count)
-        {
-            InventoryData data = inventoryDataList[slotID];
-            data.isEquipped = !data.isEquipped; // 토글 예제
 
-            Debug.Log($"Item in Slot {slotID} Equipped: {data.isEquipped}");
-
-            // 슬롯 UI 업데이트
-            UpdateSlotUI(slotID);
-        }
     }
 
     // 슬롯 UI 업데이트 메서드
     private void UpdateSlotUI(int slotID)
     {
-        if (slotID >= 0 && slotID < allSlots.Count)
-        {
-            GameObject slot = allSlots[slotID];
-            Transform itemTransform = slot.transform.Find(itemPrefab.name);
 
-            if (itemTransform != null)
-            {
-                Image itemImage = itemTransform.GetComponent<Image>();
-                if (itemImage != null)
-                {
-                    // 장착 상태에 따라 아이콘 색상 변경
-                    itemImage.color = inventoryDataList[slotID].isEquipped ? Color.green : Color.white;
-
-                    // 아이콘 스프라이트 업데이트 (필요 시)
-                    if (inventoryDataList[slotID].itemIcon != null)
-                    {
-                        itemImage.sprite = inventoryDataList[slotID].itemIcon;
-                    }
-                }
-            }
-        }
     }
 }

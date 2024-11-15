@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class DataSetManager : MonoBehaviour
 {
-    private void Awake()
-    {
-        
-    }
     public (string, string) CharacterDefaultSettings()
     {
         int cType = BackendGameData.Instance.userData.ChrType;

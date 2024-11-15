@@ -14,12 +14,13 @@ public class StaticManager : MonoBehaviour
     public WorldCanvas WorldCanvas { get; set; }
     public static DataSetManager DataSetManager { get; private set; }                // 인스펙터 참조하기 위해 public
 
+
     public bool AllLoad { get; set; }
 
     void Awake()
     {
         Init();
-    }
+    } 
     void Init()
     {
         if (Instance != null)

@@ -66,14 +66,7 @@ public class LoginSceneManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            CustomLogin("test123", "123");
-        }
-        else if (Input.GetKeyDown(KeyCode.B))
-        {
-            CustomLogin("test456", "456");
-        }
+
     }
     public void testbuttonA()
     {

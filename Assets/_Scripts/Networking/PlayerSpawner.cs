@@ -35,6 +35,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         bool isInventoryLoaded = false;
         bool isPlayerPrefabLoaded = false;
         bool isEnemyPrefabLoad = false;
+        bool isSpriteLoaded = false;
         bool isLoaded = false;
 
         // 어드레서블 로드 시작
@@ -42,7 +43,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         {
             isInventoryLoaded = true;
             CheckIfAllLoaded();
-            Debug.Log("??");
             Debug.Log("InventoryItem loaded!");
         });
         AddressableManager.instance.LoadPrefabsWithLabel("Enemy", () =>
@@ -57,14 +57,19 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
             playerPrefab = AddressableManager.instance.GetPrefab(labelName, prefabName);
             isPlayerPrefabLoaded = true;
             CheckIfAllLoaded();
-            Debug.Log("PlayerPrefab loaded!");
-
+            Debug.Log("PlayerPrefab loaded!"); 
+        });        
+        AddressableManager.instance.LoadSpritesWithLabel("Sprite", () =>
+        {
+            isSpriteLoaded = true;
+            CheckIfAllLoaded();
+            Debug.Log("Sprite loaded!"); 
         });
 
         // 내부 함수: 두 로드 완료 여부를 확인
         void CheckIfAllLoaded()
         {
-            if (isInventoryLoaded && isPlayerPrefabLoaded && isEnemyPrefabLoad)
+            if (isInventoryLoaded && isPlayerPrefabLoaded && isEnemyPrefabLoad && isSpriteLoaded)
             {
                 isLoaded = true;
             }

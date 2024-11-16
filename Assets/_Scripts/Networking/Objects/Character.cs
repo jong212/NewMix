@@ -27,6 +27,7 @@ public class Character : NetworkBehaviour
     public CharacterSpecs Specs { get; private set; }
 
     [SerializeField] private List<Transform> itemList;
+    [SerializeField] private List<Transform> itemParitsList;
 
     [SerializeField] private SimpleKCC _kcc;
     [SerializeField] private Transform _uiPoint;
@@ -40,7 +41,7 @@ public class Character : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnNicknameChanged))]
     public NetworkString<_16> Nickname { get; set; }
 
-    [Networked, Capacity(2), OnChangedRender(nameof(OnSetitemList))]
+    [Networked, Capacity(5), OnChangedRender(nameof(OnSetitemList))]
     public NetworkArray<int> setItemIndexs { get; }
 
 
@@ -61,7 +62,7 @@ public class Character : NetworkBehaviour
             InitPlayer();
             ModifyKCCCollider();
             InitItem(); // State Authority에서 네트워크 속성 초기값 설정
-            StaticManager.UI.ContentsUI.gameObject.SetActive(true);
+            StaticManager.UI.ContentsInventoryUI.gameObject.SetActive(true);
         }
         
         //OnSetitemList();
@@ -166,6 +167,8 @@ public class Character : NetworkBehaviour
 
     public override void Render()
     {
+        // 1. setItemIndexs : Init 단계에서 setItemIndexs 네트워크 변수에 값을 할당 한다.
+        // 2. AllLoad : SpawnManager 에서 어드레서블 모드 로드 되면 True로 바꿔줌 그니까 리소스가 모두 로드 된 이후에 아래 1회 실행하게 하기 위해 True인 경우에 실행하도록 함
         if (!_isInitialized && setItemIndexs.Length > 0 && StaticManager.Instance.AllLoad == true) 
         {
             _isInitialized = true;
@@ -313,7 +316,7 @@ public class Character : NetworkBehaviour
     {
         Debug.Log($"[Client {Runner.LocalPlayer.PlayerId}] OnSetitemList called for Character with InputAuthority {Object.InputAuthority.PlayerId}");
 
-        StaticManager.DataSetManager.SetCharacterItem(setItemIndexs, itemList);
+        StaticManager.DataSetManager.SetCharacterItem(setItemIndexs, itemList, itemParitsList);
     }
 
     // Item Handling

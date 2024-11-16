@@ -55,6 +55,7 @@ public class ItemChart
     public string Description { get; private set; }
     public string Label { get; private set; }
     public string Prefabname { get; private set; }
+    public string SpriteName { get; private set; }
 
     public ItemChart(JsonData json)
     {
@@ -66,6 +67,7 @@ public class ItemChart
         Description = json["Description"].ToString();
         Label       = json["Label"].ToString();
         Prefabname  = json["PrefabName"].ToString();
+        SpriteName  = json["SpriteName"].ToString();
     }
 }
 public class MonsterInfoChart
@@ -300,6 +302,9 @@ public class UserData
         }
     }
     public List<int> setPlayerItems = new List<int>();
+    /// <summary>
+    /// 캐싱 된 인벤토리 데이터, 몇 번째 슬롯에 어떤 아이템이 몇 개 있는지 담겨있음
+    /// </summary>
     public List<InventorySlot> InventorySlots { get; set; } = new List<InventorySlot>();
 
     

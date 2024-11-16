@@ -21,6 +21,7 @@ public class DownManager : MonoBehaviour
     public AssetLabelReference selecter;
     public AssetLabelReference items;
     public AssetLabelReference enemy;
+    public AssetLabelReference sprite;
 
     private long patchSize;
     private Dictionary<string, long> patchMap = new Dictionary<string, long>();
@@ -44,7 +45,7 @@ public class DownManager : MonoBehaviour
 
     IEnumerator CheckUpdateFiles()
     {
-        var labels = new List<string>() { player.labelString, selecter.labelString,items.labelString, enemy.labelString };
+        var labels = new List<string>() { player.labelString, selecter.labelString,items.labelString, enemy.labelString, sprite.labelString };
         patchSize = default;
 
         foreach (var label in labels)

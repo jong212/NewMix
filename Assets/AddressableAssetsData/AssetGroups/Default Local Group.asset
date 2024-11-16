@@ -71,6 +71,48 @@ MonoBehaviour:
     m_SerializedLabels:
     - Enemy
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91acab8b6f292c94fb90234cd5eb30ec
+    m_Address: Assets/_Prefabs/Player/SetEquipment/foot5.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e6d8e9472d5e9a4e8146bae8348a6fa
+    m_Address: Assets/_Prefabs/Player/SetEquipment/foot2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13ed19432a2d8334aa8daa83b504437e
+    m_Address: Assets/_Prefabs/Player/SetEquipment/foot1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2affb4592399fd46b023b4c59744a00
+    m_Address: Assets/_Prefabs/Player/SetEquipment/foot4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9aba25bbeadf6204e9f14def3cc6c76d
+    m_Address: Assets/_Prefabs/Player/SetEquipment/foot3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7081dca86c13f54380bdd5a8ebe9f46
+    m_Address: Assets/_Prefabs/AddressSprite/sword1S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e0f9a9db07e5c946a86156834babb23
+    m_Address: Assets/_Prefabs/AddressSprite/foot1S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
   m_SchemaSet:

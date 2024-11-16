@@ -1,12 +1,19 @@
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor.Build.Pipeline;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Btn : MonoBehaviour, IPointerClickHandler
 {
-    public Sprite img;
+    [SerializeField] Image _img;
+    public Sprite spriteImg
+    {
+        get => _img.sprite;
+        set => _img.sprite = value;
+        
+    }
     public InventoryManager ivtmanager;
 
 

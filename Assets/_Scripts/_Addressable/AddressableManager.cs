@@ -37,7 +37,7 @@ public class AddressableManager : MonoBehaviour
                     prefabCache[label] = new List<GameObject>();
                 }
 
-                foreach (var prefab in handle.Result)
+                foreach (var prefab in handle.Result) // 이 handle 사용법을 잘 익허야 할듯 디버그 해보니 내가 메모리 로드 및 인스턴스 한 오브젝트를 배열로도 가져온 것을 확인함 swoard1...2...3 그래서 그 이후 아래에서 캐싱 하는듯
                 {
                     prefabCache[label].Add(prefab);
                     Debug.Log(" [어드레서블 로드 후 캐싱 완료] :" + prefab.name);

@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
-    [SerializeField] private ContentsUI _contentsUI;
+    [SerializeField] private InventoryManager _inventoryUI;
     [SerializeField] private MainUI _mainUI;
 
 
@@ -51,11 +51,11 @@ public class UIManager : MonoBehaviour
             return _mainUI;
         }
     }
-    public ContentsUI ContentsUI
+    public InventoryManager ContentsInventoryUI
     {
         get
         {
-            return _contentsUI;
+            return _inventoryUI;
         }
     }
     public WorldNickname WorldNickNameUI

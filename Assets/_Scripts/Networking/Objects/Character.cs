@@ -57,11 +57,11 @@ public class Character : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            InitializeJoystick();
-            InitUI();
-            InitPlayer();
-            ModifyKCCCollider();
-            InitItem(); // State Authority에서 네트워크 속성 초기값 설정
+            InitializeJoystick();   // 조이스틱 On
+            InitUI();               // 공격 버튼 On, 카메라 플레이어 Follow 하도록 초기화
+            InitPlayer();           // 닉네임, 스텟 초기화
+            ModifyKCCCollider();    // 플레이어 물리 관련 초기화
+            InitItem();             // 플레이어 장비 장착 정보 네트워크 변수에 초기화 (다른 클라 동기화)
             StaticManager.UI.ContentsInventoryUI.gameObject.SetActive(true);
         }
         

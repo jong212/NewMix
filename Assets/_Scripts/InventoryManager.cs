@@ -31,8 +31,46 @@ public class InventoryManager : MonoBehaviour
     {
         InitMergeSloat();
         InitializeSlots();
+        gameObject.SetActive(false);
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            for(int i = 0; i < 10000; i++)
+            {
+                AA(i.ToString());
+            }
+            
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            BB("2");
+        }
+    }
+    public void AA(string str)
+    {
+        StaticManager.Instance.EnqueueAction(() =>
+        {
+            Test1(str);
+        });
+    }
+    public void BB(string str)
+    {
+        StaticManager.Instance.EnqueueAction(() =>
+        {
+            Test2(str);
+        });
     }
 
+    void Test1(string str)
+    {
+        Debug.Log(str);
+    }
+    void Test2(string str)
+    {
+        Debug.Log(str);
+    }
     private void InitMergeSloat()
     {
        allSlots = tabParents.SelectMany(tab => tab.Cast<Transform>()).ToList();
@@ -142,5 +180,17 @@ public class InventoryManager : MonoBehaviour
     private void UpdateSlotUI(int slotID)
     {
 
+    }
+    private void OnEnable()
+    {
+        tabParents[0].gameObject.SetActive(true);
+        tabParents[1].gameObject.SetActive(false);
+        tabParents[2].gameObject.SetActive(false);
+    }
+    private void OnDisable()
+    {
+        tabParents[0].gameObject.SetActive(true);
+        tabParents[1].gameObject.SetActive(false);
+        tabParents[2].gameObject.SetActive(false);
     }
 }

@@ -92,7 +92,6 @@ public class AddressableManager : MonoBehaviour
 
     public GameObject GetPrefab(string label, string prefabName)
     {
-        Debug.Log("test2");
         if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
         {
             foreach (var prefab in prefabs)

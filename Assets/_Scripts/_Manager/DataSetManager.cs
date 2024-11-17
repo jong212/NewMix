@@ -65,7 +65,6 @@ public class DataSetManager : MonoBehaviour
                         { 
                             if (objPartsList[idx].childCount > 0) objPartsPair[0].DestroyChildren();
                             Instantiate(obj, objPartsPair[0]);
-                            Debug.Log(idx);
                         }
                         break; // 원하는 경우 내부 루프만 탈출
                     }

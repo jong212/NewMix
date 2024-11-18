@@ -33,44 +33,7 @@ public class InventoryManager : MonoBehaviour
         InitializeSlots();
         gameObject.SetActive(false);
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            for(int i = 0; i < 10000; i++)
-            {
-                AA(i.ToString());
-            }
-            
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            BB("2");
-        }
-    }
-    public void AA(string str)
-    {
-        StaticManager.Instance.EnqueueAction(() =>
-        {
-            Test1(str);
-        });
-    }
-    public void BB(string str)
-    {
-        StaticManager.Instance.EnqueueAction(() =>
-        {
-            Test2(str);
-        });
-    }
-
-    void Test1(string str)
-    {
-        Debug.Log(str);
-    }
-    void Test2(string str)
-    {
-        Debug.Log(str);
-    }
+    
     private void InitMergeSloat()
     {
        allSlots = tabParents.SelectMany(tab => tab.Cast<Transform>()).ToList();
@@ -98,10 +61,11 @@ public class InventoryManager : MonoBehaviour
                         Sprite spriteImg = AddressableManager.instance.GetSprite(item.SpriteName);
                         if(spriteImg != null)
                         {
-                        component.spriteImg = spriteImg;
+                            component.SpriteImg = spriteImg;
+                            component.ActiveChk = true;
                         }
-                    }
                     break;
+                    }
                 }
 
                 component.ivtmanager = this; // Pass the InventoryManager reference

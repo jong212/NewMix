@@ -307,7 +307,7 @@ public class UserData
     /// </summary>
     public List<InventorySlot> InventorySlots { get; set; } = new List<InventorySlot>();
 
-    
+
     public override string ToString()  // 디버깅 위한 함수 (Debug.Log(UserData);)
     {
         StringBuilder result = new StringBuilder();
@@ -542,7 +542,7 @@ public class BackendGameData
 
                 userData.InventorySlots.Clear();
                 string inventoryJsonString = gameDataJson[0]["Inventory"].ToString();
-
+                Debug.Log("beforeData" + inventoryJsonString);
                 JsonData inventoryJsonData = JsonMapper.ToObject(inventoryJsonString);
 
                 foreach (JsonData slot in inventoryJsonData["slots"])

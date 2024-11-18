@@ -17,11 +17,17 @@ public class StaticManager : MonoBehaviour
     private Queue<Action> InventoryQueue = new Queue<Action>();
     private bool isProcessing = false;  
     public bool AllLoad { get; set; }
+    public UserData CashUdata { get;  set; }
 
     void Awake()
     {
         Init();
-    } 
+    }
+    private void Update()
+    {
+        //Debug.Log(CashUdata?.ToString());
+        
+    }
     void Init()
     {
         if (Instance != null)
@@ -98,5 +104,27 @@ public class StaticManager : MonoBehaviour
         // 잠시 대기하여 Runner가 완전히 정리될 시간을 준다
         yield return new WaitForSeconds(1);
         Matchmaker.Instance.TryConnectShared();
+    }
+     public void InvenSortTwoChange(int changeA, int ChangeB)
+    {
+        EnqueueAction(() =>
+        {
+            Sort(changeA, ChangeB);
+        });
+    }
+    private void Sort(int beforeSloatId, int afterSloatId)
+    {
+        var copyBeforeItemId   = CashUdata.InventorySlots[beforeSloatId].ItemId;
+        var copyBeforeQuantity = CashUdata.InventorySlots[beforeSloatId].Quantity;
+
+        CashUdata.InventorySlots[beforeSloatId].ItemId = CashUdata.InventorySlots[afterSloatId].ItemId;
+        CashUdata.InventorySlots[beforeSloatId].Quantity= CashUdata.InventorySlots[afterSloatId].Quantity;
+
+        CashUdata.InventorySlots[afterSloatId].ItemId = copyBeforeItemId;
+        CashUdata.InventorySlots[afterSloatId].Quantity = copyBeforeQuantity;
+
+        string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
+        BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson);
+
     }
 }

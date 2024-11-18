@@ -109,10 +109,10 @@ public class StaticManager : MonoBehaviour
     {
         EnqueueAction(() =>
         {
-            Sort(changeA, ChangeB);
+            SortTwoChange(changeA, ChangeB);
         });
     }
-    private void Sort(int beforeSloatId, int afterSloatId)
+    private void SortTwoChange(int beforeSloatId, int afterSloatId)
     {
         var copyBeforeItemId   = CashUdata.InventorySlots[beforeSloatId].ItemId;
         var copyBeforeQuantity = CashUdata.InventorySlots[beforeSloatId].Quantity;
@@ -124,7 +124,27 @@ public class StaticManager : MonoBehaviour
         CashUdata.InventorySlots[afterSloatId].Quantity = copyBeforeQuantity;
 
         string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
-        BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson);
+        BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson); 
+    }
+    public void InvenSortOneMove(int changeA, int ChangeB)
+    {
+        EnqueueAction(() =>
+        {
+            SortOneChange(changeA, ChangeB);
+        });
+    }
+    private void SortOneChange(int beforeSloatId, int afterSloatId)
+    {
+        var copyBeforeItemId = CashUdata.InventorySlots[beforeSloatId].ItemId;
+        var copyBeforeQuantity = CashUdata.InventorySlots[beforeSloatId].Quantity;
 
+        CashUdata.InventorySlots[beforeSloatId].ItemId = null;
+        CashUdata.InventorySlots[beforeSloatId].Quantity = 0;
+
+        CashUdata.InventorySlots[afterSloatId].ItemId = copyBeforeItemId;
+        CashUdata.InventorySlots[afterSloatId].Quantity = copyBeforeQuantity;
+
+        string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
+        BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson);
     }
 }

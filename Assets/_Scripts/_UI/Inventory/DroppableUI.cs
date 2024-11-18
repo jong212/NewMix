@@ -57,8 +57,8 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 							StaticManager.Instance.InvenSortTwoChange(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx,Idx);
                         } else
 						{
-
-						}
+                            StaticManager.Instance.InvenSortOneMove(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx, Idx);
+                        }
 						Transform btn = gameObject.GetComponentInChildren<Btn>().transform;
 
 						// 마우스 뗀 위치의 자식 아이템을 => 마우스 클릭한 위치의 자식으로 이동

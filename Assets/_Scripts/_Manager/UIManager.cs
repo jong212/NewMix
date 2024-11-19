@@ -10,9 +10,9 @@ public enum UIType
     BackEndName,
     CharaterUI,
     NickPanel,
-    BtnAttack,
-
+    BtnAttack
 }
+
 public class UIManager : MonoBehaviour
 {
     [Header("------ Common UI Prefabs -----")]

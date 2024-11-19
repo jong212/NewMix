@@ -486,7 +486,7 @@ public class BackendGameData
         param.Add("Money", 10000);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
         param.Add("LastMap", "A");
-        param.Add("SetPlayerItems", new List<int> { 1,4});
+        param.Add("SetPlayerItems", new List<int> { 1,4,0,0});
         param.Add("Atk", 10);
         param.Add("Miss", 10);
         param.Add("Acc", 10);

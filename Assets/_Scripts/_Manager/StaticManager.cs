@@ -1,4 +1,4 @@
-using BackEnd;
+ï»¿using BackEnd;
 using LitJson;
 using System;
 using System.Collections;
@@ -10,10 +10,10 @@ using UnityEngine.TextCore.Text;
 
 public class StaticManager : MonoBehaviour
 {
-    public static StaticManager Instance { get; private set; }      // ½Ì±ÛÅæ
-    public static UIManager UI { get; private set; }                // ÀÎ½ºÆåÅÍ ÂüÁ¶ÇÏ±â À§ÇØ public
+    public static StaticManager Instance { get; private set; }      // ì‹±ê¸€í†¤
+    public static UIManager UI { get; private set; }                // ì¸ìŠ¤í™í„° ì°¸ì¡°í•˜ê¸° ìœ„í•´ public
     public WorldCanvas WorldCanvas { get; set; }
-    public static DataSetManager DataSetManager { get; private set; }                // ÀÎ½ºÆåÅÍ ÂüÁ¶ÇÏ±â À§ÇØ public 
+    public static DataSetManager DataSetManager { get; private set; }                // ì¸ìŠ¤í™í„° ì°¸ì¡°í•˜ê¸° ìœ„í•´ public 
     private Queue<Action> InventoryQueue = new Queue<Action>();
     private bool isProcessing = false;  
     public bool AllLoad { get; set; }
@@ -43,7 +43,7 @@ public class StaticManager : MonoBehaviour
         UI.Init();
         DataSetManager = GetComponentInChildren<DataSetManager>();
         WorldCanvas = GetComponentInChildren<WorldCanvas>();
-        /*DataSetManager = GetComponentInChildren<DataSetManager>(); ÇÊ¿äÇÒ ¶§ »ç¿ë ¾ÆÁ÷ ½ºÅÂÆ½ ¸Å´ÏÀú¿¡¼­´Â ¹¹ Ã³¸®ÇÒ °Ô ¾ø¾î º¸ÀÓ*/
+        /*DataSetManager = GetComponentInChildren<DataSetManager>(); í•„ìš”í•  ë•Œ ì‚¬ìš© ì•„ì§ ìŠ¤íƒœí‹± ë§¤ë‹ˆì €ì—ì„œëŠ” ë­ ì²˜ë¦¬í•  ê²Œ ì—†ì–´ ë³´ì„*/
     }
     public void EnqueueAction(Action action)
     {
@@ -59,13 +59,13 @@ public class StaticManager : MonoBehaviour
         while (InventoryQueue.Count > 0)
         {
             Action currentAction = InventoryQueue.Dequeue();
-            currentAction.Invoke(); // ÀÛ¾÷ ½ÇÇà
-            yield return null; // ´ÙÀ½ ÇÁ·¹ÀÓ±îÁö ´ë±â
+            currentAction.Invoke(); // ì‘ì—… ì‹¤í–‰
+            yield return null; // ë‹¤ìŒ í”„ë ˆì„ê¹Œì§€ ëŒ€ê¸°
         }
         isProcessing = false;
     }
 
-    // ¸ğ¹ÙÀÏ¿¡¼­ ¿ÀºêÁ§Æ® À§Ä¡ È®ÀÎ¿ë
+    // ëª¨ë°”ì¼ì—ì„œ ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ í™•ì¸ìš©
     public void LogHierarchyPath(Transform transform)
     {
         if (transform == null)
@@ -77,14 +77,14 @@ public class StaticManager : MonoBehaviour
         string path = transform.name;
         Transform currentParent = transform.parent;
 
-        // ºÎ¸ğ¸¦ µû¶ó ¿Ã¶ó°¡¸ç ÀüÃ¼ °æ·Î »ı¼º
+        // ë¶€ëª¨ë¥¼ ë”°ë¼ ì˜¬ë¼ê°€ë©° ì „ì²´ ê²½ë¡œ ìƒì„±
         while (currentParent != null)
         {
             path = currentParent.name + "/" + path;
             currentParent = currentParent.parent;
         }
 
-        // ÀÌ¸§°ú °æ·Î¸¦ ·Î±×·Î Ãâ·Â
+        // ì´ë¦„ê³¼ ê²½ë¡œë¥¼ ë¡œê·¸ë¡œ ì¶œë ¥
         Debug.Log($"Object name: {transform.name}, Path: {path}");
     }
    
@@ -101,7 +101,7 @@ public class StaticManager : MonoBehaviour
     {
         Matchmaker.Instance.Runner.Shutdown();
 
-        // Àá½Ã ´ë±âÇÏ¿© Runner°¡ ¿ÏÀüÈ÷ Á¤¸®µÉ ½Ã°£À» ÁØ´Ù
+        // ì ì‹œ ëŒ€ê¸°í•˜ì—¬ Runnerê°€ ì™„ì „íˆ ì •ë¦¬ë  ì‹œê°„ì„ ì¤€ë‹¤
         yield return new WaitForSeconds(1);
         Matchmaker.Instance.TryConnectShared();
     }

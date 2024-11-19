@@ -1,31 +1,39 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
-
-public class InventoryManager : MonoBehaviour
+using static UnityEditor.Progress;
+using System.ComponentModel;
+/*public enum InventoryType
 {
+    Weapon = 100,
+    Armor = 101,
+    Gluve = 102,
+    Shose = 103,
+}*/
+public class InventoryManager : MonoBehaviour   
+{
+     
+     // í…ŒìŠ¤íŠ¸ ã…ã…ã…ã…ã… 
+    // íƒ­ ë¶€ëª¨ ë¦¬ìŠ¤íŠ¸ (Inspectorì—ì„œ í• ë‹¹)
+    [SerializeField]    private List<Transform> tabParents; // ì˜ˆ: Tab1, Tab2, Tab3
+    [SerializeField]    private List<DroppableUI> subInventory; // ì˜ˆ: ì¥ë¹„ ì°©ìš© ì°½
 
-
-    // ÅÇ ºÎ¸ğ ¸®½ºÆ® (Inspector¿¡¼­ ÇÒ´ç)
-    [SerializeField]
-    private List<Transform> tabParents; // ¿¹: Tab1, Tab2, Tab3
-
-    // ¾ÆÀÌÅÛ ÇÁ¸®ÆÕ (Inspector¿¡¼­ ÇÒ´ç)
+    // ì•„ì´í…œ í”„ë¦¬íŒ¹ (Inspectorì—ì„œ í• ë‹¹)
     [SerializeField]
     private GameObject itemPrefab;
 
-    // ¸ğµç ½½·ÔÀ» ÀúÀåÇÒ ¸®½ºÆ®
+    // ëª¨ë“  ìŠ¬ë¡¯ì„ ì €ì¥í•  ë¦¬ìŠ¤íŠ¸
     private List<Transform> allSlots = new List<Transform>();
 
-    // Å¬¸¯ Ä«¿îÆ® ¹× ÄÚ·çÆ¾ °ü¸®¸¦ À§ÇÑ µñ¼Å³Ê¸®
+    // í´ë¦­ ì¹´ìš´íŠ¸ ë° ì½”ë£¨í‹´ ê´€ë¦¬ë¥¼ ìœ„í•œ ë”•ì…”ë„ˆë¦¬
     private Dictionary<int, int> slotClickCounts = new Dictionary<int, int>();
     private Dictionary<int, Coroutine> slotCoroutines = new Dictionary<int, Coroutine>();
 
     [SerializeField]
-    private float doubleClickThreshold = 0.3f; // ´õºí Å¬¸¯ ÀÎ½Ä ½Ã°£ °£°İ (ÃÊ)
+    private float doubleClickThreshold = 0.3f; // ë”ë¸” í´ë¦­ ì¸ì‹ ì‹œê°„ ê°„ê²© (ì´ˆ)
 
     void Start()
     {
@@ -39,21 +47,20 @@ public class InventoryManager : MonoBehaviour
        allSlots = tabParents.SelectMany(tab => tab.Cast<Transform>()).ToList();
     }
 
-    // ½½·Ô ÃÊ±âÈ­ ¹× ¾ÆÀÌÅÛ ÇÁ¸®ÆÕ Ãß°¡ ¸Ş¼­µå
+    // ìŠ¬ë¡¯ ì´ˆê¸°í™” ë° ì•„ì´í…œ í”„ë¦¬íŒ¹ ì¶”ê°€ ë©”ì„œë“œ
     private void InitializeSlots()
     {
         List<InventorySlot> sData = BackendGameData.Instance.userData.InventorySlots;
         List<ItemChart> itemChart =  BackendGameData.Instance.ItemChartList;
-
         foreach (InventorySlot slotClass in sData)
         {
             GameObject itemInstance = Instantiate(itemPrefab, allSlots[slotClass.SlotId - 1]);
-            itemInstance.transform.localPosition = Vector3.zero; // À§Ä¡ ÃÊ±âÈ­
-            itemInstance.transform.localScale = Vector3.one;     // ½ºÄÉÀÏ ÃÊ±âÈ­
+            itemInstance.transform.localPosition = Vector3.zero; // ìœ„ì¹˜ ì´ˆê¸°í™”
+            itemInstance.transform.localScale = Vector3.one;     // ìŠ¤ì¼€ì¼ ì´ˆê¸°í™”
 
             if (itemInstance.TryGetComponent(out Btn component))
             {
-                // ¾ÆÀÌÅÛ ÇÁ¸®ÆÕÀ» ½½·ÔÀÇ ÀÚ½ÄÀ¸·Î ÀÎ½ºÅÏ½ºÈ­
+                // ì•„ì´í…œ í”„ë¦¬íŒ¹ì„ ìŠ¬ë¡¯ì˜ ìì‹ìœ¼ë¡œ ì¸ìŠ¤í„´ìŠ¤í™”
                 foreach (ItemChart item in itemChart )
                 {
                     if(slotClass.ItemId == item.Itemid)
@@ -71,9 +78,34 @@ public class InventoryManager : MonoBehaviour
                 component.ivtmanager = this; // Pass the InventoryManager reference
             }
         }
+
+        List<int> setPlayeritem = BackendGameData.Instance.userData.setPlayerItems;
+        int tIdx = 0;
+        foreach (int setInvenIdx in setPlayeritem)
+        {
+            GameObject itemInstance = Instantiate(itemPrefab, subInventory[tIdx].transform);
+            if(itemInstance.TryGetComponent(out Btn component))
+            {
+                foreach (ItemChart item in itemChart)
+                {
+                    if (setInvenIdx == item.Itemid)
+                    {
+                        Sprite spriteImg = AddressableManager.instance.GetSprite(item.SpriteName);
+                        if (spriteImg != null)
+                        {
+                            component.SpriteImg = spriteImg;
+                            component.ActiveChk = true;
+                        }
+                    }
+                }
+            }
+
+            tIdx++;
+
+        }
     }
 
-    // ¾ÆÀÌÅÛÀÌ Å¬¸¯µÇ¾úÀ» ¶§ È£ÃâµÇ´Â ¸Ş¼­µå
+    // ì•„ì´í…œì´ í´ë¦­ë˜ì—ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
     public void OnItemClicked(PointerEventData eventData, int slotID)
     {
         if (!slotClickCounts.ContainsKey(slotID))
@@ -83,64 +115,64 @@ public class InventoryManager : MonoBehaviour
 
         slotClickCounts[slotID]++;
 
-        // ±âÁ¸¿¡ ½ÇÇà ÁßÀÎ ÄÚ·çÆ¾ÀÌ ÀÖ´Ù¸é ÁßÁö
+        // ê¸°ì¡´ì— ì‹¤í–‰ ì¤‘ì¸ ì½”ë£¨í‹´ì´ ìˆë‹¤ë©´ ì¤‘ì§€
         if (slotCoroutines.ContainsKey(slotID))
         {
             StopCoroutine(slotCoroutines[slotID]);
         }
 
-        // »õ·Î¿î ÄÚ·çÆ¾ ½ÃÀÛ
+        // ìƒˆë¡œìš´ ì½”ë£¨í‹´ ì‹œì‘
         slotCoroutines[slotID] = StartCoroutine(HandleClicks(slotID));
     }
 
-    // Å¬¸¯À» Ã³¸®ÇÏ´Â ÄÚ·çÆ¾
+    // í´ë¦­ì„ ì²˜ë¦¬í•˜ëŠ” ì½”ë£¨í‹´
     private IEnumerator HandleClicks(int slotID)
     {
         yield return new WaitForSeconds(doubleClickThreshold);
 
         if (slotClickCounts[slotID] == 1)
         {
-            // ´ÜÀÏ Å¬¸¯ Ã³¸®
+            // ë‹¨ì¼ í´ë¦­ ì²˜ë¦¬
             OnSingleClick(slotID);
         }
         else if (slotClickCounts[slotID] == 2)
         {
-            // ´õºí Å¬¸¯ Ã³¸®
+            // ë”ë¸” í´ë¦­ ì²˜ë¦¬
             OnDoubleClick(slotID);
         }
 
-        // Å¬¸¯ Ä«¿îÆ® ÃÊ±âÈ­
+        // í´ë¦­ ì¹´ìš´íŠ¸ ì´ˆê¸°í™”
         slotClickCounts[slotID] = 0;
     }
 
-    // ´ÜÀÏ Å¬¸¯ Ã³¸® ¸Ş¼­µå
+    // ë‹¨ì¼ í´ë¦­ ì²˜ë¦¬ ë©”ì„œë“œ
     private void OnSingleClick(int slotID)
     {
         Debug.Log($"Slot {slotID} Single Clicked");
         ShowTooltip(slotID);
     }
 
-    // ´õºí Å¬¸¯ Ã³¸® ¸Ş¼­µå
+    // ë”ë¸” í´ë¦­ ì²˜ë¦¬ ë©”ì„œë“œ
     private void OnDoubleClick(int slotID)
     {
         Debug.Log($"Slot {slotID} Double Clicked");
         EquipItem(slotID);
     }
 
-    // ÅøÆÁ Ç¥½Ã ¸Ş¼­µå
+    // íˆ´íŒ í‘œì‹œ ë©”ì„œë“œ
     private void ShowTooltip(int slotID)
     {
-        // ÅøÆÁ Ç¥½Ã ·ÎÁ÷ ±¸Çö
-        // ¿¹: TooltipManager.Instance.Show(slotID, inventoryDataList[slotID].itemName);
+        // íˆ´íŒ í‘œì‹œ ë¡œì§ êµ¬í˜„
+        // ì˜ˆ: TooltipManager.Instance.Show(slotID, inventoryDataList[slotID].itemName);
     }
 
-    // ¾ÆÀÌÅÛ ÀåÂø ¸Ş¼­µå
+    // ì•„ì´í…œ ì¥ì°© ë©”ì„œë“œ
     private void EquipItem(int slotID)
     {
 
     }
 
-    // ½½·Ô UI ¾÷µ¥ÀÌÆ® ¸Ş¼­µå
+    // ìŠ¬ë¡¯ UI ì—…ë°ì´íŠ¸ ë©”ì„œë“œ
     private void UpdateSlotUI(int slotID)
     {
 

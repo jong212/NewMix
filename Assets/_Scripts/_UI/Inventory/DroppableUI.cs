@@ -7,7 +7,8 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 {
 	private Image image;
 	private RectTransform rect;
-	[SerializeField] int idx;
+/*	[SerializeField] InventoryType inventorytype;
+*/    [SerializeField] int idx;
 	public int Idx { get => idx; }
 	private void Awake()
 	{

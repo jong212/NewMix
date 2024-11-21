@@ -9,18 +9,10 @@ public class Btn : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private bool _activeChk;
     [SerializeField] Image _img;
-    public Sprite SpriteImg
-    {
-        get => _img.sprite;
-        set => _img.sprite = value;
-        
-    }
-    public bool ActiveChk
-    {
-        get => _activeChk;
-        set => _activeChk = value;
-    }
-
+    [SerializeField] string _category;
+    public Sprite SpriteImg { get => _img.sprite; set => _img.sprite = value; }
+    public bool   ActiveChk { get => _activeChk;  set => _activeChk  = value; }
+    public string Category  { get => _category;   set => _category   = value; }
     public InventoryManager ivtmanager;
 
 

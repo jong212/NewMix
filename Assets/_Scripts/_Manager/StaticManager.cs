@@ -1,9 +1,12 @@
 ﻿using BackEnd;
+using ExitGames.Client.Photon.StructWrapping;
+using Fusion;
 using LitJson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -18,7 +21,11 @@ public class StaticManager : MonoBehaviour
     private bool isProcessing = false;  
     public bool AllLoad { get; set; }
     public UserData CashUdata { get;  set; }
-
+    [SerializeField] private Character _uniquePlayer;
+    public Character UniquePlayer {
+        get => _uniquePlayer;
+        set => _uniquePlayer = value;
+    }
     void Awake()
     {
         Init();
@@ -105,14 +112,14 @@ public class StaticManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         Matchmaker.Instance.TryConnectShared();
     }
-     public void InvenSortTwoChange(int changeA, int ChangeB)
+     public void InvenItemSwap(int changeA, int ChangeB)
     {
         EnqueueAction(() =>
         {
-            SortTwoChange(changeA, ChangeB);
+            InvenItemSwapQueue(changeA, ChangeB);
         });
     }
-    private void SortTwoChange(int beforeSloatId, int afterSloatId)
+    private void InvenItemSwapQueue(int beforeSloatId, int afterSloatId)
     {
         var copyBeforeItemId   = CashUdata.InventorySlots[beforeSloatId].ItemId;
         var copyBeforeQuantity = CashUdata.InventorySlots[beforeSloatId].Quantity;
@@ -126,14 +133,14 @@ public class StaticManager : MonoBehaviour
         string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
         BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson); 
     }
-    public void InvenSortOneMove(int changeA, int ChangeB)
+    public void InvenItemMove(int changeA, int ChangeB)
     {
         EnqueueAction(() =>
         {
-            SortOneChange(changeA, ChangeB);
+            InvenItemMoveQueue(changeA, ChangeB);
         });
     }
-    private void SortOneChange(int beforeSloatId, int afterSloatId)
+    private void InvenItemMoveQueue(int beforeSloatId, int afterSloatId)
     {
         var copyBeforeItemId = CashUdata.InventorySlots[beforeSloatId].ItemId;
         var copyBeforeQuantity = CashUdata.InventorySlots[beforeSloatId].Quantity;
@@ -146,5 +153,53 @@ public class StaticManager : MonoBehaviour
 
         string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
         BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson);
+    }
+    public void SubInvenToInven(InventoryType type, int ChangeB)
+    {
+        EnqueueAction(() =>
+        {
+            SubInvenToInvenQueue(type, ChangeB);
+        });
+    }
+    private void SubInvenToInvenQueue(InventoryType type, int afterSloatId)
+    {
+        // 참조 캐싱
+        var tempUserdata = BackendGameData.Instance.userData;
+
+        int currentInventoryIdx = tempUserdata.setPlayerItems[(int)type];
+
+        // 뒤끝 Inventory 컬럼 업데이트
+        CashUdata.InventorySlots[afterSloatId].ItemId = currentInventoryIdx;
+        CashUdata.InventorySlots[afterSloatId].Quantity = 1;
+        string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
+        BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson);
+
+        // 뒤끝 SetPlayerItems 컬럼 업데이트
+        BackendGameData.Instance.userData.UpdatePlayerItemAt((int)type,0);
+
+        // UI 무기 해제 업데이트
+        UniquePlayer.InitItem();
+    }
+    public void DoubleClickItem(InventoryType type, int subInvenIdx)
+    {
+        EnqueueAction(() =>
+        {
+            DoubleClickItemQueue(type, subInvenIdx);
+        });
+    }
+    void DoubleClickItemQueue(InventoryType type, int subInvenIdx)
+    {
+        var tempUserdata = BackendGameData.Instance.userData;
+        int invenIdxValue = tempUserdata.setPlayerItems[(int)type];
+
+        int v = CashUdata.InventorySlots[subInvenIdx].ItemId.Value;
+        
+        CashUdata.InventorySlots[subInvenIdx].ItemId = invenIdxValue;
+        CashUdata.InventorySlots[subInvenIdx].Quantity = (invenIdxValue != 0) ? 1 : 0;
+        string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
+        BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson);
+
+        BackendGameData.Instance.userData.UpdatePlayerItemAt((int)type, v);
+        UniquePlayer.InitItem();
     }
 }

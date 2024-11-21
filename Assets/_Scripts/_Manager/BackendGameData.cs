@@ -56,6 +56,7 @@ public class ItemChart
     public string Label { get; private set; }
     public string Prefabname { get; private set; }
     public string SpriteName { get; private set; }
+    public string Category { get; private set; }
 
     public ItemChart(JsonData json)
     {
@@ -68,6 +69,7 @@ public class ItemChart
         Label       = json["Label"].ToString();
         Prefabname  = json["PrefabName"].ToString();
         SpriteName  = json["SpriteName"].ToString();
+        Category    = json["Category"].ToString();
     }
 }
 public class MonsterInfoChart
@@ -301,7 +303,25 @@ public class UserData
             }
         }
     }
+
     public List<int> setPlayerItems = new List<int>();
+    public void UpdatePlayerItemAt(int index, int newValue)
+    {
+        if (index >= 0 && index < setPlayerItems.Count)
+        {
+            setPlayerItems[index] = newValue;
+            OnSetPlayerItemsChanged();
+        }
+        else
+        {
+            Debug.LogError("잘못된 인덱스입니다.");
+        }
+    }
+    private void OnSetPlayerItemsChanged()
+    {
+        Debug.Log("setPlayerItems가 변경되었습니다.");
+        BackendGameData.Instance.GameDataUpdate<List<int>>("SetPlayerItems", new List<int>(setPlayerItems));
+    }
     /// <summary>
     /// 캐싱 된 인벤토리 데이터, 몇 번째 슬롯에 어떤 아이템이 몇 개 있는지 담겨있음
     /// </summary>
@@ -486,7 +506,7 @@ public class BackendGameData
         param.Add("Money", 10000);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
         param.Add("LastMap", "A");
-        param.Add("SetPlayerItems", new List<int> { 1,4,0,0});
+        param.Add("SetPlayerItems", new List<int> { 1,0,0,4});
         param.Add("Atk", 10);
         param.Add("Miss", 10);
         param.Add("Acc", 10);

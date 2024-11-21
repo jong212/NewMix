@@ -41,7 +41,7 @@ public class DataSetManager : MonoBehaviour
             if (pItemInfo == 0)
             {
                 objPartsList[idx].DestroyChildren();
-                if(idx == 1)
+                if(idx == 3)
                 {
                     if(objPartsPair[0] != null)
                     {
@@ -61,7 +61,7 @@ public class DataSetManager : MonoBehaviour
                         GameObject obj = AddressableManager.instance.GetPrefab(cItemInfo.Label, cItemInfo.Prefabname);
                         Instantiate(obj, objPartsList[idx]);
 
-                        if(idx == 1) // pair ½Å¹ß ½Ö
+                        if(idx == 3) // pair ½Å¹ß ½Ö
                         { 
                             if (objPartsList[idx].childCount > 0) objPartsPair[0].DestroyChildren();
                             Instantiate(obj, objPartsPair[0]);

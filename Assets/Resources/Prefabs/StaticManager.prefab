@@ -726,6 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf15d4b1c1d3b054e8c085bee76eacb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uniquePlayer: {fileID: 0}
 --- !u!114 &2862184750653016101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1526,9 +1527,9 @@ MonoBehaviour:
   - {fileID: 6760355467899510751}
   subInventory:
   - {fileID: 9051469287969680761}
-  - {fileID: 2671979042679385133}
   - {fileID: 2438244048117723737}
   - {fileID: 6311446214274117524}
+  - {fileID: 2671979042679385133}
   itemPrefab: {fileID: 1473861945284945710, guid: 16f182451b103934c9d847f980f82068, type: 3}
   doubleClickThreshold: 0.3
 --- !u!1 &5166901275291498155
@@ -3938,7 +3939,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943889683175076739, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: inventorytype
-      value: 101
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943889683175076739, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
+      propertyPath: _inventorytype
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2979045724597104827, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: m_Pivot.x
@@ -4381,7 +4386,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943889683175076739, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: inventorytype
-      value: 103
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943889683175076739, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
+      propertyPath: _inventorytype
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2979045724597104827, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: m_Pivot.x
@@ -7470,7 +7479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943889683175076739, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: inventorytype
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2979045724597104827, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: m_Pivot.x
@@ -10351,7 +10360,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943889683175076739, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: inventorytype
-      value: 102
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943889683175076739, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
+      propertyPath: _inventorytype
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2979045724597104827, guid: 1a95382289983834bbb97f2ef397bbfd, type: 3}
       propertyPath: m_Pivot.x

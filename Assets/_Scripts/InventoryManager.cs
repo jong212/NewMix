@@ -6,13 +6,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using static UnityEditor.Progress;
 using System.ComponentModel;
-/*public enum InventoryType
-{
-    Weapon = 100,
-    Armor = 101,
-    Gluve = 102,
-    Shose = 103,
-}*/
+
 public class InventoryManager : MonoBehaviour   
 {
      
@@ -70,6 +64,7 @@ public class InventoryManager : MonoBehaviour
                         {
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
+                            component.Category = item.Category;
                         }
                     break;
                     }
@@ -95,9 +90,13 @@ public class InventoryManager : MonoBehaviour
                         {
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
+                            component.Category = item.Category;
+
                         }
                     }
                 }
+                component.ivtmanager = this; // Pass the InventoryManager reference
+
             }
 
             tIdx++;
@@ -122,11 +121,11 @@ public class InventoryManager : MonoBehaviour
         }
 
         // 새로운 코루틴 시작
-        slotCoroutines[slotID] = StartCoroutine(HandleClicks(slotID));
+        slotCoroutines[slotID] = StartCoroutine(HandleClicks(slotID, eventData));
     }
 
     // 클릭을 처리하는 코루틴
-    private IEnumerator HandleClicks(int slotID)
+    private IEnumerator HandleClicks(int slotID, PointerEventData eventData)
     {
         yield return new WaitForSeconds(doubleClickThreshold);
 
@@ -137,7 +136,34 @@ public class InventoryManager : MonoBehaviour
         }
         else if (slotClickCounts[slotID] == 2)
         {
+            if (slotID == 100 || slotID == 101 || slotID == 102 || slotID == 103) yield break;
+            
             // 더블 클릭 처리
+            if (eventData.lastPress.TryGetComponent(out Btn component))
+            {
+                if (component.Category == InventoryType.Weapon.ToString() ||
+                    component.Category == InventoryType.Armor.ToString()  ||
+                    component.Category == InventoryType.Gluve.ToString()  ||
+                    component.Category == InventoryType.Shose.ToString()  )
+                {
+                    // 인벤에서 더블 클릭한 아이템을 장비창에 낄 것인지 검증하는 로직을 여기쯤 작성해야함 
+                  foreach(var subidx in subInventory)
+                    {
+                        if(subidx.InventoryType.ToString() == component.Category)
+                        {
+                            // 
+                            StaticManager.Instance.DoubleClickItem(subidx.InventoryType, slotID);
+
+                            Btn slotItem = subidx.GetComponentInChildren<Btn>();
+                            slotItem.transform.SetParent(component.transform.parent.transform);
+                            slotItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                            component.transform.SetParent(subidx.transform);
+                            component.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                        }
+                    }
+                }
+
+            }
             OnDoubleClick(slotID);
         }
 

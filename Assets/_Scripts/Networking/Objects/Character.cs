@@ -41,7 +41,7 @@ public class Character : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnNicknameChanged))]
     public NetworkString<_16> Nickname { get; set; }
 
-    [Networked, Capacity(5), OnChangedRender(nameof(OnSetitemList))]
+    [Networked, Capacity(4), OnChangedRender(nameof(OnSetitemList))]
     public NetworkArray<int> setItemIndexs { get; }
 
 
@@ -64,6 +64,7 @@ public class Character : NetworkBehaviour
             InitItem();             // 플레이어 장비 장착 정보 네트워크 변수에 초기화 (다른 클라 동기화)
             StaticManager.UI.ContentsInventoryUI.gameObject.SetActive(true);
             StaticManager.Instance.CashUdata = BackendGameData.Instance.userData;
+            StaticManager.Instance.UniquePlayer = this;
         }
         
         //OnSetitemList();
@@ -110,11 +111,12 @@ public class Character : NetworkBehaviour
         MissChance = userData.Miss;
         Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
-    private void InitItem() 
+    public void InitItem() 
     {
         List<int> playerItemsList = BackendGameData.Instance.userData.setPlayerItems;
+        Debug.Log("tetst" + playerItemsList);
         setItemIndexs.Clear();
-        setItemIndexs.CopyFrom(playerItemsList, 0, playerItemsList.Count);
+        setItemIndexs.CopyFrom(playerItemsList, 0, playerItemsList.Count);        
 
     }
     private void InitializeNicknameUI()

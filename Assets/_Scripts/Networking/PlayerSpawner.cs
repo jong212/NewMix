@@ -91,7 +91,6 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
                     if (res.IsSpawned)
                     {
                         Runner.SetPlayerObject(player, res.Object);
-
                         // Send the player info to the master client using a static RPC
                         RPC_NotifyMasterClient(Runner, player, res.Object.GetComponent<NetworkObject>());
                     }

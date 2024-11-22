@@ -15,6 +15,9 @@ public enum EnemyStateID
 }
 public class Entity : NetworkBehaviour
 {
+    /*[SerializeField] private ParticleManager _particleManager;
+    public ParticleManager ParticleManager { get => _particleManager; }
+*/
     private MonsterManager _monsterManager;
     public void InitMonsterManager(MonsterManager refV)
     {
@@ -46,7 +49,6 @@ public class Entity : NetworkBehaviour
     public System.Action onFlipped;
 
     #region MyNetwork
-    [Networked, OnChangedRender(nameof(HealthChanged))] public float NetworkedHealth { get; set; } = 100;// 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
     [Networked] protected Vector3 moveDirection { get; set; }
     public Transform target = null;
 
@@ -250,39 +252,10 @@ public class Entity : NetworkBehaviour
  
   
     // 체력이 변경되면 호출됨
-    void HealthChanged()
-    {
-        Debug.Log($"Health changed to: {NetworkedHealth}");
-        // 체력이 변경될 때 체력바나 UI 업데이트 등의 후속 작업 수행
-        UpdateHealthBar();
-    }
 
-    // 체력바를 업데이트하는 함수 (예시)
-    void UpdateHealthBar()
-    {
-        // 체력바 UI 업데이트 로직
-        Debug.Log($"Updating health bar to: {NetworkedHealth}");
-    }
 
     // RPC를 통해 State Authority 클라이언트에서 체력을 감소시키는 함수
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public virtual void DealDamageRpc(float damage)
-    {
-        // 이 코드는 State Authority 클라이언트에서만 실행됨
-        if (Object.HasStateAuthority)
-        {
-
-            if(NetworkedHealth - damage <= 0)
-            {
-                NetworkedHealth = 0;
-                Die();
-            } else
-            {
-                NetworkedHealth -= damage;
-            }
-            Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
-        }
-    }
+    
     public void DestroyThis()
     {
       Runner.Despawn(Object); // Fusion의 Despawn 호출

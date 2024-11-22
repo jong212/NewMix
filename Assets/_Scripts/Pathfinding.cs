@@ -5,8 +5,53 @@ using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
-    public Transform target;  // 현재 타겟 (몬스터)
+    private Transform _target;  // 현재 타겟 (몬스터)
+    public Transform target { 
+        get => _target;
+        set
+        {
+            if (_target == value)
+            {
+                Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
+                return;
+            }
 
+            // 기존 타겟의 파티클 멈춤
+            StopParticle(_target);
+
+            // 새로운 타겟으로 설정
+            _target = value;
+
+            // 새로운 타겟의 파티클 재생
+            PlayParticle(_target);
+        }
+
+
+    }// 현재 타겟 (몬스터)
+    private void StopParticle(Transform targetTransform)
+    {
+        if (targetTransform == null) return;
+
+        var particle = targetTransform.GetComponent<Enemy>()?.ParticleManager?.Selector;
+        if (particle != null && particle.isPlaying)
+        {
+            particle.gameObject.SetActive(false);
+            Debug.Log("기존 타겟의 파티클 멈춤: " + targetTransform.name);
+        }
+    }
+
+    private void PlayParticle(Transform targetTransform)
+    {
+        if (targetTransform == null) return;
+
+        var particle = targetTransform.GetComponent<Enemy>()?.ParticleManager?.Selector;
+        if (particle != null)
+        {
+            particle.gameObject.SetActive(true);
+            particle.Play();
+            Debug.Log("새로운 타겟 설정 및 파티클 재생: " + targetTransform.name);
+        }
+    }
     private Grid grid;
     [SerializeField] private MouseManager mouseManager;
 
@@ -39,7 +84,6 @@ public class Pathfinding : MonoBehaviour
     void SetTarget(Transform monsterTransform)
     {
         target = monsterTransform;
-        Debug.Log("타겟 설정됨: " + target.name);
     }
 
     void Update()

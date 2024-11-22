@@ -4,12 +4,11 @@ using Fusion;
 using Fusion.Addons.SimpleKCC;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 
 public class Character : NetworkBehaviour
 {
     private bool _isInitialized = false;
-
-    // Private Fields
     private VariableJoystick _joystick;
     private PlayerInput _prevInput;
     private WorldNickname _nicknameUI;
@@ -21,8 +20,6 @@ public class Character : NetworkBehaviour
         set => _isAttack = value;
     }
 
-
-    // Serialized Fields
     [field: SerializeField]
     public CharacterSpecs Specs { get; private set; }
 
@@ -37,7 +34,7 @@ public class Character : NetworkBehaviour
 
     [SerializeField] private float attackRange = 2.0f;     // 공격 범위
     [SerializeField] private LayerMask monsterLayerMask;  // 몬스터 레이어 마스크
-    // Networked Properties
+     
     [Networked, OnChangedRender(nameof(OnNicknameChanged))]
     public NetworkString<_16> Nickname { get; set; }
 
@@ -107,8 +104,8 @@ public class Character : NetworkBehaviour
         var userData = BackendGameData.Instance.userData;
         Level = userData.Level;
         Attack = userData.Atk;
-        Health = userData.Acc;
-        MissChance = userData.Miss;
+        Health = userData.Hp;
+        MissChance = userData.Def;
         Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
     public void InitItem() 
@@ -157,12 +154,29 @@ public class Character : NetworkBehaviour
     }
     private void HandleMouseInput()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            _mouseManager.ClickCheck();
-            if (_playerMovement.Pathfinding.target && _joystickInput.magnitude <= 0)
+        // UI위에 커서가 있을때 = ture/ 따라서 UI위에 커서가 없을때만 실행
+        if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject() == false) {
+
+            // 몬스터를 공격하는 방식이 2가지 있음 1. 몬스터 직접 클릭 2.우 하단 공격하기 버튼 이다.
+            // 해당 IF문은 1번이며 몬스터를 클릭한다고 무조건 공격하는게 아님 
+            // 예를들어 A 몬스터를 공격한다고 가정한다면
+            // 1. A 몬스터 클릭 (타겟 A설정 됨 공격x)
+            // 2. B 몬스터 클릭 (타겟 B로 바뀜 공격x)
+            // 3. B 몬스터 클릭 (타겟 B상태에서 B 클릭한거라 _isMoveable = false 되서 공격하러감)
+            // 이유는 공격버튼은 그냥 가장 가까이에 있는 몬스터한테 달려가면서 공격하도록 되어 있는데 몬스터를 터치한 이유는 그 몬스터의 레벨이나 정보를 보기 위함이라 타겟이 없으면 한 번 클릭해서 타겟 시켜놓고 또 몬스터를 클릭해서 공격하게끔 유도하기 위함
+            // 그래서 previousTargetTransform 클릭 전 타겟 값을 TEMP 해놓고 있는 것이고 클릭했을 때 몬스터를 클릭했는지 여부에 대해 bool값으로 리턴 받아서 몬스터를 클릭한 경우에 조건이 일치하도록 했ㄲ고 결과적으로 클릭한 몬스터가 타겟 몬스터와 같은지를 체크한 후 모든 조건이 일치한다면 ismoveble 변수를 false로 만든다
+            if (_playerMovement.Pathfinding.target != null) 
             {
-                _isMoveAble = false;
+                Transform previousTargetTransform = _playerMovement.Pathfinding.target;
+                var currentClickValue = _mouseManager.ClickCheck();
+                if(_joystickInput.magnitude <= 0 && previousTargetTransform == _playerMovement.Pathfinding.target && currentClickValue)
+                {
+                    _isMoveAble = false;
+                }
+            } else
+            {
+                _mouseManager.ClickCheck();
+                _isMoveAble = true;
             }
         }
     }
@@ -250,7 +264,7 @@ public class Character : NetworkBehaviour
     {
         if (_playerMovement.Pathfinding.target != null)
         {
-            Entity targetMonster = _playerMovement.Pathfinding.target.GetComponent<Entity>();
+            Enemy targetMonster = _playerMovement.Pathfinding.target.GetComponent<Enemy>();
             if (targetMonster != null)
             {
                 AttackRpc(targetMonster);
@@ -267,7 +281,7 @@ public class Character : NetworkBehaviour
     }
     // Attack Mechanism
  
-    public void AttackRpc(Entity targetMonster)
+    public void AttackRpc(Enemy targetMonster)
     {
         
         if(targetMonster.NetworkedHealth <= 0)

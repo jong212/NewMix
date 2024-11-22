@@ -96,8 +96,8 @@ public class MonsterInfoChart
     public string LabelName { get; private set; }
     public string PrafabName { get; private set; }
     public int    Atk { get; private set; }
-    public int    Miss { get; private set; }
-    public int    Lucky { get; private set; }
+    public int    Def { get; private set; }
+    public int    Hp { get; private set; }
     public int    AgroDistance { get; private set; }
     public int    AtkDistance { get; private set; }
     public int    AtkCooldown { get; private set; }
@@ -133,8 +133,8 @@ public class MonsterInfoChart
         LabelName = json["LabelName"].ToString();
         PrafabName = json["PrafabName"].ToString();
         Atk = int.Parse(json["Atk"].ToString());
-        Miss = int.Parse(json["Miss"].ToString());
-        Lucky = int.Parse(json["Lucky"].ToString());
+        Def = int.Parse(json["Def"].ToString());
+        Hp = int.Parse(json["Hp"].ToString());
         AgroDistance = int.Parse(json["AgroDistance"].ToString());
         AtkDistance = int.Parse(json["AtkDistance"].ToString());
         AtkCooldown = int.Parse(json["AtkCooldown"].ToString());
@@ -255,54 +255,39 @@ public class UserData
             }
         }
     }
-    private int _miss;
-    public int Miss
+    private int _def;
+    public int Def
     {
-        get { return _miss; }
+        get { return _def; }
         set
         {
-            if (_miss != value)
+            if (_def != value)
             {
-                _miss = value;
+                _def = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.GameDataUpdate<int>("Miss", value);
+                    BackendGameData.Instance.GameDataUpdate<int>("Def", value);
                 }
             }
         }
     }
-    private int _acc;
-    public int Acc
+    private int _hp;
+    public int Hp
     {
-        get { return _acc; }
+        get { return _hp; }
         set
         {
-            if (_acc != value)
+            if (_hp != value)
             {
-                _acc = value;
+                _hp = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.GameDataUpdate<int>("Acc", value);
+                    BackendGameData.Instance.GameDataUpdate<int>("Hp", value);
                 }
             }
         }
     }
-    private int _lucky;
-    public int Lucky
-    {
-        get { return _lucky; }
-        set
-        {
-            if (_lucky != value)
-            {
-                _lucky = value;
-                if (!_isInitializing)
-                {
-                    BackendGameData.Instance.GameDataUpdate<int>("Lucky", value);
-                }
-            }
-        }
-    }
+   
 
     public List<int> setPlayerItems = new List<int>();
     public void UpdatePlayerItemAt(int index, int newValue)
@@ -337,9 +322,8 @@ public class UserData
         result.AppendLine($"LastMap : {_lastMap}");
         result.AppendLine($"ChrType : {ChrType}");
         result.AppendLine($"공격력 : {_atk}");
-        result.AppendLine($"민첩 : {_miss}");
-        result.AppendLine($"정확도 : {_acc}");
-        result.AppendLine($"행운 : {_lucky}");
+        result.AppendLine($"방어력 : {_def}");
+        result.AppendLine($"체력 : {_hp}");
         foreach (var _value in setPlayerItems)
         {
             result.AppendLine($"장착아이템 : {_value}");
@@ -508,9 +492,8 @@ public class BackendGameData
         param.Add("LastMap", "A");
         param.Add("SetPlayerItems", new List<int> { 1,0,0,4});
         param.Add("Atk", 10);
-        param.Add("Miss", 10);
-        param.Add("Acc", 10);
-        param.Add("Lucky", 10);
+        param.Add("Def", 10);
+        param.Add("Hp", 100);
         param.Add("Inventory", inventoryJson); // Add inventory JSON to database
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
@@ -555,9 +538,8 @@ public class BackendGameData
                 userData.ChrType = int.Parse(gameDataJson[0]["ChrType"].ToString());
                 userData.LastMap = gameDataJson[0]["LastMap"].ToString();
                 userData.Atk = int.Parse(gameDataJson[0]["Atk"].ToString());
-                userData.Miss = int.Parse(gameDataJson[0]["Miss"].ToString());
-                userData.Acc = int.Parse(gameDataJson[0]["Acc"].ToString());
-                userData.Lucky = int.Parse(gameDataJson[0]["Lucky"].ToString());
+                userData.Def = int.Parse(gameDataJson[0]["Def"].ToString());
+                userData.Hp = int.Parse(gameDataJson[0]["Hp"].ToString());
 
 
                 userData.InventorySlots.Clear();

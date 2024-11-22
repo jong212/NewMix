@@ -8,6 +8,10 @@ using Fusion;
 public class MonsterData
 {
     public GameObject prefab;
+    public int lv;
+    public int atk;
+    public int def;
+    public int hp;
     public float agroDistance;
     public float atkDistance;
     public float atkCooldown;
@@ -16,9 +20,13 @@ public class MonsterData
     public float moveTime;
     public float battleTime;
 
-    public MonsterData(GameObject prefab, float agroDistance, float atkDistance, float atkCooldown, float moveSpeed, float idleTime, float moveTime, float battleTime)
+    public MonsterData(GameObject prefab,int lv, int atk, int def, int hp, float agroDistance, float atkDistance, float atkCooldown, float moveSpeed, float idleTime, float moveTime, float battleTime)
     {
         this.prefab = prefab;
+        this.lv = lv;
+        this.atk= atk;
+        this.def = def;
+        this.hp = hp;
         this.agroDistance = agroDistance;
         this.atkDistance = atkDistance;
         this.atkCooldown = atkCooldown;
@@ -67,7 +75,7 @@ public class MonsterManager : NetworkBehaviour
                     if (enemyAiComponent != null)
                     {
                         // 새 MonsterData 객체를 리스트에 추가
-                        monsterDataList.Add(new MonsterData(prefab, row.AgroDistance, row.AtkDistance, row.AtkCooldown, row.MoveSpeed, row.IdleTime, row.MoveTime, row.BattleTime));
+                        monsterDataList.Add(new MonsterData(prefab, row.Lv, row.Atk, row.Def, row.Hp, row.AgroDistance, row.AtkDistance, row.AtkCooldown, row.MoveSpeed, row.IdleTime, row.MoveTime, row.BattleTime));
                     }
                     monsterPrefab.Add(prefab);
                     Debug.Log($"[로드 후 캐싱 완료]: {row.PrafabName}");
@@ -102,6 +110,7 @@ public class MonsterManager : NetworkBehaviour
                 Enemy enemyAiComponent = instantiatedMonster.GetComponent<Enemy>();
                 if (enemyAiComponent != null)
                 {
+                    enemyAiComponent.NetworkedHealth = selectedMonster.hp;
                     enemyAiComponent.agroDistance = selectedMonster.agroDistance;
                     enemyAiComponent.atkDistance = selectedMonster.atkDistance;
                     enemyAiComponent.atkCooldown = selectedMonster.atkCooldown;

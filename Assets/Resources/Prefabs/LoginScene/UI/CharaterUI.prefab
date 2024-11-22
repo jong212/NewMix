@@ -643,7 +643,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uBBFC\uCCA9\uC131"
+  m_Text: "\uCCB4\uB825"
 --- !u!1 &2745822086079155953
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,9 +842,8 @@ MonoBehaviour:
   nickNameLayout: {fileID: 1900274568576250475}
   lvLayout: {fileID: 7546794988081253665}
   atkLayout: {fileID: 5807611577200434497}
-  accLayout: {fileID: 5807563719803937287}
-  missLayout: {fileID: 7970438558345544501}
-  luckyLayout: {fileID: 7176664654691326136}
+  hpLayout: {fileID: 7970438558345544501}
+  defLayout: {fileID: 5807563719803937287}
   lastLocationLayout: {fileID: 5251444926379939612}
   deleteCharacter: {fileID: 4445931337818453766}
   gameStartButton: {fileID: 8514167019690718337}
@@ -1613,7 +1612,7 @@ GameObject:
   - component: {fileID: 6202012569680497301}
   - component: {fileID: 5807563719803937287}
   m_Layer: 5
-  m_Name: Layout_Acc
+  m_Name: Layout_Def
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1899,7 +1898,7 @@ GameObject:
   - component: {fileID: 3547798213373665000}
   - component: {fileID: 7970438558345544501}
   m_Layer: 5
-  m_Name: Layout_miss
+  m_Name: Layout_hp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2159,4 +2158,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC815\uD655\uB3C4"
+  m_Text: "\uBC29\uC5B4\uB825"

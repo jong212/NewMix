@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyInfoUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Slider Slider;
+    public Text Level;
+    public Text HpPercent;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        if(Slider == null || Level == null || HpPercent == null)
+        {
+            Debug.LogError("EnemyINfoUI noref");
+        }
     }
 }

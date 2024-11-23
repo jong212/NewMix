@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
     [SerializeField] private InventoryManager _inventoryUI;
+    [SerializeField] private EnemyInfoUI _enemyInfoUI;
     [SerializeField] private MainUI _mainUI;
 
 
@@ -71,6 +72,7 @@ public class UIManager : MonoBehaviour
     {
         AlertUI.gameObject.SetActive(false);
         ConfirmUI.gameObject.SetActive(false);
+        _enemyInfoUI.gameObject.SetActive(false);
     }
 
     // Common ( Try UI Open )

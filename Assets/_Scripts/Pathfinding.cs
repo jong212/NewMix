@@ -15,7 +15,7 @@ public class Pathfinding : MonoBehaviour
                 Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
                 return;
             }
-
+            OpenMonsterInfoUI(target);
             // 기존 타겟의 파티클 멈춤
             StopParticle(_target);
 
@@ -28,30 +28,7 @@ public class Pathfinding : MonoBehaviour
 
 
     }// 현재 타겟 (몬스터)
-    private void StopParticle(Transform targetTransform)
-    {
-        if (targetTransform == null) return;
-
-        var particle = targetTransform.GetComponent<Enemy>()?.ParticleManager?.Selector;
-        if (particle != null && particle.isPlaying)
-        {
-            particle.gameObject.SetActive(false);
-            Debug.Log("기존 타겟의 파티클 멈춤: " + targetTransform.name);
-        }
-    }
-
-    private void PlayParticle(Transform targetTransform)
-    {
-        if (targetTransform == null) return;
-
-        var particle = targetTransform.GetComponent<Enemy>()?.ParticleManager?.Selector;
-        if (particle != null)
-        {
-            particle.gameObject.SetActive(true);
-            particle.Play();
-            Debug.Log("새로운 타겟 설정 및 파티클 재생: " + targetTransform.name);
-        }
-    }
+    
     private Grid grid;
     [SerializeField] private MouseManager mouseManager;
 
@@ -198,4 +175,34 @@ public class Pathfinding : MonoBehaviour
             return 14 * dstY + 10 * (dstX - dstY);
         return 14 * dstX + 10 * (dstY - dstX);
     }
+
+    private void StopParticle(Transform targetTransform)
+    {
+        if (targetTransform == null) return;
+
+        var particle = targetTransform.GetComponent<Enemy>()?.ParticleManager?.Selector;
+        if (particle != null && particle.isPlaying)
+        {
+            particle.gameObject.SetActive(false);
+            Debug.Log("기존 타겟의 파티클 멈춤: " + targetTransform.name);
+        }
+    }
+
+    private void PlayParticle(Transform targetTransform)
+    {
+        if (targetTransform == null) return;
+
+        var particle = targetTransform.GetComponent<Enemy>()?.ParticleManager?.Selector;
+        if (particle != null)
+        {
+            particle.gameObject.SetActive(true);
+            particle.Play();
+            Debug.Log("새로운 타겟 설정 및 파티클 재생: " + targetTransform.name);
+        }
+    }
+    void OpenMonsterInfoUI(Transform target)
+    {
+        // TO DO
+    }
+
 }

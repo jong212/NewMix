@@ -54,12 +54,14 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 
             DraggableUI DragingPrefab = eventData.pointerDrag.GetComponent<DraggableUI>();
 
-			// 
-            if (DragingPrefab.PreviousParent.name.Contains("Sloat"))			// 드래그 하기 전 부모 오브젝트 이름이 Sloat인지 즉, 장비가 아닌 인벤토리 슬롯인지
+			// 인벤창에서 드래그 시작한 경우 (장비 X)
+            if (DragingPrefab.PreviousParent.name.Contains("Sloat"))			
 			{
-				if (gameObject.name.Contains("Sloat"))							//  오브젝트 놓은 위치가 슬롯인 경우에만 
+				// 인벤 에서 인벤
+				if (gameObject.name.Contains("Sloat"))							
 				{
-					if(DragingPrefab.PreviousParent.name != gameObject.name)	// 오브젝트 잡고 놓은 위치가 같지 않은 경우에만
+					// 인벤의 슬롯을 드래그 하였지만 제자리에 그냥 놓은 경우 실행 X
+					if(DragingPrefab.PreviousParent.name != gameObject.name)	
 					{
                         if(gameObject.GetComponentInChildren<Btn>()?.ActiveChk == true)
 						{
@@ -78,12 +80,12 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 					{
 						return;
 					}
-
+					return; // 인벤창에서 장비창으로 드래그햇을 떄 DB처리를 여기에 해야하는데 작업 량이 많아져서 그냥 return; 시킴 어차피 더블클릭으로 장비 창용 가능
                     
 				}
-			} 
-			else if (DragingPrefab.PreviousParent.name.Contains("EquipmentShot") && transform.name.Contains("Sloat")) // 아이템 오브젝트 "장비창" => "인벤" 으로 이동한 경우
-			{
+			} //장비창에서 드래그 시작했고 인벤창에 놓은 경우
+			else if (DragingPrefab.PreviousParent.name.Contains("EquipmentShot") && transform.name.Contains("Sloat")) 
+			{	// 장비창 아이템을 인벤창에 놓았는데 빈 슬롯인 경우에만 실행 되도록
 				 if (gameObject.GetComponentInChildren<Btn>()?.ActiveChk == false)
 				{
 					StaticManager.Instance.SubInvenToInven(DragingPrefab.PreviousParent.GetComponent<DroppableUI>()._inventorytype, Idx);

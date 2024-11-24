@@ -15,12 +15,12 @@ public class Pathfinding : MonoBehaviour
                 Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
                 return;
             }
-            OpenMonsterInfoUI(target);
             // 기존 타겟의 파티클 멈춤
             StopParticle(_target);
 
             // 새로운 타겟으로 설정
             _target = value;
+            OpenMonsterInfoUI(target);
 
             // 새로운 타겟의 파티클 재생
             PlayParticle(_target);
@@ -202,7 +202,28 @@ public class Pathfinding : MonoBehaviour
     }
     void OpenMonsterInfoUI(Transform target)
     {
-        // TO DO
+        if(target == null) return;
+        var chkObjActive = StaticManager.UI.EnemyInfoUI.gameObject;
+        // 오브젝트가 비활성화 상태라면? 활성화
+        if (!chkObjActive.activeSelf)
+        {
+            chkObjActive.SetActive(true);
+        }
+
+
+        EnemyInfoUI enemyUIComponent = chkObjActive.GetComponent<EnemyInfoUI>();
+        if( target.gameObject.TryGetComponent(out Enemy componenet)){
+            if(enemyUIComponent != null)
+            {
+                enemyUIComponent.Level.text = "Lv"+ componenet.Lv.ToString();
+                float healthPercentage = (componenet.NetworkedHealth / componenet.MaxHealth) * 100f;
+                enemyUIComponent.HpPercentText  = healthPercentage.ToString();
+                enemyUIComponent.Slider.value = componenet.NetworkedHealth / componenet.MaxHealth;
+                enemyUIComponent.ObjRef = componenet.transform;
+            }
+        }
+        
+
     }
 
 }

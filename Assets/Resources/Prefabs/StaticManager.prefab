@@ -837,8 +837,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7095188017953724697}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -957,7 +957,7 @@ GameObject:
   - component: {fileID: 6326048695123979273}
   - component: {fileID: 4252735728861154922}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Lv
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2200,7 +2200,7 @@ RectTransform:
   m_Father: {fileID: 618323662647557983}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2722,6 +2722,7 @@ MonoBehaviour:
   _alertUI: {fileID: 8733340191980203292}
   _confirmUI: {fileID: 8521343273500405856}
   _inventoryUI: {fileID: 4699265953828469607}
+  _enemyInfoUI: {fileID: 1501091576834396737}
   _mainUI: {fileID: 759539231474733215}
   _worldNicknameUI: {fileID: 6409792631830009774, guid: 553a27002faed4147bb438d39701e961, type: 3}
 --- !u!1 &6072582215665621689
@@ -3795,7 +3796,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8299751476540873253
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3830,7 +3831,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Slider: {fileID: 4637409302738495322}
   Level: {fileID: 4252735728861154922}
-  HpPercent: {fileID: 2143790305902702897}
+  _hpPercent: {fileID: 2143790305902702897}
+  ObjRef: {fileID: 0}
 --- !u!1 &8526857156285416067
 GameObject:
   m_ObjectHideFlags: 0

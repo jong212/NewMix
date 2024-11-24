@@ -1,14 +1,8 @@
-﻿using BackEnd;
-using ExitGames.Client.Photon.StructWrapping;
-using Fusion;
-using LitJson;
+﻿using LitJson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 
 public class StaticManager : MonoBehaviour

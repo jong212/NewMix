@@ -13,27 +13,53 @@ public class Enemy : Entity
     private int currentRayIndex = 0;                             // 현재 레이를 쏠 방향 인덱스
     public EnemyStateMachine stateMachine { get; private set; }
 
-    [Networked] public float agroDistance { get; set; }  // 플레이어 감지 거리 5
-    [Networked] public float atkDistance  { get; set; }  // 근접 원거리 따라 다르게 설정할 것 ,기본 값 3
-    [Networked] public float atkCooldown { get; set; }   // 몬스터 공격 쿨타임, 기본 값 1
-    [Networked] public float moveSpeed   { get; set; }   // 몬스터 이속 1.5f
-    [Networked] public float idleTime    { get; set; }   // 상태 지속 시간 2
-    [Networked] public float moveTime    { get; set; }   // 상태 지속 시간 3
-    [Networked] public float battleTime  { get; set; }   // 상태 지속 시간 7
+
+    [Networked] public float MonsterName { get; set; }       // 몬스터이름
+    [Networked] public float Lv { get; set; }                // 레벨
+    [Networked] public float Exp { get; set; }               // 경험치
+    [Networked] public float Money { get; set; }             // 머니
+    [Networked] public float MonsterDropPercent { get; set; }// 드랍율
+    //[Networked] public List<DropItems> DropItem { get; set; }// 드랍아이템
+    [Networked] public int Atk { get; set; }            // 공격력
+    [Networked] public int Def { get; set; }            // 방어력
+    [Networked] public int DropItem { get; set; }// 드랍아이템
+    [Networked] public float agroDistance { get; set; }      // 플레이어 감지 거리 5
+    [Networked] public float atkDistance  { get; set; }      // 근접 원거리 따라 다르게 설정할 것 ,기본 값 3
+    [Networked] public float atkCooldown { get; set; }       // 몬스터 공격 쿨타임, 기본 값 1
+    [Networked] public float moveSpeed   { get; set; }       // 몬스터 이속 1.5f
+    [Networked] public float idleTime    { get; set; }       // 상태 지속 시간 2
+    [Networked] public float moveTime    { get; set; }       // 상태 지속 시간 3
+    [Networked] public float battleTime  { get; set; }       // 상태 지속 시간 7
     [HideInInspector] public float lastTimeAttacked;
     [Networked, OnChangedRender(nameof(HealthChanged))] public float NetworkedHealth { get; set; } = 100;// 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
+    [Networked] public float MaxHealth { get; set; }
     public virtual void HealthChanged()
     {
         Debug.Log($"Health changed to: {NetworkedHealth}");
+
         // 체력이 변경될 때 체력바나 UI 업데이트 등의 후속 작업 수행
         UpdateHealthBar();
+        if(NetworkedHealth <= 0)
+        {
+            Die();
+        }
     }
 
     // 체력바를 업데이트하는 함수 (예시)
     void UpdateHealthBar()
     {
         // 체력바 UI 업데이트 로직
-        Debug.Log($"Updating health bar to: {NetworkedHealth}");
+        var targetEnemy = StaticManager.UI.EnemyInfoUI;
+        if(targetEnemy != null && targetEnemy.ObjRef != null)
+        {
+            if(targetEnemy.ObjRef == this.transform)
+            {
+                targetEnemy.Level.text = "Lv" + Lv.ToString();
+                float healthPercentage = (NetworkedHealth / MaxHealth) * 100f;
+                targetEnemy.HpPercentText = healthPercentage.ToString();
+                targetEnemy.Slider.value = NetworkedHealth / MaxHealth;
+            }
+        }
     }
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public virtual void DealDamageRpc(float damage)
@@ -45,7 +71,7 @@ public class Enemy : Entity
             if (NetworkedHealth - damage <= 0)
             {
                 NetworkedHealth = 0;
-                Die();
+              
             }
             else
             {

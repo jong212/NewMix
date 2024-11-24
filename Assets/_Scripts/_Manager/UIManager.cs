@@ -66,7 +66,20 @@ public class UIManager : MonoBehaviour
             return _worldNicknameUI;
         }
     }
-
+    public EnemyInfoUI EnemyInfoUI
+    {
+        get
+        {
+            return _enemyInfoUI;
+        }
+    }
+    private void Awake()
+    {
+        if(AlertUI == null || ConfirmUI == null || MainUI == null || ContentsInventoryUI == null || WorldNickNameUI == null || EnemyInfoUI == null)
+        {
+            Debug.LogError("Component ´©¶ô");
+        }
+    }
     // Init
     public void Init()
     {

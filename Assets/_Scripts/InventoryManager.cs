@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
-using static UnityEditor.Progress;
-using System.ComponentModel;
 
 public class InventoryManager : MonoBehaviour   
 {

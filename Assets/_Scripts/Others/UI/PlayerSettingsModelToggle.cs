@@ -9,12 +9,12 @@ public class PlayerSettingsModelToggle : MonoBehaviour
 
 	private void OnEnable()
 	{
-		GameManager.OnReservedPlayerVisualsChanged += ReservedVisualsChanged;
+		//GameManager.OnReservedPlayerVisualsChanged += ReservedVisualsChanged;
 	}
 
 	private void OnDisable()
 	{
-		GameManager.OnReservedPlayerVisualsChanged -= ReservedVisualsChanged;
+		//GameManager.OnReservedPlayerVisualsChanged -= ReservedVisualsChanged;
 	}
 
 	void ReservedVisualsChanged(byte reservedMask)

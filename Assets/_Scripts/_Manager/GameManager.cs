@@ -9,18 +9,18 @@ using Fusion;
 [DefaultExecutionOrder(-200)]
 public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
 {
-    public static event System.Action<byte> OnReservedPlayerVisualsChanged;
+   // public static event System.Action<byte> OnReservedPlayerVisualsChanged;
  
 
     // 네트워크에서 관리되는 주문 리스트, 생성된 주문의 수, 주문 타이머
-    [Networked, Capacity(6), UnitySerializeField] public NetworkLinkedList<Order> OrderList => default;
-    [Networked] public int OrdersSpawned { get; set; }
-    [Networked] public TickTimer OrderTimer { get; set; }
+    //[Networked, Capacity(6), UnitySerializeField] public NetworkLinkedList<Order> OrderList => default;
+ //   [Networked] public int OrdersSpawned { get; set; }
+   // [Networked] public TickTimer OrderTimer { get; set; }
 
     // 주문 생성 간격 및 주문 유효 시간을 설정하는 변수들
-    [SerializeField] private float orderInterval = 20;
-    [SerializeField] private float orderIntervalFilled = 10;
-    [SerializeField] private float orderLifetime = 180;
+  //  [SerializeField] private float orderInterval = 20;
+ //   [SerializeField] private float orderIntervalFilled = 10;
+    //[SerializeField] private float orderLifetime = 180;
 
     // 주문 UI 객체를 관리하는 딕셔너리
     private Dictionary<int, FoodOrderItemUI> OrderUIs { get; } = new();

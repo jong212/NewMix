@@ -42,6 +42,10 @@ public class Enemy : Entity
         if(NetworkedHealth <= 0)
         {
             Die();
+            if (Object.HasStateAuthority)
+            {
+                NetworkedHealth = MaxHealth;
+            }
         }
     }
 

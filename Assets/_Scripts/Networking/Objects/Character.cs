@@ -198,10 +198,8 @@ public class Character : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (!Object.HasInputAuthority)
-            return;
-
-        ProcessMovement();
+        if (Object.HasStateAuthority) ProcessMovement();
+        
     }
 
     private void ProcessMovement()
@@ -402,7 +400,7 @@ public class Character : NetworkBehaviour
     // 플레이어 공격 애니메이션 시작,종료 프레임 이벤트
     public void AttackingCheck(int isAttacking)
     {
-        bool isAnimationStart = (isAttacking == 1);
+        bool isAnimationStart = (isAttacking == 1); // TRUE 공격중
         IsAttack = (isAnimationStart) ? true : false;
     }
 }

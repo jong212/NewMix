@@ -151,24 +151,22 @@ public class MonsterManager : NetworkBehaviour
 
     public void DespawnMonster(NetworkObject monster)
     {
-        if (Object.HasStateAuthority)
-        {
+      
             monster.gameObject.SetActive(false);
 
             // 5초 후에 몬스터 재스폰 코루틴 실행
             StartCoroutine(RespawnMonsterAfterDelay(monster, 5f));
-        }
+      
     }
 
     private IEnumerator RespawnMonsterAfterDelay(NetworkObject monster, float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        if (Object.HasStateAuthority)
-        {
+       
             monster.transform.position = GetRandomSpawnPosition();
             monster.gameObject.SetActive(true);
-        }
+       
     }
 
     private Vector3 GetRandomSpawnPosition()

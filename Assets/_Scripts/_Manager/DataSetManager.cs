@@ -34,7 +34,7 @@ public class DataSetManager : MonoBehaviour
         {
             if (idx >= objPartsList.Count)
             {
-                Debug.LogWarning($"Index out of bounds: idx ({idx}) is greater than objPartsList.Count ({objPartsList.Count})");
+                //TEMPHIDE// Debug.LogWarning($"Index out of bounds: idx ({idx}) is greater than objPartsList.Count ({objPartsList.Count})");
                 break; // 또는 continue; 를 사용하여 다음 루프로 이동
             }
 

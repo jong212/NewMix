@@ -24,11 +24,6 @@ public class StaticManager : MonoBehaviour
     {
         Init();
     }
-    private void Update()
-    {
-        //Debug.Log(CashUdata?.ToString());
-        
-    }
     void Init()
     {
         if (Instance != null)
@@ -71,7 +66,6 @@ public class StaticManager : MonoBehaviour
     {
         if (transform == null)
         {
-            Debug.LogError("Transform is null. Cannot log hierarchy path.");
             return;
         }
 
@@ -84,9 +78,6 @@ public class StaticManager : MonoBehaviour
             path = currentParent.name + "/" + path;
             currentParent = currentParent.parent;
         }
-
-        // 이름과 경로를 로그로 출력
-        Debug.Log($"Object name: {transform.name}, Path: {path}");
     }
    
     public void CashData()

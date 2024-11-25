@@ -40,23 +40,23 @@ public class AddressableManager : MonoBehaviour
                 foreach (var prefab in handle.Result) // 이 handle 사용법을 잘 익허야 할듯 디버그 해보니 내가 메모리 로드 및 인스턴스 한 오브젝트를 배열로도 가져온 것을 확인함 swoard1...2...3 그래서 그 이후 아래에서 캐싱 하는듯
                 {
                     prefabCache[label].Add(prefab);
-                    Debug.Log(" [어드레서블 로드 후 캐싱 완료] :" + prefab.name);
+                    //TEMPHIDE// Debug.Log(" [어드레서블 로드 후 캐싱 완료] :" + prefab.name);
                 }
                 onLoaded?.Invoke();
             }
             else
             {
-                Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
+                //TEMPHIDE// Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
             }
         };
     }
     public IEnumerator LoadPrefabsWithLabels(string label)
     {
-        Debug.Log("[몬스터 스폰 과정 순서 메모 3]");
+        //TEMPHIDE// Debug.Log("AddressableManager => 코루틴 => [몬스터 스폰 과정 순서 3]");
 
         var handle = Addressables.LoadAssetsAsync<GameObject>(label, null);
         yield return handle;
-        Debug.Log("[몬스터 스폰 과정 순서 메모 5]");
+        //TEMPHIDE// Debug.Log("AddressableManager => 코루틴 => [몬스터 스폰 과정 순서 5]");
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
@@ -68,12 +68,12 @@ public class AddressableManager : MonoBehaviour
             foreach (var prefab in handle.Result)
             {
                 prefabCache[label].Add(prefab);
-                Debug.Log(" [어드레서블 로드 후 캐싱 완료] :" + prefab.name);
+                //TEMPHIDE// Debug.Log(" AddressableManager => 코루틴 => [어드레서블 로드 후 캐싱 완료] :" + prefab.name);
             }
         }
         else
         {
-            Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
+            //TEMPHIDE// Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
         }
     }
      
@@ -84,7 +84,7 @@ public class AddressableManager : MonoBehaviour
         {
             return prefabs;
         }
-        Debug.LogError($"No prefabs found with label: {label}");
+        //TEMPHIDE// Debug.LogError($"No prefabs found with label: {label}");
         return new List<GameObject>();
     }
 
@@ -101,10 +101,10 @@ public class AddressableManager : MonoBehaviour
                     return prefab;
                 }
             }
-            Debug.LogError($"Prefab '{prefabName}' not found under label '{label}'.");
+            //TEMPHIDE// Debug.LogError($"Prefab '{prefabName}' not found under label '{label}'.");
             return null;
         }
-        Debug.LogError($"No prefabs found with label: {label}");
+        //TEMPHIDE// Debug.LogError($"No prefabs found with label: {label}");
         return null;
     }
     // Release a Prefab (optional for memory management)
@@ -117,11 +117,11 @@ public class AddressableManager : MonoBehaviour
                 Addressables.Release(prefab);
             }
             prefabCache.Remove(label);
-            Debug.Log($"All prefabs with label '{label}' released.");
+            //TEMPHIDE// Debug.Log($"All prefabs with label '{label}' released.");
         }
         else
         {
-            Debug.LogWarning($"No prefabs found with label: {label} to release.");
+            //TEMPHIDE// Debug.LogWarning($"No prefabs found with label: {label} to release.");
         }
     }
     public void LoadSpritesWithLabel(string label, Action onLoaded)
@@ -135,14 +135,14 @@ public class AddressableManager : MonoBehaviour
                     if (!spriteCache.ContainsKey(sprite.name))
                     {
                         spriteCache[sprite.name] = sprite;
-                        Debug.Log($"[스프라이트 로드 및 캐싱 완료] : {sprite.name}");
+                        //TEMPHIDE// Debug.Log($"[스프라이트 로드 및 캐싱 완료] : {sprite.name}");
                     }
                 }
                 onLoaded?.Invoke();
             }
             else
             {
-                Debug.LogError($"Failed to load sprites with label '{label}': {handle.OperationException}");
+                //TEMPHIDE// Debug.LogError($"Failed to load sprites with label '{label}': {handle.OperationException}");
             }
         };
     }
@@ -152,7 +152,7 @@ public class AddressableManager : MonoBehaviour
         {
             return sprite;
         }
-        Debug.LogError($"Sprite '{spriteName}' not found in cache.");
+        //TEMPHIDE// Debug.LogError($"Sprite '{spriteName}' not found in cache.");
         return null;
     }
     public void ReleaseSprites()
@@ -162,17 +162,17 @@ public class AddressableManager : MonoBehaviour
             Addressables.Release(sprite);
         }
         spriteCache.Clear();
-        Debug.Log("All cached sprites released.");
+        //TEMPHIDE// Debug.Log("All cached sprites released.");
     }
-/*
-    SpriteManager.instance.LoadSpritesWithLabel("MyLabel", () =>
-{
-    Debug.Log("모든 스프라이트 로드 및 캐싱 완료");
-});
-Sprite mySprite = SpriteManager.instance.GetSprite("SpriteName");
-if (mySprite != null)
-{
-    // 스프라이트를 사용할 수 있습니다.
-}
-*/
+    /*
+        SpriteManager.instance.LoadSpritesWithLabel("MyLabel", () =>
+    {
+        Debug.Log("모든 스프라이트 로드 및 캐싱 완료");
+    });
+    Sprite mySprite = SpriteManager.instance.GetSprite("SpriteName");
+    if (mySprite != null)
+    {
+        // 스프라이트를 사용할 수 있습니다.
+    }
+    */
 }

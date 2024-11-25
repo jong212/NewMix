@@ -13,8 +13,18 @@ public class Character : NetworkBehaviour
     private PlayerInput _prevInput;
     private WorldNickname _nicknameUI;
     private Vector2 _joystickInput;
-    private bool _isMoveAble;
+
+    /// <summary>
+    /// true => 조이스틱 값이 있을 때 <br></br>
+    /// false => 조이스틱 값이 없을 때
+    /// </summary>
+    private bool _isMoveAble; 
+
     private bool _isAttack;
+    /// <summary>
+    /// true => 공격중 <br></br>
+    /// false => 공격 안 하는 중
+    /// </summary>
     public bool IsAttack {
         get => _isAttack;
         set => _isAttack = value;
@@ -30,6 +40,7 @@ public class Character : NetworkBehaviour
     [SerializeField] private Transform _uiPoint;
     [SerializeField] private Animator _anim;
     [SerializeField] private PlayerMovement _playerMovement;
+    public PlayerMovement PlayerMovement { get => _playerMovement; }
     [SerializeField] private MouseManager _mouseManager;
 
     [SerializeField] private float attackRange = 2.0f;     // 공격 범위
@@ -85,7 +96,7 @@ public class Character : NetworkBehaviour
         }
         else
         {
-            Debug.LogWarning("IsometricCameraFollow component not found in the scene.");
+            //TEMPHIDE// Debug.LogWarning("IsometricCameraFollow component not found in the scene.");
         }
     }
     private void InitPlayer()
@@ -106,12 +117,12 @@ public class Character : NetworkBehaviour
         Attack = userData.Atk;
         Health = userData.Hp;
         MissChance = userData.Def;
-        Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
+        //TEMPHIDE// Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
     public void InitItem() 
     {
         List<int> playerItemsList = BackendGameData.Instance.userData.setPlayerItems;
-        Debug.Log("tetst" + playerItemsList);
+        //TEMPHIDE// Debug.Log("tetst" + playerItemsList);
         setItemIndexs.Clear();
         setItemIndexs.CopyFrom(playerItemsList, 0, playerItemsList.Count);        
 
@@ -135,12 +146,12 @@ public class Character : NetworkBehaviour
             }
             else
             {
-                Debug.LogWarning("CapsuleCollider not found on KCCCollider object.");
+                //TEMPHIDE// Debug.LogWarning("CapsuleCollider not found on KCCCollider object.");
             }
         }
         else
         {
-            Debug.LogWarning("KCCCollider object not found as a child.");
+            //TEMPHIDE// Debug.LogWarning("KCCCollider object not found as a child.");
         }
     }
 
@@ -199,27 +210,35 @@ public class Character : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         if (Object.HasStateAuthority) ProcessMovement();
-        
     }
-
+    /// <summary>
+    /// 조이스틱으로 움직일 것인지 Astar로 움직일 것인지.
+    /// </summary>
     private void ProcessMovement()
     {
-        if (IsAttack) return;
+        
+        if (IsAttack) return; 
         if (_joystick != null)
         {
             _joystickInput = new Vector2(_joystick.Horizontal, _joystick.Vertical);
+
+            // 조이스틱 값이 있을 때 이동 및 회전 처리
+            // 조이스틱 값이 있을 때 isMoveAble을 true로 해서 Astar로 움직이지 못 하도록 한다
             if (_joystickInput.magnitude > 0)
             {
-                _isMoveAble = true;
-                MoveCharacter(_joystickInput);
+                _isMoveAble = true; 
+                MoveCharacter(_joystickInput);  // JoyStick Move Logic
             }
-            else
+            else 
             {
-                HandleIdleMovement();
+                HandleIdleMovement();           // Astar Move Logic
             }
         }
     }
 
+    /// <summary>
+    /// 조이스틱값을 통해 플레이어 이동 및 회전처리 하는 메서드이다.
+    /// </summary>
     private void MoveCharacter(Vector2 input)
     {
         Vector3 moveDirection = new Vector3(input.x, 0, input.y);
@@ -250,7 +269,9 @@ public class Character : NetworkBehaviour
 
     private void HandleIdleMovement()
     {
-        if (_playerMovement.Pathfinding.target  && !_isMoveAble)
+        // 조이스틱 값이 없는 경우에만 아래 로직을 탈 수 있다.
+        // Astar Move Logic
+        if (_playerMovement.Pathfinding.target && !_isMoveAble)
         {
             _playerMovement.Movement();
             return;
@@ -274,7 +295,7 @@ public class Character : NetworkBehaviour
         }
         else
         {
-            Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
+            //TEMPHIDE//  Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
         }
     }
     // Attack Mechanism
@@ -286,9 +307,15 @@ public class Character : NetworkBehaviour
         {
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;
+        } else if(targetMonster.NetworkedHealth - 10 <= 0)
+        {
+            targetMonster.DealDamageRpc(10);
+            _playerMovement.path.Clear();
+            _playerMovement.Pathfinding.target = null;
+            PlayAttackAnimationRpc();
         } else
         {
-        targetMonster.DealDamageRpc(10);
+            targetMonster.DealDamageRpc(10);
             PlayAttackAnimationRpc();
         }
         //PushMonster(targetMonster);
@@ -329,7 +356,7 @@ public class Character : NetworkBehaviour
     }
     private void OnSetitemList()
     {
-        Debug.Log($"[Client {Runner.LocalPlayer.PlayerId}] OnSetitemList called for Character with InputAuthority {Object.InputAuthority.PlayerId}");
+        //TEMPHIDE// Debug.Log($"[Client {Runner.LocalPlayer.PlayerId}] OnSetitemList called for Character with InputAuthority {Object.InputAuthority.PlayerId}");
 
         StaticManager.DataSetManager.SetCharacterItem(setItemIndexs, itemList, itemParitsList);
     }

@@ -51,7 +51,7 @@ public class BackEndSetName : BaseUI
     {
         Backend.BMember.CreateNickname(nickname, (callback) =>
         {
-            Debug.Log("닉네임 설정 완료");
+            //TEMPHIDE// Debug.Log("닉네임 설정 완료");
             int chrIndex = LoginSceneManager.Instance.Selecter.selectedCharacter;
             BackendGameData.Instance.GameDataInsert(chrIndex);
             LoginSceneManager.Instance.SetWaitRoom();

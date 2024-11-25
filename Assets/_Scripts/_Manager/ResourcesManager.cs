@@ -10,7 +10,6 @@ public class ResourcesManager : MonoBehaviour
     {
         if (instance)
         {
-            Debug.LogWarning("Instance already exists!");
             Destroy(gameObject);
         }
         else

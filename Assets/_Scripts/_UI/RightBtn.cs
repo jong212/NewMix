@@ -21,7 +21,7 @@ public class RightBtn : MonoBehaviour
         }
         else
         {
-            Debug.LogError("CharacterSelection 스크립트를 찾을 수 없습니다.");
+            Debug.LogError("캐릭터 선택 화면 : 스크립트 null error");
         }
     }
 }

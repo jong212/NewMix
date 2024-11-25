@@ -71,17 +71,15 @@ public class Enemy : Entity
         // 이 코드는 State Authority 클라이언트에서만 실행됨
         if (Object.HasStateAuthority)
         {
-
             if (NetworkedHealth - damage <= 0)
             {
                 NetworkedHealth = 0;
-              
             }
             else
             {
                 NetworkedHealth -= damage;
             }
-            Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
+            //TEMPHIDE// Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
         }
     }
     public string lastAnimBoolName { get; private set; }

@@ -35,7 +35,7 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
         // 싱글톤 패턴을 사용하여 단일 인스턴스 유지
         if (instance)
         {
-            Debug.LogWarning("Instance already exists!");
+            //TEMPHIDE// Debug.LogWarning("Instance already exists!");
             Destroy(gameObject);
         }
         else

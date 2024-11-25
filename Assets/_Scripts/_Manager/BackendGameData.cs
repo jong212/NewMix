@@ -299,12 +299,12 @@ public class UserData
         }
         else
         {
-            Debug.LogError("잘못된 인덱스입니다.");
+            //TEMPHIDE// Debug.LogError("잘못된 인덱스입니다.");
         }
     }
     private void OnSetPlayerItemsChanged()
     {
-        Debug.Log("setPlayerItems가 변경되었습니다.");
+        //TEMPHIDE// Debug.Log("setPlayerItems가 변경되었습니다.");
         BackendGameData.Instance.GameDataUpdate<List<int>>("SetPlayerItems", new List<int>(setPlayerItems));
     }
     /// <summary>
@@ -414,7 +414,7 @@ public class BackendGameData
     public void SetNickname(string nickname)    // 캐싱 - 버튼 클릭 시 닉넴 캐싱 하는 건데 리펙토링 가능한지 체크해 봐야 할 듯 (중복코드라서)중복 버튼에서 바로 위 코드로 타는거가능한지 체크필요
     {
         NickName = nickname;
-        Debug.Log($"[3-2] 캐싱완료 플레이어 닉네임 {NickName}");
+        //TEMPHIDE// Debug.Log($"[3-2] 캐싱완료 플레이어 닉네임 {NickName}");
     }
     // -----------------캐싱 End-------------------------
 
@@ -473,7 +473,7 @@ public class BackendGameData
             userData = new UserData();
         }
         userData.BeginInit();
-        Debug.Log("데이터를 초기화합니다.");
+        //TEMPHIDE// Debug.Log("데이터를 초기화합니다.");
 
         List<InventorySlot> inventorySlots = new List<InventorySlot>();
 
@@ -482,9 +482,9 @@ public class BackendGameData
             inventorySlots.Add(new InventorySlot(i, null, 0)); // Empty slot
         }
         string inventoryJson = JsonMapper.ToJson(new { slots = inventorySlots });
-     
 
-        Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
+
+        //TEMPHIDE// Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
         param.Add("Level", 1);
         param.Add("Money", 10000);
@@ -496,19 +496,19 @@ public class BackendGameData
         param.Add("Hp", 100);
         param.Add("Inventory", inventoryJson); // Add inventory JSON to database
 
-        Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
+        //TEMPHIDE// Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("Character", param);
         userData.EndInit();
         if (bro.IsSuccess())
         {
-            Debug.Log("게임 정보 데이터 삽입에 성공했습니다. : " + bro);
+            //TEMPHIDE// Debug.Log("게임 정보 데이터 삽입에 성공했습니다. : " + bro);
 
             //삽입한 게임 정보의 고유값입니다.  
             gameDataRowInDate = bro.GetInDate();
         }
         else
         {
-            Debug.LogError("게임 정보 데이터 삽입에 실패했습니다. : " + bro);
+            //TEMPHIDE// Debug.LogError("게임 정보 데이터 삽입에 실패했습니다. : " + bro);
         }
     }
 
@@ -522,8 +522,8 @@ public class BackendGameData
 
             if (gameDataJson.Count <= 0) // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
             {
-                Debug.LogWarning("데이터가 존재하지 않습니다.");
-               // GameDataInsert(0);
+                //TEMPHIDE// Debug.LogWarning("데이터가 존재하지 않습니다.");
+                // GameDataInsert(0);
                 //GetPlayerData();
             }
             else
@@ -544,7 +544,7 @@ public class BackendGameData
 
                 userData.InventorySlots.Clear();
                 string inventoryJsonString = gameDataJson[0]["Inventory"].ToString();
-                Debug.Log("beforeData" + inventoryJsonString);
+                //TEMPHIDE// Debug.Log("beforeData" + inventoryJsonString);
                 JsonData inventoryJsonData = JsonMapper.ToObject(inventoryJsonString);
 
                 foreach (JsonData slot in inventoryJsonData["slots"])
@@ -579,14 +579,14 @@ public class BackendGameData
                     userData.setPlayerItems.Add(int.Parse(item.ToString()));
                 }
 
-                Debug.Log($"[3-4] 캐싱완료 userData 여기 넣음 {userData.ToString()}]");
+                //TEMPHIDE// Debug.Log($"[3-4] 캐싱완료 userData 여기 넣음 {userData.ToString()}]");
 
                 userData.EndInit();
             }
         }
         else
         {
-            Debug.LogError("게임 정보 조회에 실패했습니다. : " + bro);
+            //TEMPHIDE// Debug.LogError("게임 정보 조회에 실패했습니다. : " + bro);
         }
     }
 
@@ -594,7 +594,7 @@ public class BackendGameData
     {
         if (userData == null)
         {
-            Debug.LogError("서버에서 다운받거나 새로 삽입한 데이터가 존재하지 않습니다. Insert 혹은 Get을 통해 데이터를 생성해주세요.");
+            //TEMPHIDE// Debug.LogError("서버에서 다운받거나 새로 삽입한 데이터가 존재하지 않습니다. Insert 혹은 Get을 통해 데이터를 생성해주세요.");
             return;
         }
 
@@ -606,18 +606,12 @@ public class BackendGameData
 
         if (bro.IsSuccess())
         {
-            Debug.Log("게임 정보 데이터 수정에 성공했습니다. : " + bro);
+            //TEMPHIDE// Debug.Log("뒤끝 : 게임 정보 데이터 수정에 성공했습니다. : " + bro);
         }
         else
         {
-            Debug.LogError("게임 정보 데이터 수정에 실패했습니다. : " + bro);
+            //TEMPHIDE// Debug.LogError("뒤끝 : 게임 정보 데이터 수정에 실패했습니다. : " + bro);
         }
     }
-
-    /*public void SetNickname(string nickname)
-    {
-        Nickname = nickname;
-        Debug.Log($"닉네임 캐싱: {Nickname}");
-    }*/
 
 }

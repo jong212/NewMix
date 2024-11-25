@@ -100,8 +100,8 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 */		}
 		else
 		{
-			Debug.LogWarning(shutdownReason);
-			DisconnectUI.OnShutdown(shutdownReason);
+            Debug.LogWarning(shutdownReason);
+            DisconnectUI.OnShutdown(shutdownReason);
 		}
 	}
 

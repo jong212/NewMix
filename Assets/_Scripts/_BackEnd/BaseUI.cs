@@ -10,7 +10,7 @@ public class BaseUI : MonoBehaviour
     // ======================================================
     protected void ShowAlertUI(string titleText, string callback)
     {
-        Debug.LogWarning(callback);
+        //TEMPHIDE// Debug.LogWarning(callback);
         StaticManager.UI.AlertUI.OpenWarningUI(titleText, callback);
     }
     protected void ShowConfirmUI(string titleText = null, string infoText = null, string okBtnText = null, string cancelBtnText = null, ClickConfirmOkButton okCallback = null)

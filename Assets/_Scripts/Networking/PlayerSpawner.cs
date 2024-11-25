@@ -11,7 +11,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
     public void PlayerJoined(PlayerRef player)
     {
-        Debug.Log("test1");
+         
         if (player == Runner.LocalPlayer)
         {
             StartCoroutine(SpawnRoutine(player));
@@ -25,11 +25,11 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
        
         (string labelName, string prefabName) = StaticManager.DataSetManager.CharacterDefaultSettings(); 
         if(string.IsNullOrEmpty(labelName) || string.IsNullOrEmpty(prefabName)){
-            Debug.Log("[플레이어 스포너에서 스폰할 때 플레이어의 캐릭터 어드레서블 라벨 혹은 프리팹 이름 값을 불러오지 못함]");
+            //TEMPHIDE// Debug.Log("[플레이어 스포너에서 스폰할 때 플레이어의 캐릭터 어드레서블 라벨 혹은 프리팹 이름 값을 불러오지 못함]");
             yield break;
         } else
         {
-            Debug.Log($"[5 PlayerSpawner : 플레이어 에게 적용할 어드레서블 레이블,프리팹이름 값 정상적으로 가져옴 {labelName}, {prefabName} ]");
+            //TEMPHIDE// Debug.Log($"[5 PlayerSpawner : 플레이어 에게 적용할 어드레서블 레이블,프리팹이름 값 정상적으로 가져옴 {labelName}, {prefabName} ]");
         }
         // 로드 완료 여부를 추적하는 변수들
         bool isInventoryLoaded = false;
@@ -43,13 +43,13 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         {
             isInventoryLoaded = true;
             CheckIfAllLoaded();
-            Debug.Log("InventoryItem loaded!");
+            //TEMPHIDE// Debug.Log("InventoryItem loaded!");
         });
         AddressableManager.instance.LoadPrefabsWithLabel("Enemy", () =>
         {
             isEnemyPrefabLoad = true;
             CheckIfAllLoaded();
-            Debug.Log("Enemy loaded!");
+            //TEMPHIDE// Debug.Log("Enemy loaded!");
         });
         AddressableManager.instance.LoadPrefabsWithLabel(labelName, () =>
         {
@@ -57,13 +57,13 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
             playerPrefab = AddressableManager.instance.GetPrefab(labelName, prefabName);
             isPlayerPrefabLoaded = true;
             CheckIfAllLoaded();
-            Debug.Log("PlayerPrefab loaded!"); 
+            //TEMPHIDE// Debug.Log("PlayerPrefab loaded!"); 
         });        
         AddressableManager.instance.LoadSpritesWithLabel("Sprite", () =>
         {
             isSpriteLoaded = true;
             CheckIfAllLoaded();
-            Debug.Log("Sprite loaded!"); 
+            //TEMPHIDE// Debug.Log("Sprite loaded!"); 
         });
 
         // 내부 함수: 두 로드 완료 여부를 확인
@@ -80,7 +80,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         StaticManager.Instance.AllLoad = true;
         if (SpawnpointManager.GetSpawnpoint(out Vector3 location, out Quaternion orientation))
         {
-            Debug.Log("Spawning player");
+            //TEMPHIDE// Debug.Log("Spawning player");
             Runner.SpawnAsync(
                 prefab: playerPrefab,
                 position: location,
@@ -99,7 +99,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         }
         else
         {
-            Debug.LogWarning("Unable to spawn player");
+            //TEMPHIDE// Debug.LogWarning("Unable to spawn player");
         }
     }
 
@@ -126,7 +126,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     {
         if (Runner.IsSharedModeMasterClient)
         {
-            Debug.Log("Master client handling player left: " + player);
+            //TEMPHIDE// Debug.Log("Master client handling player left: " + player);
             OnPlayerLeft?.Invoke(player);
             // Remove player from any tracked lists or states if necessary
         }

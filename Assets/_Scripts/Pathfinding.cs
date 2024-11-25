@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Pathfinding : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Pathfinding : MonoBehaviour
         {
             if (_target == value)
             {
-                Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
+                //TEMPHIDE// Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
                 return;
             }
             // 기존 타겟의 파티클 멈춤
@@ -46,7 +47,7 @@ public class Pathfinding : MonoBehaviour
         }
         else
         {
-            Debug.LogError("MouseManager를 찾을 수 없습니다.");
+            //TEMPHIDE// Debug.LogError("MouseManager를 찾을 수 없습니다.");
         }
     }
 
@@ -63,6 +64,8 @@ public class Pathfinding : MonoBehaviour
         target = monsterTransform;
     }
 
+    float findEvenCallTime = .1f;
+    float timer = 0f;
     void Update()
     {
         if (target == null)
@@ -70,7 +73,13 @@ public class Pathfinding : MonoBehaviour
             return;
         }
 
-        FindPath(transform.position, target.position);
+        timer += Time.deltaTime;
+        if(findEvenCallTime < timer)
+        {
+            Debug.Log(timer);
+            FindPath(transform.position, target.position);
+            timer = 0f;
+        }
     }
 
     void FindPath(Vector3 startPos, Vector3 targetPos)
@@ -80,7 +89,7 @@ public class Pathfinding : MonoBehaviour
 
         if (startNode == null || targetNode == null)
         {
-            Debug.LogError("시작 노드 또는 목표 노드가 null입니다.");
+            //TEMPHIDE// Debug.LogError("시작 노드 또는 목표 노드가 null입니다.");
             OnPathUpdated?.Invoke(null);
             return;
         }
@@ -132,7 +141,7 @@ public class Pathfinding : MonoBehaviour
             }
         }
 
-        Debug.LogWarning("경로를 찾지 못했습니다.");
+        //TEMPHIDE// Debug.LogWarning("경로를 찾지 못했습니다.");
         OnPathUpdated?.Invoke(null);
     }
 
@@ -147,7 +156,7 @@ public class Pathfinding : MonoBehaviour
             currentNode = currentNode.parent;
             if (currentNode == null)
             {
-                Debug.LogError("경로 추적 중 부모 노드가 null입니다.");
+                //TEMPHIDE// Debug.LogError("경로 추적 중 부모 노드가 null입니다.");
                 OnPathUpdated?.Invoke(null);
                 return;
             }
@@ -155,12 +164,8 @@ public class Pathfinding : MonoBehaviour
         path.Reverse();
 
         grid.path = path;
-        if(path.Count == 0)
-        {
-            target = null;
-            return;
-        }
-        Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
+        if(path.Count == 0) return;
+        //TEMPHIDE// Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
 
         // 경로 업데이트 이벤트 호출
         OnPathUpdated?.Invoke(path);
@@ -184,7 +189,7 @@ public class Pathfinding : MonoBehaviour
         if (particle != null && particle.isPlaying)
         {
             particle.gameObject.SetActive(false);
-            Debug.Log("기존 타겟의 파티클 멈춤: " + targetTransform.name);
+            //TEMPHIDE// Debug.Log("기존 타겟의 파티클 멈춤: " + targetTransform.name);
         }
     }
 
@@ -197,7 +202,7 @@ public class Pathfinding : MonoBehaviour
         {
             particle.gameObject.SetActive(true);
             particle.Play();
-            Debug.Log("새로운 타겟 설정 및 파티클 재생: " + targetTransform.name);
+            //TEMPHIDE// Debug.Log("새로운 타겟 설정 및 파티클 재생: " + targetTransform.name);
         }
     }
     void OpenMonsterInfoUI(Transform target)

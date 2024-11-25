@@ -49,9 +49,6 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 		// pointerDrag는 현재 드래그하고 있는 대상(=아이템)
 		if ( eventData.pointerDrag != null )
 		{
-			/*Debug.Log(eventData.pointerDrag.GetComponent<DraggableUI>().PreviousParent.name + "이전 슬롯 Name");
-			Debug.Log(gameObject.name + "놓은 슬롯 Name");*/
-
             DraggableUI DragingPrefab = eventData.pointerDrag.GetComponent<DraggableUI>();
 
 			// 인벤창에서 드래그 시작한 경우 (장비 X)

@@ -77,7 +77,7 @@ public class UIManager : MonoBehaviour
     {
         if(AlertUI == null || ConfirmUI == null || MainUI == null || ContentsInventoryUI == null || WorldNickNameUI == null || EnemyInfoUI == null)
         {
-            Debug.LogError("Component 누락");
+            Debug.LogError("UIManager Awake : Component 누락");
         }
     }
     // Init

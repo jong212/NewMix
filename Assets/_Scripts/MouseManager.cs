@@ -37,8 +37,8 @@ public class MouseManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("클릭한 위치에 몬스터가 없습니다.");
-                return false;
+            Debug.Log("클릭한 위치에 몬스터가 없습니다.");
+            return false;
         }
          
     }

@@ -26,7 +26,7 @@ public class PlayerWaitRoomInfo : MonoBehaviour
     {
         if (nickNameLayout == null || lvLayout == null || atkLayout == null ||  hpLayout == null || defLayout == null || lastLocationLayout == null || deleteCharacter == null || gameStartButton == null)
         {
-            Debug.LogError("UI 요소가 연결되지 않았습니다!");
+            Debug.LogError("캐릭터 선택 화면 : UI 요소가 연결되지 않았습니다!");
         }
     }
 }

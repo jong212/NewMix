@@ -64,7 +64,7 @@ public class DownManager : MonoBehaviour
         {
             waitMessage.SetActive(false);               // 업데이트 체크중 팝업 닫기
             downMessage.SetActive(true);                // 다운 받아야 할 파일 있다는 팝업 오픈
-            //TEMPHIDE// Debug.Log("[2 DownManager : 서버에서 다운로드 해야 할 리소스 파일 확인 됨]");
+             Debug.Log("[2 DownManager : 서버에서 다운로드 해야 할 리소스 파일 확인 됨]");
             sizeInfoText.text = GetFileSize(patchSize); // 다운 받아야할 크기 UI 표시
 
         }
@@ -73,7 +73,7 @@ public class DownManager : MonoBehaviour
             downValText.text = "100 %";
             downSlider.value = 1f;
             yield return new WaitForSeconds(2f);
-            //TEMPHIDE// Debug.Log("[2 LobbyManager : 다운로드 할 리소스 파일 없음 ]");
+             Debug.Log("[2 LobbyManager : 다운로드 할 리소스 파일 없음 ]");
             LoadingManager.LoadScene("4Login");
         }
 
@@ -158,7 +158,7 @@ public class DownManager : MonoBehaviour
 
             if (total >= patchSize)
             {
-                //TEMPHIDE// Debug.Log("[2-1 다운 완료]");
+                 Debug.Log("[2-1 다운 완료]");
 
 
                 // 모든 비동기 작업이 완료되었는지 확인

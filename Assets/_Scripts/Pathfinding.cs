@@ -13,7 +13,7 @@ public class Pathfinding : MonoBehaviour
         {
             if (_target == value)
             {
-                //TEMPHIDE// Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
+                 Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
                 return;
             }
             // 기존 타겟의 파티클 멈춤
@@ -47,7 +47,7 @@ public class Pathfinding : MonoBehaviour
         }
         else
         {
-            //TEMPHIDE// Debug.LogError("MouseManager를 찾을 수 없습니다.");
+             Debug.LogError("MouseManager를 찾을 수 없습니다.");
         }
     }
 
@@ -89,7 +89,7 @@ public class Pathfinding : MonoBehaviour
 
         if (startNode == null || targetNode == null)
         {
-            //TEMPHIDE// Debug.LogError("시작 노드 또는 목표 노드가 null입니다.");
+             Debug.LogError("시작 노드 또는 목표 노드가 null입니다.");
             OnPathUpdated?.Invoke(null);
             return;
         }
@@ -141,7 +141,7 @@ public class Pathfinding : MonoBehaviour
             }
         }
 
-        //TEMPHIDE// Debug.LogWarning("경로를 찾지 못했습니다.");
+         Debug.LogWarning("경로를 찾지 못했습니다.");
         OnPathUpdated?.Invoke(null);
     }
 
@@ -156,7 +156,7 @@ public class Pathfinding : MonoBehaviour
             currentNode = currentNode.parent;
             if (currentNode == null)
             {
-                //TEMPHIDE// Debug.LogError("경로 추적 중 부모 노드가 null입니다.");
+                 Debug.LogError("경로 추적 중 부모 노드가 null입니다.");
                 OnPathUpdated?.Invoke(null);
                 return;
             }
@@ -165,7 +165,7 @@ public class Pathfinding : MonoBehaviour
 
         grid.path = path;
         if(path.Count == 0) return;
-        //TEMPHIDE// Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
+         Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
 
         // 경로 업데이트 이벤트 호출
         OnPathUpdated?.Invoke(path);
@@ -189,7 +189,7 @@ public class Pathfinding : MonoBehaviour
         if (particle != null && particle.isPlaying)
         {
             particle.gameObject.SetActive(false);
-            //TEMPHIDE// Debug.Log("기존 타겟의 파티클 멈춤: " + targetTransform.name);
+             Debug.Log("기존 타겟의 파티클 멈춤: " + targetTransform.name);
         }
     }
 
@@ -202,7 +202,7 @@ public class Pathfinding : MonoBehaviour
         {
             particle.gameObject.SetActive(true);
             particle.Play();
-            //TEMPHIDE// Debug.Log("새로운 타겟 설정 및 파티클 재생: " + targetTransform.name);
+             Debug.Log("새로운 타겟 설정 및 파티클 재생: " + targetTransform.name);
         }
     }
     void OpenMonsterInfoUI(Transform target)

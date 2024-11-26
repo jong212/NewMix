@@ -57,11 +57,11 @@ public class LoginSceneManager : MonoBehaviour
              * StartGoogleLogin(); // PC 테스트는 CustomLogin 함수 사용하고 모바일은 StartGoogleLogin
              * ================================================================================*/
 
-            //TEMPHIDE// Debug.Log("초기화 성공 : " + bro.StatusCode);
+             Debug.Log("초기화 성공 : " + bro.StatusCode);
         }
         else
         {
-            //TEMPHIDE// Debug.LogError("초기화 실패 : " + bro);
+             Debug.LogError("초기화 실패 : " + bro);
         }
     }
     private void Update()
@@ -108,12 +108,12 @@ public class LoginSceneManager : MonoBehaviour
     {
         if (isSuccess == false)
         {
-            //TEMPHIDE// Debug.LogError(errorMessage);
+             Debug.LogError(errorMessage);
             return;
         }
 
         var bro = Backend.BMember.AuthorizeFederation(token, FederationType.Google);
-        //TEMPHIDE// Debug.Log("구글 페데레이션 로그인 결과 : " + bro);
+         Debug.Log("구글 페데레이션 로그인 결과 : " + bro);
 
         StartCoroutine(ServerCharLoad());                                              // 다운로드 차트
 
@@ -147,11 +147,11 @@ public class LoginSceneManager : MonoBehaviour
         var serverChartBro = Backend.Chart.GetChartContents(chartManagerFileId);            // 서버에서 ChartManager 차트를 불러옵니다. 기기에 저장하지는 않습니다.
         if (serverChartBro.IsSuccess() == false)                                            // 서버에서 불러오지 못할 경우에는 데이터 꼬임 방지를 위해 진행을 중지합니다.
         {
-            //TEMPHIDE// Debug.Log("CheckChartStop");
+             Debug.Log("CheckChartStop");
             yield break;
         }
 
-        //TEMPHIDE// Debug.Log("LoginScenemanager => 코루틴 => [3] 차트파일 업데이트 해야하는지 체크");
+         Debug.Log("LoginScenemanager => 코루틴 => [3] 차트파일 업데이트 해야하는지 체크");
         JsonData newChartManagerJson = serverChartBro.FlattenRows();                        // 서버에서 불러온 ChartManager을 언마샬하여 JsonData 형태로 캐싱합니다.
         Dictionary<string, ChartInfo> chartInfoDic = new Dictionary<string, ChartInfo>();   // 차트 이름으로 데이터를 검색할 것이기 때문에 Dictnary로 생성합니다, // 해당 Dictnary는 최신 버전으로 업데이트할 차트 리스트로 사용됩니다.(최신 버전이라면 해당 리스트에서 제외)
 
@@ -187,14 +187,14 @@ public class LoginSceneManager : MonoBehaviour
         {
             foreach (var downloadChartInfo in chartInfoDic)                                 // 차트를 재다운로드하여 기기에 덮어씌웁니다.
             {
-                //TEMPHIDE// Debug.Log($"LoginScenemanager => 코루틴 => [3-1] {downloadChartInfo.Value.chartName} 차트를 새로운 버전으로 다운받습니다.");
+                 Debug.Log($"LoginScenemanager => 코루틴 => [3-1] {downloadChartInfo.Value.chartName} 차트를 새로운 버전으로 다운받습니다.");
                 Backend.Chart.GetOneChartAndSave(downloadChartInfo.Value.chartFileId, downloadChartInfo.Value.chartName);
             }
             Backend.Chart.GetOneChartAndSave(chartManagerFileId, chartManagerName);         // chartManager 차트를 최신화합니다.(로컬저장)
         }
         else
         {
-            //TEMPHIDE// Debug.Log("LoginScenemanager => 코루틴 => [3-1] 업이트할 차트 내역이 존재하지 않습니다.");
+             Debug.Log("LoginScenemanager => 코루틴 => [3-1] 업이트할 차트 내역이 존재하지 않습니다.");
         }
 
     }
@@ -203,7 +203,7 @@ public class LoginSceneManager : MonoBehaviour
     #region # SetWaitRoom
     public void SetWaitRoom()
     {
-        //TEMPHIDE// Debug.Log("LoginScenemanager => SetWaitRoom => [3-3] 캐릭터 선택창 화면 진입");
+         Debug.Log("LoginScenemanager => SetWaitRoom => [3-3] 캐릭터 선택창 화면 진입");
         if (Selecter != null && Selecter.gameObject.activeSelf == true)
         {
             Selecter.gameObject.SetActive(false);

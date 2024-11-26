@@ -32,35 +32,32 @@ public class Character : NetworkBehaviour
 
     [field: SerializeField]
     public CharacterSpecs Specs { get; private set; }
+    public PlayerMovement PlayerMovement { get => _playerMovement; }
 
     [SerializeField] private List<Transform> itemList;
     [SerializeField] private List<Transform> itemParitsList;
-
     [SerializeField] private SimpleKCC _kcc;
     [SerializeField] private Transform _uiPoint;
     [SerializeField] private Animator _anim;
     [SerializeField] private PlayerMovement _playerMovement;
-    public PlayerMovement PlayerMovement { get => _playerMovement; }
     [SerializeField] private MouseManager _mouseManager;
-
     [SerializeField] private float attackRange = 2.0f;     // 공격 범위
     [SerializeField] private LayerMask monsterLayerMask;  // 몬스터 레이어 마스크
-     
-    [Networked, OnChangedRender(nameof(OnNicknameChanged))]
-    public NetworkString<_16> Nickname { get; set; }
 
-    [Networked, Capacity(4), OnChangedRender(nameof(OnSetitemList))]
-    public NetworkArray<int> setItemIndexs { get; }
-
+    [Networked, OnChangedRender(nameof(OnNicknameChanged))] public NetworkString<_16> Nickname { get; set; }
+    [Networked, Capacity(4), OnChangedRender(nameof(OnSetitemList))] public NetworkArray<int> setItemIndexs { get; }
 
     [Networked] public int Level { get; set; }
     [Networked] public int Attack { get; set; }
     [Networked] public int Health { get; set; }
-    [Networked] public int MissChance { get; set; }
+    [Networked] public int Def { get; set; }
+    [Networked] public int FinalAtk { get; set; }
+    [Networked] public int FinalHP { get; set; }
+    [Networked] public float FinalAtkSpeed { get; set; }
+    [Networked] public float FinalMoveSpeed { get; set; }
     [Networked] public bool WaitingForAuthority { get; set; }
     [Networked] public Item HeldItem { get; set; }
 
-    // Unity Callbacks
     public override void Spawned()
     {
         if (Object.HasStateAuthority)
@@ -73,11 +70,14 @@ public class Character : NetworkBehaviour
             StaticManager.UI.ContentsInventoryUI.gameObject.SetActive(true);
             StaticManager.Instance.CashUdata = BackendGameData.Instance.userData;
             StaticManager.Instance.UniquePlayer = this;
-        }
-        
-        //OnSetitemList();
+            CalculateStatUI();
+            StaticManager.Instance.Stat += CalculateStatUI;
+        } 
     }
-
+    private void OnDisable()
+    {
+        StaticManager.Instance.Stat -= CalculateStatUI;
+    }
     private void InitializeJoystick()
     {
         _joystick = FindObjectOfType<VariableJoystick>();
@@ -93,10 +93,6 @@ public class Character : NetworkBehaviour
         if (cameraFollow != null)
         {
             cameraFollow.target = this.transform;
-        }
-        else
-        {
-            //TEMPHIDE// Debug.LogWarning("IsometricCameraFollow component not found in the scene.");
         }
     }
     private void InitPlayer()
@@ -116,16 +112,14 @@ public class Character : NetworkBehaviour
         Level = userData.Level;
         Attack = userData.Atk;
         Health = userData.Hp;
-        MissChance = userData.Def;
-        //TEMPHIDE// Debug.Log($"Player spawned with Level: {Level}, Attack: {Attack}, Health: {Health}");
+        Def = userData.Def;
+        Debug.Log($"플레이어 오브젝트에 스텟 적용 Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
     public void InitItem() 
     {
         List<int> playerItemsList = BackendGameData.Instance.userData.setPlayerItems;
-        //TEMPHIDE// Debug.Log("tetst" + playerItemsList);
         setItemIndexs.Clear();
-        setItemIndexs.CopyFrom(playerItemsList, 0, playerItemsList.Count);        
-
+        setItemIndexs.CopyFrom(playerItemsList, 0, playerItemsList.Count);
     }
     private void InitializeNicknameUI()
     {
@@ -144,24 +138,15 @@ public class Character : NetworkBehaviour
                 capsuleCollider.isTrigger = false;
                 // 추가적인 Collider 설정이 필요하면 여기에 작성
             }
-            else
-            {
-                //TEMPHIDE// Debug.LogWarning("CapsuleCollider not found on KCCCollider object.");
-            }
-        }
-        else
-        {
-            //TEMPHIDE// Debug.LogWarning("KCCCollider object not found as a child.");
         }
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (Object.HasInputAuthority)
         {
             HandleMouseInput();
-        }
+         }
     }
     private void HandleMouseInput()
     {
@@ -295,7 +280,7 @@ public class Character : NetworkBehaviour
         }
         else
         {
-            //TEMPHIDE//  Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
+              Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
         }
     }
     // Attack Mechanism
@@ -356,8 +341,6 @@ public class Character : NetworkBehaviour
     }
     private void OnSetitemList()
     {
-        //TEMPHIDE// Debug.Log($"[Client {Runner.LocalPlayer.PlayerId}] OnSetitemList called for Character with InputAuthority {Object.InputAuthority.PlayerId}");
-
         StaticManager.DataSetManager.SetCharacterItem(setItemIndexs, itemList, itemParitsList);
     }
 
@@ -429,5 +412,47 @@ public class Character : NetworkBehaviour
     {
         bool isAnimationStart = (isAttacking == 1); // TRUE 공격중
         IsAttack = (isAnimationStart) ? true : false;
+    }
+
+    public void CalculateStatUI()
+    {
+        InventoryManager InventoryUI = StaticManager.UI.ContentsInventoryUI;
+        List<ItemChart> itemList = BackendGameData.Instance.ItemChartList;
+
+        if (InventoryUI != null)
+        {
+            int _FinalAtk = default;
+            int _FinalHP = default;
+            float _FinalAtkSpeed = default;
+            float _FinalMoveSpeed = default;
+             
+            InventoryUI.Power.text = Attack.ToString();
+            InventoryUI.Def.text = Def.ToString();
+            InventoryUI.Hp.text = Health.ToString();
+            
+            foreach (var stat in setItemIndexs)
+            {                
+                foreach(ItemChart item in itemList)
+                {
+                    if(stat == item.Itemid)
+                    {
+                        _FinalAtk += item.Damage;
+                        _FinalHP += item.Hp;
+                        _FinalAtkSpeed += item.AtkSpeed;
+                        _FinalMoveSpeed += item.MoveSpeed;
+                        break;
+                    }
+                }
+            }
+            InventoryUI.LastPower.text = Attack.ToString()+ " + " + _FinalAtk.ToString();
+            InventoryUI.LastHp.text = Health.ToString() + " + " + _FinalHP.ToString();
+            InventoryUI.LastAtkSpeed.text = "1 + " + _FinalAtkSpeed.ToString();
+            InventoryUI.LastMoveSpeed.text = "5 + " + _FinalMoveSpeed.ToString();
+
+            FinalAtk = Attack + _FinalAtk;
+            FinalHP = Health + _FinalHP;
+            FinalAtkSpeed = 1 + _FinalAtkSpeed;
+            FinalMoveSpeed = 5 + _FinalMoveSpeed;
+        }
     }
 }

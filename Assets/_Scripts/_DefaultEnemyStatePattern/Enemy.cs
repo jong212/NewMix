@@ -35,7 +35,7 @@ public class Enemy : Entity
     [Networked] public float MaxHealth { get; set; }
     public virtual void HealthChanged()
     {
-        Debug.Log($"Health changed to: {NetworkedHealth}");
+        //TEMPHIDE// Debug.Log($"Health changed to: {NetworkedHealth}");
 
         // 체력이 변경될 때 체력바나 UI 업데이트 등의 후속 작업 수행
         UpdateHealthBar();
@@ -79,7 +79,7 @@ public class Enemy : Entity
             {
                 NetworkedHealth -= damage;
             }
-            //TEMPHIDE// Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
+             Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
         }
     }
     public string lastAnimBoolName { get; private set; }

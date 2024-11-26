@@ -1,4 +1,4 @@
-using BackEnd;
+ï»¿using BackEnd;
 using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WebSocketSharp;
 
-// OnClickCreateNicknameButton > BaseUI, protected, ShowAlertUI() > StaticManager > UIManager > AlertUI > AlertUIÀÇ OpenWarningUI ½ÇÇà
+// OnClickCreateNicknameButton > BaseUI, protected, ShowAlertUI() > StaticManager > UIManager > AlertUI > AlertUIì˜ OpenWarningUI ì‹¤í–‰
 public class BackEndSetName : BaseUI
 {
     [SerializeField] InputField _nicknameCreateInput;
@@ -18,29 +18,29 @@ public class BackEndSetName : BaseUI
         _nicknameCreateButton.onClick.AddListener(OnClickCreateNicknameButton);
     }
 
-    // ´Ð³×ÀÓ ¼³Á¤ ¹öÆ° Å¬¸¯ ½Ã È£Ãâ µÇ´Â ÇÔ¼ö
+    // ë‹‰ë„¤ìž„ ì„¤ì • ë²„íŠ¼ í´ë¦­ ì‹œ í˜¸ì¶œ ë˜ëŠ” í•¨ìˆ˜
     void OnClickCreateNicknameButton()
     {
-       // ºñ¾ú³ª?
+       // ë¹„ì—ˆë‚˜?
        var nickname = _nicknameCreateInput.text;
         if (string.IsNullOrEmpty(nickname))
         {
-            ShowAlertUI("¾È³»","´Ð³×ÀÓÀÌ ºñ¾îÀÖ½À´Ï´Ù.");
+            ShowAlertUI("ì•ˆë‚´","ë‹‰ë„¤ìž„ì´ ë¹„ì–´ìžˆìŠµë‹ˆë‹¤.");
             return;
         } 
         else
         {
-            // Áßº¹ÀÎ°¡?
+            // ì¤‘ë³µì¸ê°€?
             Backend.BMember.CheckNicknameDuplication(nickname, (callback) =>
             {
                 if(callback.StatusCode == 204)
                 {
-                    // »ç¿ë ÇÒ °ÍÀÎÁö? Open Confirm UI
-                    ShowConfirmUI("¾È³»", "»ç¿ë °¡´ÉÇÑ ¾ÆÀÌµðÀÔ´Ï´Ù", null, null, () => SetNick(nickname));
+                    // ì‚¬ìš© í•  ê²ƒì¸ì§€? Open Confirm UI
+                    ShowConfirmUI("ì•ˆë‚´", "ì‚¬ìš© ê°€ëŠ¥í•œ ì•„ì´ë””ìž…ë‹ˆë‹¤", null, null, () => SetNick(nickname));
                 }
                 else if (callback.StatusCode == 409)
                 {
-                    ShowAlertUI("¾È³»", "´Ð³×ÀÓ Áßº¹ÀÔ´Ï´Ù.");
+                    ShowAlertUI("ì•ˆë‚´", "ë‹‰ë„¤ìž„ ì¤‘ë³µìž…ë‹ˆë‹¤.");
 
                 }
             });
@@ -51,7 +51,7 @@ public class BackEndSetName : BaseUI
     {
         Backend.BMember.CreateNickname(nickname, (callback) =>
         {
-            //TEMPHIDE// Debug.Log("´Ð³×ÀÓ ¼³Á¤ ¿Ï·á");
+             Debug.Log("ë‹‰ë„¤ìž„ ì„¤ì • ì™„ë£Œ");
             int chrIndex = LoginSceneManager.Instance.Selecter.selectedCharacter;
             BackendGameData.Instance.GameDataInsert(chrIndex);
             LoginSceneManager.Instance.SetWaitRoom();

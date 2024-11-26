@@ -99,7 +99,7 @@ public class Entity : NetworkBehaviour
             playerNetworkObject = Runner.GetPlayerObject(playerRef);
             if (playerNetworkObject == null)
             {
-                //TEMPHIDE// Debug.LogWarning("Waiting for valid NetworkObject...");
+                 Debug.LogWarning("Waiting for valid NetworkObject...");
             }
             yield return null; // 다음 프레임까지 대기
         }
@@ -108,7 +108,7 @@ public class Entity : NetworkBehaviour
         if (playerNetworkObject.gameObject != null)
         {
             nearbyPlayerObjects.Add(playerNetworkObject.gameObject);
-            //TEMPHIDE// Debug.Log($"Player {playerRef.PlayerId} added to the list.");
+             Debug.Log($"Player {playerRef.PlayerId} added to the list.");
         }
     }
     protected virtual void Awake()
@@ -116,18 +116,18 @@ public class Entity : NetworkBehaviour
         playerSpawner = FindObjectOfType<PlayerSpawner>();
         if (playerSpawner != null)
         {
-            //TEMPHIDE// Debug.Log("PlayerSpawner found");
+             Debug.Log("PlayerSpawner found");
 
             // 이벤트 등록 시 디버그 로그 출력
             playerSpawner.OnPlayerJoined += AddPlayerToList;
-            //TEMPHIDE// Debug.Log("OnPlayerJoined event registered");
+             Debug.Log("OnPlayerJoined event registered");
 
             playerSpawner.OnPlayerLeft += RemovePlayerFromList;
-            //TEMPHIDE// Debug.Log("OnPlayerLeft event registered");
+             Debug.Log("OnPlayerLeft event registered");
         }
         else
         {
-            //TEMPHIDE// Debug.LogWarning("PlayerSpawner not found");
+             Debug.LogWarning("PlayerSpawner not found");
         }
 
     }
@@ -147,7 +147,7 @@ public class Entity : NetworkBehaviour
     {
         if (this == null || gameObject == null)
         {
-            //TEMPHIDE// Debug.LogWarning("Entity has been destroyed. Cannot add player.");
+             Debug.LogWarning("Entity has been destroyed. Cannot add player.");
             return;
         }
 
@@ -182,7 +182,7 @@ public class Entity : NetworkBehaviour
         if (Object.IsValid && Object.HasStateAuthority && !nearbyPlayers.Contains(player))
         {
             nearbyPlayers.Add(player); // Add the player to the networked list
-            //TEMPHIDE// Debug.Log($"Player {player.PlayerId} added to nearbyPlayers.");
+             //TEMPHIDE// Debug.Log($"Player {player.PlayerId} added to nearbyPlayers.");
         }
     }
 
@@ -215,7 +215,7 @@ public class Entity : NetworkBehaviour
         // Wait until this client has state authority
         while (!Object.HasStateAuthority || !Object.IsValid)
         {
-            //TEMPHIDE// Debug.LogWarning("Waiting for state authority before modifying networked variables...");
+            //TEMPHIDE//  Debug.LogWarning("Waiting for state authority before modifying networked variables...");
             yield return null; // Wait for the next frame and try again
         }
 
@@ -271,7 +271,7 @@ public class Entity : NetworkBehaviour
             Character player = networkObject.GetComponent<Character>();
             if (player != null)
             {
-                //TEMPHIDE// Debug.Log("플레이어를 감지하였습니다.");
+                 Debug.Log("플레이어를 감지하였습니다.");
                 // 필요한 로직을 처리합니다.                
             }
         }
@@ -279,7 +279,7 @@ public class Entity : NetworkBehaviour
    
     public virtual void Die()
     {
-        //TEMPHIDE// Debug.Log("Monster died.");
+         Debug.Log("Monster died.");
         // 사망 처리 로직 (예: 몬스터 제거)
         if (_monsterManager == null) _monsterManager = FindObjectOfType<MonsterManager>();
         _monsterManager.DespawnMonster(gameObject.GetComponent<NetworkObject>());

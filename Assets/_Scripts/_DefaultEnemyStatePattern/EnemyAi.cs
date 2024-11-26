@@ -35,7 +35,7 @@ public class EnemyAi : Enemy
 
     protected override void Update()
     {
-        //TEMPHIDE// Debug.Log($"[몬스터 현재 상태 : {stateMachine.currentState.ToString()}]");
+         //TEMPHIDE// Debug.Log($"[몬스터 현재 상태 : {stateMachine.currentState.ToString()}]");
 
         if (Object.HasStateAuthority)
         {

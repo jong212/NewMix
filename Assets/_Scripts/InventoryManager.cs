@@ -8,24 +8,31 @@ using System.Linq;
 public class InventoryManager : MonoBehaviour   
 {
      
-     // 테스트 ㅁㅁㅁㅁㅁ 
-    // 탭 부모 리스트 (Inspector에서 할당)
-    [SerializeField]    private List<Transform> tabParents; // 예: Tab1, Tab2, Tab3
-    [SerializeField]    private List<DroppableUI> subInventory; // 예: 장비 착용 창
+    [SerializeField] private List<Transform> tabParents; // 예: Tab1, Tab2, Tab3
+    [SerializeField] private List<DroppableUI> subInventory; // 예: 장비 착용 창
+    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private float doubleClickThreshold = 0.3f; // 더블 클릭 인식 시간 간격 (초)
 
-    // 아이템 프리팹 (Inspector에서 할당)
-    [SerializeField]
-    private GameObject itemPrefab;
+    [SerializeField] private Text _power;
+    [SerializeField] private Text _def;
+    [SerializeField] private Text _hp;
+    [SerializeField] private Text _LastPower;
+    [SerializeField] private Text _LastHP;
+    [SerializeField] private Text _LastAtkSpeed;
+    [SerializeField] private Text _LastMoveSpeed;
 
-    // 모든 슬롯을 저장할 리스트
-    private List<Transform> allSlots = new List<Transform>();
+    public Text Power { get => _power; set => _power = value; }
+    public Text Def { get => _def; set => _def = value; }
+    public Text Hp { get => _hp; set => _hp = value; }
+    public Text LastPower { get => _LastPower; set => _LastPower = value; }
+    public Text LastHp { get => _LastHP; set => _LastHP = value; }
+    public Text LastAtkSpeed { get => _LastAtkSpeed; set => _LastAtkSpeed = value; }
+    public Text LastMoveSpeed { get => _LastMoveSpeed; set => _LastMoveSpeed = value; }
 
-    // 클릭 카운트 및 코루틴 관리를 위한 딕셔너리
-    private Dictionary<int, int> slotClickCounts = new Dictionary<int, int>();
+    private List<Transform> allSlots = new List<Transform>(); // 모든 슬롯을 저장할 리스트
+    private Dictionary<int, int> slotClickCounts = new Dictionary<int, int>(); // 클릭 카운트 및 코루틴 관리를 위한 딕셔너리
     private Dictionary<int, Coroutine> slotCoroutines = new Dictionary<int, Coroutine>();
 
-    [SerializeField]
-    private float doubleClickThreshold = 0.3f; // 더블 클릭 인식 시간 간격 (초)
 
     void Start()
     {

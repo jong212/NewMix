@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,8 +24,8 @@ public class AddressableManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // ³ÖÀº ¶óº§°ª¿¡ ÇØ´çÇÏ´Â ¾îµå·¹¼­ºí¿¡¼ÂµéÀ» "·Îµå" ¹× "Ä³½Ì"
-    // µñ¼Å³Ê¸®¿¡ Å° = ¶óº§ÀÌ¸§ , °ª = ÇÁ¸®ÆÕ ÀÌ¸§ À¸·Î ¸ÊÇÎ ÇØ¼­ ¿ÀºêÁ§Æ® Ãß°¡ÇÔ
+    // ë„£ì€ ë¼ë²¨ê°’ì— í•´ë‹¹í•˜ëŠ” ì–´ë“œë ˆì„œë¸”ì—ì…‹ë“¤ì„ "ë¡œë“œ" ë° "ìºì‹±"
+    // ë”•ì…”ë„ˆë¦¬ì— í‚¤ = ë¼ë²¨ì´ë¦„ , ê°’ = í”„ë¦¬íŒ¹ ì´ë¦„ ìœ¼ë¡œ ë§µí•‘ í•´ì„œ ì˜¤ë¸Œì íŠ¸ ì¶”ê°€í•¨
     public void LoadPrefabsWithLabel(string label, System.Action onLoaded)
     {
         Addressables.LoadAssetsAsync<GameObject>(label, null).Completed += handle =>
@@ -37,26 +37,26 @@ public class AddressableManager : MonoBehaviour
                     prefabCache[label] = new List<GameObject>();
                 }
 
-                foreach (var prefab in handle.Result) // ÀÌ handle »ç¿ë¹ıÀ» Àß ÀÍÇã¾ß ÇÒµí µğ¹ö±× ÇØº¸´Ï ³»°¡ ¸Ş¸ğ¸® ·Îµå ¹× ÀÎ½ºÅÏ½º ÇÑ ¿ÀºêÁ§Æ®¸¦ ¹è¿­·Îµµ °¡Á®¿Â °ÍÀ» È®ÀÎÇÔ swoard1...2...3 ±×·¡¼­ ±× ÀÌÈÄ ¾Æ·¡¿¡¼­ Ä³½Ì ÇÏ´Âµí
+                foreach (var prefab in handle.Result) // ì´ handle ì‚¬ìš©ë²•ì„ ì˜ ìµí—ˆì•¼ í• ë“¯ ë””ë²„ê·¸ í•´ë³´ë‹ˆ ë‚´ê°€ ë©”ëª¨ë¦¬ ë¡œë“œ ë° ì¸ìŠ¤í„´ìŠ¤ í•œ ì˜¤ë¸Œì íŠ¸ë¥¼ ë°°ì—´ë¡œë„ ê°€ì ¸ì˜¨ ê²ƒì„ í™•ì¸í•¨ swoard1...2...3 ê·¸ë˜ì„œ ê·¸ ì´í›„ ì•„ë˜ì—ì„œ ìºì‹± í•˜ëŠ”ë“¯
                 {
                     prefabCache[label].Add(prefab);
-                    //TEMPHIDE// Debug.Log(" [¾îµå·¹¼­ºí ·Îµå ÈÄ Ä³½Ì ¿Ï·á] :" + prefab.name);
+                    Debug.Log(" [ì–´ë“œë ˆì„œë¸” ë¡œë“œ í›„ ìºì‹± ì™„ë£Œ] :" + prefab.name);
                 }
                 onLoaded?.Invoke();
             }
             else
             {
-                //TEMPHIDE// Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
+                 Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
             }
         };
     }
     public IEnumerator LoadPrefabsWithLabels(string label)
     {
-        //TEMPHIDE// Debug.Log("AddressableManager => ÄÚ·çÆ¾ => [¸ó½ºÅÍ ½ºÆù °úÁ¤ ¼ø¼­ 3]");
+         Debug.Log("AddressableManager => ì½”ë£¨í‹´ => [ëª¬ìŠ¤í„° ìŠ¤í° ê³¼ì • ìˆœì„œ 3]");
 
         var handle = Addressables.LoadAssetsAsync<GameObject>(label, null);
         yield return handle;
-        //TEMPHIDE// Debug.Log("AddressableManager => ÄÚ·çÆ¾ => [¸ó½ºÅÍ ½ºÆù °úÁ¤ ¼ø¼­ 5]");
+         Debug.Log("AddressableManager => ì½”ë£¨í‹´ => [ëª¬ìŠ¤í„° ìŠ¤í° ê³¼ì • ìˆœì„œ 5]");
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
@@ -68,27 +68,27 @@ public class AddressableManager : MonoBehaviour
             foreach (var prefab in handle.Result)
             {
                 prefabCache[label].Add(prefab);
-                //TEMPHIDE// Debug.Log(" AddressableManager => ÄÚ·çÆ¾ => [¾îµå·¹¼­ºí ·Îµå ÈÄ Ä³½Ì ¿Ï·á] :" + prefab.name);
+                 Debug.Log(" AddressableManager => ì½”ë£¨í‹´ => [ì–´ë“œë ˆì„œë¸” ë¡œë“œ í›„ ìºì‹± ì™„ë£Œ] :" + prefab.name);
             }
         }
         else
         {
-            //TEMPHIDE// Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
+             Debug.LogError($"Failed to load prefabs with label '{label}' from Addressables: {handle.OperationException}");
         }
     }
      
-    // (¶óº§ °ª ¸Å°Ô º¯¼ö·Î ¹Ş°í) ¿ÀºêÁ§Æ®µé ¸®½ºÆ® ÇüÅÂ·Î ¹İÈ¯ ÇÔ
+    // (ë¼ë²¨ ê°’ ë§¤ê²Œ ë³€ìˆ˜ë¡œ ë°›ê³ ) ì˜¤ë¸Œì íŠ¸ë“¤ ë¦¬ìŠ¤íŠ¸ í˜•íƒœë¡œ ë°˜í™˜ í•¨
     public List<GameObject> GetPrefabsByLabel(string label)
     {
         if (prefabCache.TryGetValue(label, out List<GameObject> prefabs))
         {
             return prefabs;
         }
-        //TEMPHIDE// Debug.LogError($"No prefabs found with label: {label}");
+         Debug.LogError($"No prefabs found with label: {label}");
         return new List<GameObject>();
     }
 
-    //(¶óº§°ª,ÇÁ¸®ÆéÀÌ¸§ ¸Å°Ô º¯¼ö·Î ¹Ş°í) Ä³½Ì µÈ ´ÜÀÏ ¿ÀºêÁ§Æ®¸¦ ÇÁ¸®ÆÕ ÀÌ¸§À¸·Î Ã£¾Æ¼­ ¹İÈ¯ 
+    //(ë¼ë²¨ê°’,í”„ë¦¬í©ì´ë¦„ ë§¤ê²Œ ë³€ìˆ˜ë¡œ ë°›ê³ ) ìºì‹± ëœ ë‹¨ì¼ ì˜¤ë¸Œì íŠ¸ë¥¼ í”„ë¦¬íŒ¹ ì´ë¦„ìœ¼ë¡œ ì°¾ì•„ì„œ ë°˜í™˜ 
 
     public GameObject GetPrefab(string label, string prefabName)
     {
@@ -101,10 +101,10 @@ public class AddressableManager : MonoBehaviour
                     return prefab;
                 }
             }
-            //TEMPHIDE// Debug.LogError($"Prefab '{prefabName}' not found under label '{label}'.");
+             Debug.LogError($"Prefab '{prefabName}' not found under label '{label}'.");
             return null;
         }
-        //TEMPHIDE// Debug.LogError($"No prefabs found with label: {label}");
+         Debug.LogError($"No prefabs found with label: {label}");
         return null;
     }
     // Release a Prefab (optional for memory management)
@@ -117,11 +117,11 @@ public class AddressableManager : MonoBehaviour
                 Addressables.Release(prefab);
             }
             prefabCache.Remove(label);
-            //TEMPHIDE// Debug.Log($"All prefabs with label '{label}' released.");
+             Debug.Log($"All prefabs with label '{label}' released.");
         }
         else
         {
-            //TEMPHIDE// Debug.LogWarning($"No prefabs found with label: {label} to release.");
+             Debug.LogWarning($"No prefabs found with label: {label} to release.");
         }
     }
     public void LoadSpritesWithLabel(string label, Action onLoaded)
@@ -135,14 +135,14 @@ public class AddressableManager : MonoBehaviour
                     if (!spriteCache.ContainsKey(sprite.name))
                     {
                         spriteCache[sprite.name] = sprite;
-                        //TEMPHIDE// Debug.Log($"[½ºÇÁ¶óÀÌÆ® ·Îµå ¹× Ä³½Ì ¿Ï·á] : {sprite.name}");
+                         Debug.Log($"[ìŠ¤í”„ë¼ì´íŠ¸ ë¡œë“œ ë° ìºì‹± ì™„ë£Œ] : {sprite.name}");
                     }
                 }
                 onLoaded?.Invoke();
             }
             else
             {
-                //TEMPHIDE// Debug.LogError($"Failed to load sprites with label '{label}': {handle.OperationException}");
+                 Debug.LogError($"Failed to load sprites with label '{label}': {handle.OperationException}");
             }
         };
     }
@@ -152,7 +152,7 @@ public class AddressableManager : MonoBehaviour
         {
             return sprite;
         }
-        //TEMPHIDE// Debug.LogError($"Sprite '{spriteName}' not found in cache.");
+         Debug.LogError($"Sprite '{spriteName}' not found in cache.");
         return null;
     }
     public void ReleaseSprites()
@@ -162,17 +162,17 @@ public class AddressableManager : MonoBehaviour
             Addressables.Release(sprite);
         }
         spriteCache.Clear();
-        //TEMPHIDE// Debug.Log("All cached sprites released.");
+         Debug.Log("All cached sprites released.");
     }
     /*
         SpriteManager.instance.LoadSpritesWithLabel("MyLabel", () =>
     {
-        Debug.Log("¸ğµç ½ºÇÁ¶óÀÌÆ® ·Îµå ¹× Ä³½Ì ¿Ï·á");
+        Debug.Log("ëª¨ë“  ìŠ¤í”„ë¼ì´íŠ¸ ë¡œë“œ ë° ìºì‹± ì™„ë£Œ");
     });
     Sprite mySprite = SpriteManager.instance.GetSprite("SpriteName");
     if (mySprite != null)
     {
-        // ½ºÇÁ¶óÀÌÆ®¸¦ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
+        // ìŠ¤í”„ë¼ì´íŠ¸ë¥¼ ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
     }
     */
 }

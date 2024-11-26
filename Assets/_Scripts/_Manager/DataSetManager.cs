@@ -26,7 +26,7 @@ public class DataSetManager : MonoBehaviour
 
     public void SetCharacterItem(NetworkArray<int> playerItemInfo, List<Transform> objPartsList, List<Transform> objPartsPair)
     {
-
+        Debug.Log(playerItemInfo);
         var chartItemInfo = BackendGameData.Instance.ItemChartList;
         int idx = 0;
 
@@ -34,7 +34,7 @@ public class DataSetManager : MonoBehaviour
         {
             if (idx >= objPartsList.Count)
             {
-                //TEMPHIDE// Debug.LogWarning($"Index out of bounds: idx ({idx}) is greater than objPartsList.Count ({objPartsList.Count})");
+                 Debug.LogWarning($"Index out of bounds: idx ({idx}) is greater than objPartsList.Count ({objPartsList.Count})");
                 break; // 또는 continue; 를 사용하여 다음 루프로 이동
             }
 

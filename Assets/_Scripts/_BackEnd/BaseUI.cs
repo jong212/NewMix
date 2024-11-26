@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ConfirmUI;
@@ -6,11 +6,11 @@ using static ConfirmUI;
 public class BaseUI : MonoBehaviour
 {
     // ======================================================
-    // ∞¯≈Î ø°∑Ø√≥∏Æ & ø°∑Ø√≥∏ÆøÎ UI 
+    // Í≥µÌÜµ ÏóêÎü¨Ï≤òÎ¶¨ & ÏóêÎü¨Ï≤òÎ¶¨Ïö© UI 
     // ======================================================
     protected void ShowAlertUI(string titleText, string callback)
     {
-        //TEMPHIDE// Debug.LogWarning(callback);
+         Debug.LogWarning(callback);
         StaticManager.UI.AlertUI.OpenWarningUI(titleText, callback);
     }
     protected void ShowConfirmUI(string titleText = null, string infoText = null, string okBtnText = null, string cancelBtnText = null, ClickConfirmOkButton okCallback = null)

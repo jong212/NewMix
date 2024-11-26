@@ -62,17 +62,17 @@ public class MonsterManager : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            //TEMPHIDE// Debug.Log("[Monstermanager => Spawned => 몬스터 스폰 과정 순서 1]");
+             Debug.Log("[Monstermanager => Spawned => 몬스터 스폰 과정 순서 1]");
             StartCoroutine(LoadAndSpawnMonsters());
-            //TEMPHIDE// Debug.Log("[Monstermanager => Spawned => 몬스터 스폰 과정 순서 4]");
+             Debug.Log("[Monstermanager => Spawned => 몬스터 스폰 과정 순서 4]");
         }
     }
     private IEnumerator LoadAndSpawnMonsters()
     {
-        //TEMPHIDE// Debug.Log("[Monstermanager => 코루틴 => 몬스터 스폰 과정 순서 2]");
+         Debug.Log("[Monstermanager => 코루틴 => 몬스터 스폰 과정 순서 2]");
 
         yield return StartCoroutine(AddressableManager.instance.LoadPrefabsWithLabels("Enemy"));
-        //TEMPHIDE// Debug.Log("[Monstermanager => 코루틴 => 몬스터 스폰 과정 순서 6]");
+         Debug.Log("[Monstermanager => 코루틴 => 몬스터 스폰 과정 순서 6]");
 
         // 캐싱된 프리팹을 가져와서 몬스터 리스트에 추가
         foreach (MonsterInfoChart row in BackendGameData.Instance.MonsterInfoList) // 몬스터 캐싱 차트 row 
@@ -89,22 +89,22 @@ public class MonsterManager : NetworkBehaviour
                         monsterDataList.Add(new MonsterData(prefab,row.MonsterName,row.Lv,row.Exp,row.Money,row.MonsterDropPercent,row.Dropitem, row.Atk, row.Def, row.Hp, row.AgroDistance, row.AtkDistance, row.AtkCooldown, row.MoveSpeed, row.IdleTime, row.MoveTime, row.BattleTime));
                     }
                     monsterPrefab.Add(prefab);
-                    //TEMPHIDE// Debug.Log($"[Monstermanager => 코루틴 => 로드 후 캐싱 완료]: {row.PrafabName}");
+                     Debug.Log($"[Monstermanager => 코루틴 => 로드 후 캐싱 완료]: {row.PrafabName}");
                 }
                 else
                 {
-                    //TEMPHIDE// Debug.LogError($"Monstermanager => 코루틴 => Failed to load prefab: {row.PrafabName}");
+                     Debug.LogError($"Monstermanager => 코루틴 => Failed to load prefab: {row.PrafabName}");
                 }
             }
         }
 
         if (monsterPrefab.Count == 0)
         {
-            //TEMPHIDE// Debug.LogError("Monstermanager => 코루틴 => 씬에 스폰 될 몬스터의 프리팹이 없는 오류");
+             Debug.LogError("Monstermanager => 코루틴 => 씬에 스폰 될 몬스터의 프리팹이 없는 오류");
             yield break;
         }
 
-        //TEMPHIDE// Debug.Log("Monstermanager => 코루틴 => [4-3] 적 모델 로드 완료");
+         Debug.Log("Monstermanager => 코루틴 => [4-3] 적 모델 로드 완료");
         SpawnMonsters();
     }
     private void SpawnMonsters()

@@ -15,6 +15,7 @@ public class StaticManager : MonoBehaviour
     private bool isProcessing = false;  
     public bool AllLoad { get; set; }
     public UserData CashUdata { get;  set; }
+    public event Action Stat;
     [SerializeField] private Character _uniquePlayer;
     public Character UniquePlayer {
         get => _uniquePlayer;
@@ -56,6 +57,7 @@ public class StaticManager : MonoBehaviour
         {
             Action currentAction = InventoryQueue.Dequeue();
             currentAction.Invoke(); // 작업 실행
+            Stat?.Invoke(); 
             yield return null; // 다음 프레임까지 대기
         }
         isProcessing = false;

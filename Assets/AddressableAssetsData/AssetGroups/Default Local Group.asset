@@ -113,6 +113,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0c90730efcdb4341abb2d8edd21f3f5
+    m_Address: Assets/_Prefabs/monster/mon3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b78805f2f706b9847b1eeb6e238fb090
+    m_Address: Assets/_Prefabs/monster/mon4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
   m_SchemaSet:

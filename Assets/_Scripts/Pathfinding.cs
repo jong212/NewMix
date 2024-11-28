@@ -76,7 +76,7 @@ public class Pathfinding : MonoBehaviour
         timer += Time.deltaTime;
         if(findEvenCallTime < timer)
         {
-            Debug.Log(timer);
+            //Debug.Log(timer);
             FindPath(transform.position, target.position);
             timer = 0f;
         }

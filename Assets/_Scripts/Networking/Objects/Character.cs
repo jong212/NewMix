@@ -284,27 +284,29 @@ public class Character : NetworkBehaviour
         }
     }
     // Attack Mechanism
- 
+    // 죽이면 타겟 해제한느거랑 ㅔ쳑 100 하는거 해야함
     public void AttackRpc(Enemy targetMonster)
     {
-        
-        if(targetMonster.NetworkedHealth <= 0)
+        if (targetMonster.NetworkedHealth <= 0)
         {
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;
-        } else if(targetMonster.NetworkedHealth - 10 <= 0)
+            return;
+        }
+        else if (targetMonster.NetworkedHealth - 10 <= 0)
         {
             targetMonster.DealDamageRpc(10);
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;
-            PlayAttackAnimationRpc();
-        } else
-        {
-            targetMonster.DealDamageRpc(10);
             PlayAttackAnimationRpc();
         }
-        //PushMonster(targetMonster);
-        
+        else
+        {
+            targetMonster.DealDamageRpc(10);
+            PlayAttackAnimationRpc();
+
+            //PushMonster(targetMonster);
+        }
     }
     private void PushMonster(Entity monster)
     {

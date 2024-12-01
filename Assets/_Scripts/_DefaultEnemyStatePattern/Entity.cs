@@ -18,6 +18,8 @@ public class Entity : NetworkBehaviour
     /*[SerializeField] private ParticleManager _particleManager;
     public ParticleManager ParticleManager { get => _particleManager; }
 */
+    public SkinnedMeshRenderer skinnedMeshRenderer;
+
     private MonsterManager _monsterManager;
     public void InitMonsterManager(MonsterManager refV)
     {
@@ -114,6 +116,14 @@ public class Entity : NetworkBehaviour
     protected virtual void Awake()
     {
         playerSpawner = FindObjectOfType<PlayerSpawner>();
+        if (skinnedMeshRenderer == null)
+        {
+            skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+            if (skinnedMeshRenderer == null)
+            {
+                Debug.LogWarning("SkinnedMeshRenderer가 설정되지 않았습니다.");
+            }
+        }
         if (playerSpawner != null)
         {
              Debug.Log("PlayerSpawner found");
@@ -282,7 +292,7 @@ public class Entity : NetworkBehaviour
          Debug.Log("Monster died.");
         // 사망 처리 로직 (예: 몬스터 제거)
         if (_monsterManager == null) _monsterManager = FindObjectOfType<MonsterManager>();
-        _monsterManager.DespawnMonster(gameObject.GetComponent<NetworkObject>());
+        _monsterManager.DespawnMonster(this);
     }
     #endregion
 

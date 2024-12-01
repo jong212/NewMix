@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 // MonsterManager에서 SpawnMonsterFromPool 를 통해 몬스터를 꺼내 Active true 하면 현재 스크립트의 Onenable이 실행 된다. 
 
@@ -74,11 +72,15 @@ public class EnemyAi : Enemy
     public bool ischeck;
     public override void OnEnable()
     {
+     
         if (ischeck)                                // 두 번째 호출부터 실행
         {
             stateMachine.Initialize(idleState);
         }
         ischeck = true;                             // 처음 호출 후 ischeck를 true로 설정
     }
-
+    public override void OnDisable()
+    {
+        base.OnDisable();
+    }
 }

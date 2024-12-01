@@ -149,28 +149,47 @@ public class MonsterManager : NetworkBehaviour
         }
     }
 
-    public void DespawnMonster(NetworkObject monster)
+    public void DespawnMonster(Entity monster)
     {
-      
-            monster.gameObject.SetActive(false);
+        // SkinnedMeshRenderer를 비활성화
+        if (monster.skinnedMeshRenderer != null)
+        {
+            monster.skinnedMeshRenderer.enabled = false;
+        }
+        else
+        {
+            Debug.LogWarning("SkinnedMeshRenderer가 null입니다.");
+        }            
+        monster.gameObject.SetActive(false);
 
-            // 5초 후에 몬스터 재스폰 코루틴 실행
-            StartCoroutine(RespawnMonsterAfterDelay(monster, 5f));
-      
+        if (StaticManager.UI.EnemyInfoUI.ObjRef == monster.transform)
+        {
+            Debug.Log("??dd??");
+            StaticManager.Instance.UniquePlayer.PlayerMovement.Pathfinding.target = null;
+        }
+
+
+        if (Object.HasStateAuthority)
+        {
+            monster.transform.position = GetRandomSpawnPosition();
+        }
+        // 5초 후에 몬스터 재스폰 코루틴 실행
+        StartCoroutine(RespawnMonsterAfterDelay(monster, 5f));
+
     }
 
-    private IEnumerator RespawnMonsterAfterDelay(NetworkObject monster, float delay)
+    private IEnumerator RespawnMonsterAfterDelay(Entity monster, float delay)
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(delay);  
+     
+        monster.gameObject.SetActive(true);
+        monster.skinnedMeshRenderer.enabled = true;
 
-       
-            monster.transform.position = GetRandomSpawnPosition();
-            monster.gameObject.SetActive(true);
-       
     }
 
     private Vector3 GetRandomSpawnPosition()
     {
+        Random.InitState((int)(Time.time * 1000));  // 밀리초 단위로 시드값 생성
         return new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
     }
 

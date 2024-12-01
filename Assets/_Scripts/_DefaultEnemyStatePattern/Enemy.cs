@@ -1,6 +1,7 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 // 여기서부터 업데이트가 시작 됨 > 여기 업데이트 치고 > 현재 상태 업데이트 같이 치고 > 그래서 update, fixedupdae 추가했음 
@@ -41,11 +42,9 @@ public class Enemy : Entity
         UpdateHealthBar();
         if(NetworkedHealth <= 0)
         {
+            Debug.Log("test2");
             Die();
-            if (Object.HasStateAuthority)
-            {
-                NetworkedHealth = MaxHealth;
-            }
+            
         }
     }
 
@@ -71,15 +70,17 @@ public class Enemy : Entity
         // 이 코드는 State Authority 클라이언트에서만 실행됨
         if (Object.HasStateAuthority)
         {
-            if (NetworkedHealth - damage <= 0)
+            if (NetworkedHealth <= 0)
             {
-                NetworkedHealth = 0;
-            }
+                return;
+            } else if(NetworkedHealth - damage <= 0)
+            {
+                NetworkedHealth = 0;                
+            } 
             else
             {
                 NetworkedHealth -= damage;
             }
-             Debug.Log($"Monster damaged! Remaining Health: {NetworkedHealth}");
         }
     }
     public string lastAnimBoolName { get; private set; }
@@ -227,6 +228,12 @@ public class Enemy : Entity
     }
     public virtual void OnEnable()
     {
-        
+      
+    }
+    public virtual void OnDisable()
+    {
+        if(StaticManager.UI.EnemyInfoUI.ObjRef == gameObject.transform)
+        {
+        }
     }
 }

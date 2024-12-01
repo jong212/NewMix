@@ -1586,6 +1586,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   target: {fileID: 0}
+  skinnedMeshRenderer: {fileID: 933343363628531627}
   _particleManager: {fileID: 1847336751992278432}
   ObstacleLayer:
     serializedVersion: 2

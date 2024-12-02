@@ -180,9 +180,21 @@ public class MonsterManager : NetworkBehaviour
 
     private IEnumerator RespawnMonsterAfterDelay(Entity monster, float delay)
     {
-        yield return new WaitForSeconds(delay);  
-     
-        monster.gameObject.SetActive(true);
+        yield return new WaitForSeconds(delay);
+        if (Object.HasStateAuthority)
+        {
+            monster.gameObject.SetActive(true);
+            monster.GetComponent<Enemy>().NetworkedHealth = monster.GetComponent<Enemy>().MaxHealth;
+        }
+        else
+        {
+            if(monster.TryGetComponent(out Enemy hp))
+            {
+                yield return new WaitUntil(() => hp.NetworkedHealth > 0);
+                monster.gameObject.SetActive(true);
+
+            }
+        }
         monster.skinnedMeshRenderer.enabled = true;
 
     }

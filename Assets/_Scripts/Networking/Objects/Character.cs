@@ -68,11 +68,14 @@ public class Character : NetworkBehaviour
             ModifyKCCCollider();    // 플레이어 물리 관련 초기화
             InitItem();             // 플레이어 장비 장착 정보 네트워크 변수에 초기화 (다른 클라 동기화)
             StaticManager.UI.ContentsInventoryUI.gameObject.SetActive(true);
+            StaticManager.UI.ContentsInventoryUI.FirstInit();
             StaticManager.Instance.CashUdata = BackendGameData.Instance.userData;
             StaticManager.Instance.UniquePlayer = this;
             CalculateStatUI();
             StaticManager.Instance.Stat += CalculateStatUI;
-        } 
+        }
+        InitializeNicknameUI();
+
     }
     private void OnDisable()
     {
@@ -99,7 +102,6 @@ public class Character : NetworkBehaviour
     {
         InitPlayerName();
         InitStat();
-        InitializeNicknameUI();
     }
     private void InitPlayerName()
     {

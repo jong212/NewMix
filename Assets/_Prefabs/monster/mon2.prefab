@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b80282a46e7404d94f99fd374b2409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skinnedMeshRenderer: {fileID: 0}
   nearbyPlayerObjects: []
   _NetworkedStateId: 0
   _nearbyPlayers: []
@@ -63,12 +64,19 @@ MonoBehaviour:
   whatIsWall:
     serializedVersion: 2
     m_Bits: 0
-  _NetworkedHealth: 100
   target: {fileID: 0}
   _particleManager: {fileID: 1847336751992278432}
   ObstacleLayer:
     serializedVersion: 2
     m_Bits: 256
+  _MonsterName: 0
+  _Lv: 0
+  _Exp: 0
+  _Money: 0
+  _MonsterDropPercent: 0
+  _Atk: 0
+  _Def: 0
+  _DropItem: 0
   _agroDistance: 0
   _atkDistance: 0
   _atkCooldown: 0
@@ -77,6 +85,8 @@ MonoBehaviour:
   _moveTime: 0
   _battleTime: 0
   lastTimeAttacked: 0
+  _NetworkedHealth: 0
+  _MaxHealth: 0
   closestPlayerTransform: {fileID: 0}
   ischeck: 0
 --- !u!65 &3901600442813068076

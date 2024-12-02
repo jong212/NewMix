@@ -34,13 +34,12 @@ public class InventoryManager : MonoBehaviour
     private Dictionary<int, Coroutine> slotCoroutines = new Dictionary<int, Coroutine>();
 
 
-    void Start()
+    public void FirstInit()
     {
         InitMergeSloat();
         InitializeSlots();
         gameObject.SetActive(false);
     }
-    
     private void InitMergeSloat()
     {
        allSlots = tabParents.SelectMany(tab => tab.Cast<Transform>()).ToList();

@@ -32,7 +32,7 @@ public class Enemy : Entity
     [Networked] public float moveTime    { get; set; }       // 상태 지속 시간 3
     [Networked] public float battleTime  { get; set; }       // 상태 지속 시간 7
     [HideInInspector] public float lastTimeAttacked;
-    [Networked, OnChangedRender(nameof(HealthChanged))] public float NetworkedHealth { get; set; } = 100;// 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
+    [Networked, OnChangedRender(nameof(HealthChanged))] public float NetworkedHealth { get; set; }// 체력 값이 네트워크 상에서 동기화되며 변경이 감지되면 HealthChanged 호출
     [Networked] public float MaxHealth { get; set; }
     public virtual void HealthChanged()
     {

@@ -3080,6 +3080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b80282a46e7404d94f99fd374b2409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skinnedMeshRenderer: {fileID: 0}
   nearbyPlayerObjects: []
   _NetworkedStateId: 0
   _nearbyPlayers: []
@@ -3111,7 +3112,7 @@ MonoBehaviour:
   _moveTime: 0
   _battleTime: 0
   lastTimeAttacked: 0
-  _NetworkedHealth: 100
+  _NetworkedHealth: 0
   _MaxHealth: 0
   closestPlayerTransform: {fileID: 0}
   ischeck: 0

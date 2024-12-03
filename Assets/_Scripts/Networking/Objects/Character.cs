@@ -73,6 +73,8 @@ public class Character : NetworkBehaviour
             StaticManager.Instance.UniquePlayer = this;
             CalculateStatUI();
             StaticManager.Instance.Stat += CalculateStatUI;
+            StaticManager.UI.Loading.gameObject.SetActive(false);
+
         }
         InitializeNicknameUI();
 
@@ -83,7 +85,10 @@ public class Character : NetworkBehaviour
     }
     private void InitializeJoystick()
     {
-        _joystick = FindObjectOfType<VariableJoystick>();
+        //_joystick = FindObjectOfType<VariableJoystick>();
+        _joystick = StaticManager.UI.VariableJoystick;
+        _joystick.gameObject.SetActive(true);
+
     }
     private void InitUI() {
         StaticManager.UI.CommonOpen(UIType.BtnAttack, StaticManager.UI.MainUI.Layout_BottomRight, true, ChangeMoveProperty);

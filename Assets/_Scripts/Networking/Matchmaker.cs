@@ -50,7 +50,6 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (Runner) Runner.Shutdown();
         Runner = Instantiate(runnerPrefab);
-
         NetworkEvents networkEvents = Runner.GetComponent<NetworkEvents>();
 
         void SpawnManager(NetworkRunner runner)

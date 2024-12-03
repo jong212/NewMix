@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class LoadingManager : MonoBehaviour
 {
     public static string nextScene;
-    public Slider loadingBar;
+    public Scrollbar loadingBar;
+    public Text per;
 
     private void Start()
     {
@@ -26,20 +27,23 @@ public class LoadingManager : MonoBehaviour
         {
             yield return null;
             timer += Time.deltaTime;
-
+            
             if(op.progress < .9f)
             {
-                loadingBar.value = Mathf.Lerp(loadingBar.value, op.progress, timer);
-                if(loadingBar.value >= op.progress)
+                per.text = op.progress.ToString() + " %";
+                loadingBar.size = Mathf.Lerp(loadingBar.size, op.progress, timer);
+                if(loadingBar.size >= op.progress)
                 {
                     timer = 0f;
                 }
             } else
             {
-                loadingBar.value = Mathf.Lerp(loadingBar.value,1f, timer);
-                if(loadingBar.value == 1f)
+                
+                loadingBar.size = Mathf.Lerp(loadingBar.size,1f, timer);
+                per.text = Mathf.RoundToInt(loadingBar.size * 100) + " %";
+                if (loadingBar.size == 1f)
                 {
-                    yield return new WaitForSeconds(2f);
+                    yield return new WaitForSeconds(1);//Fake Loading
                     op.allowSceneActivation = true;
                     yield break;
                 }

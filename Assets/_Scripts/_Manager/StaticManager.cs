@@ -93,6 +93,8 @@ public class StaticManager : MonoBehaviour
     }
     private IEnumerator LeaveAndJoinNewSession()
     {
+        UI.Loading.gameObject.SetActive(true);
+
         Matchmaker.Instance.Runner.Shutdown();
 
         // 잠시 대기하여 Runner가 완전히 정리될 시간을 준다

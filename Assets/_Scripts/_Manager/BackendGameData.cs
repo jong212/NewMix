@@ -430,6 +430,8 @@ public class BackendGameData
         {
             LoadChart(chartName);
         }
+        StaticManager.UI.Loading.gameObject.SetActive(true);
+
         Matchmaker.Instance.TryConnectShared();
 
     }

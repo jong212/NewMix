@@ -12,7 +12,7 @@ public class DownManager : MonoBehaviour
     public GameObject waitMessage;
     public GameObject downMessage;
 
-    public Slider downSlider;
+    public Scrollbar downSlider;
     public Text sizeInfoText;
     public Text downValText;
 
@@ -71,7 +71,7 @@ public class DownManager : MonoBehaviour
         else // 다운 받을 게 없으면 씬 변경
         {
             downValText.text = "100 %";
-            downSlider.value = 1f;
+            downSlider.size = 1f;
             yield return new WaitForSeconds(2f);
              Debug.Log("[2 LobbyManager : 다운로드 할 리소스 파일 없음 ]");
             LoadingManager.LoadScene("4Login");
@@ -153,8 +153,8 @@ public class DownManager : MonoBehaviour
         {
             total = patchMap.Sum(tmp => tmp.Value);
 
-            downSlider.value = total / patchSize;
-            downValText.text = (int)(downSlider.value * 100) + " %";
+            downSlider.size = total / patchSize;
+            downValText.text = (int)(downSlider.size * 100) + " %";
 
             if (total >= patchSize)
             {

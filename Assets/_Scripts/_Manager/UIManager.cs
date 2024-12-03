@@ -20,7 +20,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
     [SerializeField] private InventoryManager _inventoryUI;
+    [SerializeField] private GameObject _loading;
     [SerializeField] private EnemyInfoUI _enemyInfoUI;
+    [SerializeField] private VariableJoystick _joystick;
     [SerializeField] private MainUI _mainUI;
 
 
@@ -57,6 +59,20 @@ public class UIManager : MonoBehaviour
         get
         {
             return _inventoryUI;
+        }
+    }
+    public VariableJoystick VariableJoystick
+    {
+        get
+        {
+            return _joystick;
+        }
+    }
+    public GameObject Loading
+    {
+        get
+        {
+            return _loading;
         }
     }
     public WorldNickname WorldNickNameUI

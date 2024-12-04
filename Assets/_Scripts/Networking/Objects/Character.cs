@@ -74,6 +74,7 @@ public class Character : NetworkBehaviour
             CalculateStatUI();
             StaticManager.Instance.Stat += CalculateStatUI;
             StaticManager.UI.Loading.gameObject.SetActive(false);
+            StaticManager.UI.MainUI.Layout_TopRight.gameObject.SetActive(true);
 
         }
         InitializeNicknameUI();

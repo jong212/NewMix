@@ -219,4 +219,21 @@ public class InventoryManager : MonoBehaviour
         tabParents[1].gameObject.SetActive(false);
         tabParents[2].gameObject.SetActive(false);
     }
+    public void OpenTab(int idx)
+    {
+        int tempIdx = 0;
+
+        foreach (var tab in tabParents)
+        {
+            if (idx == tempIdx)
+            {
+                tab.gameObject.SetActive(true);
+            }
+            else
+            {
+                tab.gameObject.SetActive(false);
+            }
+            tempIdx++;
+        }
+    }
 }

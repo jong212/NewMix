@@ -483,7 +483,7 @@ public class BackendGameData
 
         List<InventorySlot> inventorySlots = new List<InventorySlot>();
 
-        for (int i = 1; i <= 20; i++) // Assuming 30 slots
+        for (int i = 1; i <= 60; i++) // Assuming 30 slots
         {
             inventorySlots.Add(new InventorySlot(i, null, 0)); // Empty slot
         }

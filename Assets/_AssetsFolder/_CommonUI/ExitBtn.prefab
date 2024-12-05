@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 11462024}
   - component: {fileID: 11476052}
   m_Layer: 5
-  m_Name: Btn_Square_Red
+  m_Name: ExitBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

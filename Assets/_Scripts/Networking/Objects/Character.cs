@@ -195,7 +195,7 @@ public class Character : NetworkBehaviour
             _isInitialized = true;
             OnSetitemList();
         }
-
+        Debug.Log("RealSpeed" +_kcc.RealSpeed +",  SUMSpeed " + _kcc.RealSpeed / Specs.MovementSpeed);
         float movementSpeed = _kcc.RealSpeed > 0 ? _kcc.RealSpeed / Specs.MovementSpeed : 0;
         _anim.SetFloat("Movement", movementSpeed);
     }
@@ -457,12 +457,12 @@ public class Character : NetworkBehaviour
             InventoryUI.LastPower.text = Attack.ToString()+ " + " + _FinalAtk.ToString();
             InventoryUI.LastHp.text = Health.ToString() + " + " + _FinalHP.ToString();
             InventoryUI.LastAtkSpeed.text = "1 + " + _FinalAtkSpeed.ToString();
-            InventoryUI.LastMoveSpeed.text = "5 + " + _FinalMoveSpeed.ToString();
+            InventoryUI.LastMoveSpeed.text = "3 + " + _FinalMoveSpeed.ToString();
 
             FinalAtk = Attack + _FinalAtk;
             FinalHP = Health + _FinalHP;
             FinalAtkSpeed = 1 + _FinalAtkSpeed;
-            FinalMoveSpeed = 5 + _FinalMoveSpeed;
+            FinalMoveSpeed = 3 + _FinalMoveSpeed;
         }
     }
 }

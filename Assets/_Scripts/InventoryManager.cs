@@ -9,6 +9,8 @@ public class InventoryManager : MonoBehaviour
 {
      
     [SerializeField] private List<Transform> tabParents; // 예: Tab1, Tab2, Tab3
+    [SerializeField] private List<Image> _inventoryBtnImage; // 예: Tab1, Tab2, Tab3
+
     [SerializeField] private List<DroppableUI> subInventory; // 예: 장비 착용 창
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private float doubleClickThreshold = 0.3f; // 더블 클릭 인식 시간 간격 (초)
@@ -20,6 +22,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private Text _LastHP;
     [SerializeField] private Text _LastAtkSpeed;
     [SerializeField] private Text _LastMoveSpeed;
+    [SerializeField] private Sprite _btnClickImg;
+    [SerializeField] private Sprite _btnNoClickImg;
 
     public Text Power { get => _power; set => _power = value; }
     public Text Def { get => _def; set => _def = value; }
@@ -228,10 +232,12 @@ public class InventoryManager : MonoBehaviour
             if (idx == tempIdx)
             {
                 tab.gameObject.SetActive(true);
+                _inventoryBtnImage[tempIdx].GetComponent<Image>().sprite = _btnNoClickImg;
             }
             else
             {
                 tab.gameObject.SetActive(false);
+                _inventoryBtnImage[tempIdx].GetComponent<Image>().sprite = _btnClickImg;
             }
             tempIdx++;
         }

@@ -52,7 +52,7 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
             DraggableUI DragingPrefab = eventData.pointerDrag.GetComponent<DraggableUI>();
 
 			// 인벤창에서 드래그 시작한 경우 (장비 X)
-            if (DragingPrefab.PreviousParent.name.Contains("Sloat"))			
+            if (DragingPrefab && DragingPrefab.PreviousParent.name.Contains("Sloat"))			
 			{
 				// 인벤 에서 인벤
 				if (gameObject.name.Contains("Sloat"))							
@@ -81,7 +81,7 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
                     
 				}
 			} //장비창에서 드래그 시작했고 인벤창에 놓은 경우
-			else if (DragingPrefab.PreviousParent.name.Contains("EquipmentShot") && transform.name.Contains("Sloat")) 
+			else if (DragingPrefab && DragingPrefab.PreviousParent.name.Contains("EquipmentShot") && transform.name.Contains("Sloat")) 
 			{	// 장비창 아이템을 인벤창에 놓았는데 빈 슬롯인 경우에만 실행 되도록
 				 if (gameObject.GetComponentInChildren<Btn>()?.ActiveChk == false)
 				{

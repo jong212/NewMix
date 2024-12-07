@@ -53,8 +53,8 @@ public class Character : NetworkBehaviour
     [Networked] public int Def { get; set; }
     [Networked] public int FinalAtk { get; set; }
     [Networked] public int FinalHP { get; set; }
-    [Networked] public float FinalAtkSpeed { get; set; }
-    [Networked] public float FinalMoveSpeed { get; set; }
+    [Networked, OnChangedRender(nameof(OnChangeAttackSpeed))] public float FinalAtkSpeed { get; set; }
+    [Networked, OnChangedRender(nameof(OnChangeMoveSpeed))] public float FinalMoveSpeed { get; set; }
     [Networked] public bool WaitingForAuthority { get; set; }
     [Networked] public Item HeldItem { get; set; }
 
@@ -114,6 +114,28 @@ public class Character : NetworkBehaviour
         Nickname = BackendGameData.Instance.NickName;
     }
 
+    private void OnChangeAttackSpeed()
+    {
+        if (FinalAtkSpeed != 1)
+        {
+            _anim.SetFloat("AttackSpd", FinalAtkSpeed - 1);
+        }
+        else
+        {
+            _anim.SetFloat("AttackSpd", 1);
+        }
+    }
+    private void OnChangeMoveSpeed()
+    {
+        if (FinalMoveSpeed != 3)
+        {
+            _anim.SetFloat("MoveSpd", FinalMoveSpeed - 3);
+        }
+        else
+        {
+            _anim.SetFloat("MoveSpd", 1);
+        }
+    }
     private void InitStat()
     {
         var userData = BackendGameData.Instance.userData;
@@ -195,9 +217,11 @@ public class Character : NetworkBehaviour
             _isInitialized = true;
             OnSetitemList();
         }
-        Debug.Log("RealSpeed" +_kcc.RealSpeed +",  SUMSpeed " + _kcc.RealSpeed / Specs.MovementSpeed);
-        float movementSpeed = _kcc.RealSpeed > 0 ? _kcc.RealSpeed / Specs.MovementSpeed : 0;
+        Debug.Log(FinalMoveSpeed);
+        float movementSpeed = _kcc.RealSpeed > 0 ? _kcc.RealSpeed / FinalMoveSpeed : 0;
         _anim.SetFloat("Movement", movementSpeed);
+
+
     }
 
     public override void FixedUpdateNetwork()
@@ -237,7 +261,7 @@ public class Character : NetworkBehaviour
         Vector3 moveDirection = new Vector3(input.x, 0, input.y);
         Vector3 finalMoveDirection = CalculateFinalMoveDirection(moveDirection);
 
-        _kcc.Move(finalMoveDirection * Specs.MovementSpeed);
+        _kcc.Move(finalMoveDirection * FinalMoveSpeed);
 
         if (finalMoveDirection.magnitude > 0)
         {

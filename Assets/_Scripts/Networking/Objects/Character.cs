@@ -76,6 +76,11 @@ public class Character : NetworkBehaviour
             StaticManager.UI.Loading.gameObject.SetActive(false);
             StaticManager.UI.MainUI.Layout_TopRight.gameObject.SetActive(true);
 
+        } else
+        {
+            // 다른 플레이어가 내 방에 들어왔을 때 그 플레이어의 이동속도나 공격속도는 네트워크 변수를 통해 알 수 있지만 애니메이터에 반영된 것은 아니여서 따로 세팅을 해줘야 하기에 else인 경우에 세팅하도록 하였다.
+            OnChangeAttackSpeed();
+            OnChangeMoveSpeed();
         }
         InitializeNicknameUI();
 
@@ -127,6 +132,7 @@ public class Character : NetworkBehaviour
     }
     private void OnChangeMoveSpeed()
     {
+        Debug.Log(FinalMoveSpeed);
         if (FinalMoveSpeed != 3)
         {
             _anim.SetFloat("MoveSpd", FinalMoveSpeed - 3);

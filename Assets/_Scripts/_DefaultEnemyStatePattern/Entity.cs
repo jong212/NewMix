@@ -30,6 +30,8 @@ public class Entity : NetworkBehaviour
 
     [Networked, Capacity(12), OnChangedRender(nameof(OnNearbyPlayersChanged))]
     public NetworkLinkedList<PlayerRef> nearbyPlayers { get; } = new NetworkLinkedList<PlayerRef>();
+    [Networked, Capacity(12)]
+    public NetworkLinkedList<PlayerRef> resetSetActiveObj { get; } = new NetworkLinkedList<PlayerRef>();
 
     public Animator anim { get; private set; } //다른 스크립트에서 entity.anim으로 애니메이터에 접근하여 애니메이션 상태를 확인할 수 있지만, 애니메이터를 변경할 수는 없다.
     public Rigidbody rb { get; private set; } // 엔티티에서 게터세터 사용으로 외부수정을 제한했다 만약 Enemy에서 rb = GetComponent<Rigidbody>(); 이런코드 쓰면 오류난다 하지만 rb.verocity 값 설정은 가능하다 재정의만 불가능
@@ -170,7 +172,7 @@ public class Entity : NetworkBehaviour
         NetworkObject playerNetworkObject = null;
 
         // Wait until the player's NetworkObject is valid and initialized on the master client
-        while (playerNetworkObject == null || !playerNetworkObject.IsValid)
+        while (playerNetworkObject == null || !playerNetworkObject.IsValid )
         {
             playerNetworkObject = Runner.GetPlayerObject(player);
             if (playerNetworkObject == null)
@@ -199,10 +201,15 @@ public class Entity : NetworkBehaviour
     // 플레이어를 nearbyPlayers 리스트에서 제거
     public void RemovePlayerFromList(PlayerRef player)
     {
-        if (this == null || gameObject == null)
+        if (this == null || gameObject == null )
         {
             //TEMPHIDE// Debug.LogWarning("Entity has been destroyed. Cannot remove player.");
             return;
+        }
+        if (!gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(true);
+            resetSetActiveObj.Add(player);
         }
         StartCoroutine(WaitForStateAuthorityAndRemovePlayer(player));
 
@@ -212,7 +219,7 @@ public class Entity : NetworkBehaviour
     {
         if (this is EnemyAi enemyAi) // this가 EnemyAi인지 확인 후 캐스팅
         {
-            while (!Object.HasStateAuthority || !Object.IsValid)
+            while (!Object.HasStateAuthority || !Object.IsValid )
             {
                 //TEMPHIDE// Debug.LogWarning("Waiting for state authority before changing state...");
                 yield return null; // 다음 프레임까지 대기
@@ -256,16 +263,21 @@ public class Entity : NetworkBehaviour
         }
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
+        if (resetSetActiveObj.Count > 0)
+        {
+            RemovePlayerFromList(resetSetActiveObj[0]);
+            resetSetActiveObj.Clear();
+        }
     }
- 
-  
+
+
     // 체력이 변경되면 호출됨
 
 
     // RPC를 통해 State Authority 클라이언트에서 체력을 감소시키는 함수
-    
+
     public void DestroyThis()
     {
       Runner.Despawn(Object); // Fusion의 Despawn 호출

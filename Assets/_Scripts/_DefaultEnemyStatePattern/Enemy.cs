@@ -14,13 +14,15 @@ public class Enemy : Entity
     private int currentRayIndex = 0;                             // 현재 레이를 쏠 방향 인덱스
     public EnemyStateMachine stateMachine { get; private set; }
 
+    [Networked, Capacity(4)] public NetworkArray<int> DropItemIdx { get; }
+    [Networked, Capacity(4)] public NetworkArray<int> DropItemPercent { get;  }
 
+    [Networked] public float MonsterId { get; set; }       // 몬스터이름
     [Networked] public float MonsterName { get; set; }       // 몬스터이름
     [Networked] public float Lv { get; set; }                // 레벨
     [Networked] public float Exp { get; set; }               // 경험치
     [Networked] public float Money { get; set; }             // 머니
     [Networked] public float MonsterDropPercent { get; set; }// 드랍율
-    //[Networked] public List<DropItems> DropItem { get; set; }// 드랍아이템
     [Networked] public int Atk { get; set; }            // 공격력
     [Networked] public int Def { get; set; }            // 방어력
     [Networked] public int DropItem { get; set; }// 드랍아이템
@@ -139,6 +141,7 @@ public class Enemy : Entity
     protected override void Update()
     {
         base.Update();
+        
         if (Object.HasStateAuthority && stateMachine.currentState != null)
         {
             stateMachine.currentState.Update();

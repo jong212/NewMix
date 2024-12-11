@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private InventoryManager _inventoryUI;
     [SerializeField] private GameObject _loading;
     [SerializeField] private EnemyInfoUI _enemyInfoUI;
+    [SerializeField] private DamageTextPoolManager _damagePoolManager;
+    [SerializeField] private DropItemPoolManager _dropItemPoolMaanger;
     [SerializeField] private VariableJoystick _joystick;
     [SerializeField] private MainUI _mainUI;
 
@@ -52,6 +54,20 @@ public class UIManager : MonoBehaviour
         get
         {
             return _mainUI;
+        }
+    }
+    public DamageTextPoolManager DamagePoolUI
+    {
+        get
+        {
+            return _damagePoolManager;
+        }
+    }
+    public DropItemPoolManager DropItemPoolManager
+    {
+        get
+        {
+            return _dropItemPoolMaanger;
         }
     }
     public InventoryManager ContentsInventoryUI

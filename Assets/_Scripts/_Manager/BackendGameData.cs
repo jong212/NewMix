@@ -80,8 +80,8 @@ public class MonsterInfoChart
 {
     public class DropItems
     {
-        public int Id { get; private set; }
-        public int Percent { get; private set; }
+        public int Id { get;  set; }
+        public int Percent { get;  set; }
         public DropItems(int id, int percent)
         {
             Id = id;

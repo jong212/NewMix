@@ -75,6 +75,8 @@ public class Character : NetworkBehaviour
             StaticManager.Instance.Stat += CalculateStatUI;
             StaticManager.UI.Loading.gameObject.SetActive(false);
             StaticManager.UI.MainUI.Layout_TopRight.gameObject.SetActive(true);
+            StaticManager.UI.DamagePoolUI.gameObject.SetActive(true);
+            StaticManager.UI.DropItemPoolManager.gameObject.SetActive(true);
 
         } else
         {
@@ -309,7 +311,7 @@ public class Character : NetworkBehaviour
             Enemy targetMonster = _playerMovement.Pathfinding.target.GetComponent<Enemy>();
             if (targetMonster != null)
             {
-                AttackRpc(targetMonster);
+                AttackRpc(targetMonster, FinalAtk);
             }
             else
             {
@@ -323,25 +325,41 @@ public class Character : NetworkBehaviour
     }
     // Attack Mechanism
     // 죽이면 타겟 해제한느거랑 ㅔ쳑 100 하는거 해야함
-    public void AttackRpc(Enemy targetMonster)
+    public void AttackRpc(Enemy targetMonster,float finalAtk)
     {
+        NetworkObject nObject = targetMonster.GetComponent<NetworkObject>();
         if (targetMonster.NetworkedHealth <= 0)
         {
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;
             return;
         }
-        else if (targetMonster.NetworkedHealth - 10 <= 0)
+        else if (targetMonster.NetworkedHealth - finalAtk <= 0)
         {
-            targetMonster.DealDamageRpc(10);
+            targetMonster.DealDamageRpc(finalAtk);
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;
-            PlayAttackAnimationRpc();
+            PlayAttackAnimationRpc(finalAtk, nObject);
+
+            int tempIdx = 0;
+            foreach(var item in targetMonster.DropItemPercent)
+            {
+                int randomValue = Random.Range(0, 100); // 0~99 사이의 랜덤 값 생성
+                if(randomValue < item) // 드랍 됨
+                {
+                    RpcItemDropMethod(nObject, targetMonster.MonsterId, (string)Nickname, targetMonster.DropItemIdx[tempIdx]);
+                } else
+                {
+
+                }
+                tempIdx++;
+
+            }
         }
         else
         {
-            targetMonster.DealDamageRpc(10);
-            PlayAttackAnimationRpc();
+            targetMonster.DealDamageRpc(finalAtk);
+            PlayAttackAnimationRpc(finalAtk, nObject);
 
             //PushMonster(targetMonster);
         }
@@ -363,12 +381,19 @@ public class Character : NetworkBehaviour
         }
     }
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void PlayAttackAnimationRpc()
+    public void PlayAttackAnimationRpc(float damage,NetworkObject trs)
     {
         if (_anim != null)
         {
             _anim.SetTrigger("Attack");
+            StaticManager.UI.DamagePoolUI.ShowDamage(trs, damage.ToString());
+
         }
+    }    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RpcItemDropMethod(NetworkObject trs, float monsterid,string Nickname,int dropIdx)
+    {
+        StaticManager.UI.DropItemPoolManager.ShowDropItem(trs,monsterid, Nickname, dropIdx);
     }
 
     // Network Change Detection

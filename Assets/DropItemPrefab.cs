@@ -13,17 +13,47 @@ public class DropItemPrefab : MonoBehaviour
     private Text textMesh;
     private RectTransform rectTransform;
     private float lifetime = 1f; // 텍스트가 사라지는 시간
+    List<ItemChart> itemList;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         textMesh = GetComponent<Text>();
+        itemList = BackendGameData.Instance.ItemChartList;
     }
 
     public void Initialize(Transform objTransform,float monsterId,string Nickname,int dropIdx)
     {
+        if(SetDropItem.transform.childCount > 0)
+        {
+            foreach (Transform child in SetDropItem.transform)
+            {
+                Destroy(child.gameObject);
+            }
 
-        StartCoroutine(FadeAndMove(objTransform));
+        }
+        foreach (ItemChart item in itemList)
+        {
+            if (item.Itemid == dropIdx)
+            {
+                // Fetch the prefab using AddressableManager
+                GameObject prefab = AddressableManager.instance.GetPrefab("Inventory", item.Prefabname);
+
+                // Instantiate the prefab to avoid modifying the original asset
+                GameObject instantiatedObject = Instantiate(prefab);
+
+                // Set the parent of the instantiated object
+                instantiatedObject.transform.SetParent(SetDropItem.transform);
+
+                // Optionally reset the local position, rotation, and scale
+                instantiatedObject.transform.localPosition = Vector3.zero;
+                instantiatedObject.transform.localRotation = Quaternion.identity;
+                instantiatedObject.transform.localScale = Vector3.one;
+
+                break;
+            }
+        }
+        //StartCoroutine(FadeAndMove(objTransform));
     }
 
     private IEnumerator FadeAndMove(Transform trs)

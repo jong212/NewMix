@@ -99,6 +99,7 @@ public class MonsterInfoChart
     public List<DropItems> Dropitem { get; private set; }
     public string LabelName { get; private set; }
     public string PrafabName { get; private set; }
+    public string MyMonSpriteName { get; private set; }
     public int    Atk { get; private set; }
     public int    Def { get; private set; }
     public int    Hp { get; private set; }
@@ -136,6 +137,7 @@ public class MonsterInfoChart
         }
         LabelName = json["LabelName"].ToString();
         PrafabName = json["PrafabName"].ToString();
+        MyMonSpriteName = json["MonsterSpriteName"].ToString();
         Atk = int.Parse(json["Atk"].ToString());
         Def = int.Parse(json["Def"].ToString());
         Hp = int.Parse(json["Hp"].ToString());
@@ -149,6 +151,14 @@ public class MonsterInfoChart
         
     }
 
+}
+/// <summary>
+/// mList 인덱스 순서별 뜻 >>>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+/// </summary>
+public class Mymon
+{
+    public string columName;
+    public List<int> mList = new List<int>();
 }
 
 public class Node
@@ -294,6 +304,7 @@ public class UserData
    
 
     public List<int> setPlayerItems = new List<int>();
+    public List<Mymon> mymonList = new List<Mymon>();
     public void UpdatePlayerItemAt(int index, int newValue)
     {
         if (index >= 0 && index < setPlayerItems.Count)
@@ -336,6 +347,8 @@ public class UserData
         {
             result.AppendLine($"인벤토리 SloatId: {_value.SlotId} ItemId: {_value.ItemId}, Quantity:,  {_value.Quantity}"); 
         }
+
+ 
         return result.ToString();
     }
     public void BeginInit()
@@ -501,8 +514,9 @@ public class BackendGameData
         param.Add("Def", 10);
         param.Add("Hp", 100);
         param.Add("Inventory", inventoryJson); // Add inventory JSON to database
+        param.Add("mymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
 
-         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
+        Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("Character", param);
         userData.EndInit();
         if (bro.IsSuccess())
@@ -546,7 +560,7 @@ public class BackendGameData
                 userData.Atk = int.Parse(gameDataJson[0]["Atk"].ToString());
                 userData.Def = int.Parse(gameDataJson[0]["Def"].ToString());
                 userData.Hp = int.Parse(gameDataJson[0]["Hp"].ToString());
-
+                
 
                 userData.InventorySlots.Clear();
                 string inventoryJsonString = gameDataJson[0]["Inventory"].ToString();
@@ -577,6 +591,33 @@ public class BackendGameData
                     }
                     int quantity = int.Parse(slot["Quantity"].ToString());
                     userData.InventorySlots.Add(new InventorySlot(slotId, itemId, quantity));
+                }
+                userData.mymonList.Clear();
+                for(int i = 1; i <3; i++) // mymonster 1 부터 2까지의 컬럼을 serch
+                {
+                    if (gameDataJson[0].ContainsKey("mymon" + i) && gameDataJson[0]["mymon" + i].IsArray)
+                    {
+                        Mymon mymon = new Mymon();
+                        mymon.columName = mymon + i.ToString();
+
+                        foreach (JsonData item in gameDataJson[0]["mymon" + i])
+                        {
+                            if (int.TryParse(item.ToString(), out int value)) // 수정된 부분
+                            {
+                                mymon.mList.Add(value);
+                                
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Failed to parse item: {item}"); // 디버깅 메시지
+                            }
+                        }
+                        userData.mymonList.Add(mymon);
+                    }
+                    else
+                    {
+                        Debug.Log(i + "dfsdsdfsd");
+                    }
                 }
 
                 userData.setPlayerItems.Clear();

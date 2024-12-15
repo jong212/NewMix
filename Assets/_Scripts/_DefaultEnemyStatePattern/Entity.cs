@@ -15,9 +15,6 @@ public enum EnemyStateID
 }
 public class Entity : NetworkBehaviour
 {
-    /*[SerializeField] private ParticleManager _particleManager;
-    public ParticleManager ParticleManager { get => _particleManager; }
-*/
     public SkinnedMeshRenderer skinnedMeshRenderer;
 
     private MonsterManager _monsterManager;
@@ -151,7 +148,6 @@ public class Entity : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
        // stats = GetComponent<CharacterStats>();
         cd = GetComponent<CapsuleCollider>();
-        
     }
     // 플레이어를 nearbyPlayers 리스트에 추가
     // Method to add a player to the nearbyPlayers list

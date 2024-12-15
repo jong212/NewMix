@@ -125,6 +125,36 @@ MonoBehaviour:
     m_SerializedLabels:
     - Enemy
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d0ac819610865b49b28a81ff7716a7f
+    m_Address: Assets/_AssetsFolder/_Ingame_MyMonster/mon1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MyMonster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 581c2b09c36410947b0916d8cd10d7cc
+    m_Address: Assets/_AssetsFolder/_AddressSprite/mon1sprite.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc970a8b97506c64bb7ee739d168bc2e
+    m_Address: Assets/_AssetsFolder/_AddressSprite/mon3sprite.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0fd624617d0cd284ea8c9815b883e16f
+    m_Address: Assets/_AssetsFolder/_AddressSprite/mon2sprite.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5078d2f3cd4724d4f87e32f52d0a3dc7
+    m_Address: Assets/_AssetsFolder/_AddressSprite/mon4sprite.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
   m_SchemaSet:

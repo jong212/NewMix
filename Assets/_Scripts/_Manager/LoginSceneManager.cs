@@ -66,7 +66,8 @@ public class LoginSceneManager : MonoBehaviour
     }
     private void Update()
     {
-
+   
+        
     }
     public void testbuttonA()
     {

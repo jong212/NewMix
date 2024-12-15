@@ -184,7 +184,22 @@ public class Character : NetworkBehaviour
         if (Object.HasInputAuthority)
         {
             HandleMouseInput();
-         }
+          
+
+
+            
+/*        if (BackendGameData.Instance.userData != null)
+            {
+                if (BackendGameData.Instance.userData.mymonList != null)
+                {
+                    foreach(Mymon item in BackendGameData.Instance.userData.mymonList)
+                    {
+                        string listContent = string.Join(", ", item.mList);
+                        Debug.Log(item.columName + " : " + listContent);
+                    }
+                }
+            }*/
+        }
     }
     private void HandleMouseInput()
     {

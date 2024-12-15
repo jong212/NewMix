@@ -46,7 +46,6 @@ public class Enemy : Entity
         {
             Debug.Log("test2");
             Die();
-            
         }
     }
 
@@ -235,8 +234,6 @@ public class Enemy : Entity
     }
     public virtual void OnDisable()
     {
-        if(StaticManager.UI.EnemyInfoUI.ObjRef == gameObject.transform)
-        {
-        }
+    
     }
 }

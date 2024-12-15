@@ -191,4 +191,5 @@ public class StaticManager : MonoBehaviour
         BackendGameData.Instance.userData.UpdatePlayerItemAt((int)type, v);
         UniquePlayer.InitItem();
     }
+   
 }

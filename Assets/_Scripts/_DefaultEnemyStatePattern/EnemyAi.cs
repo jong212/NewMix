@@ -23,7 +23,6 @@ public class EnemyAi : Enemy
         moveState = new EnemyMoveState(this, stateMachine, "Move", this);
         battleState = new EnemyBattleState(this, stateMachine, "Battle", this);
         attackState = new EnemyAttackState(this, stateMachine, "Attack", this);
-
     }
     protected override void Start()
     {

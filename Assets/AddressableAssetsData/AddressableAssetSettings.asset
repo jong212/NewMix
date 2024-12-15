@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 94b466ca57349f543acf1e50c196809d
   m_currentHash:
     serializedVersion: 2
-    Hash: 97b2ba4bc82fdf21502c8edd814ab3da
+    Hash: e0230c1967f5eb36857db7eb4d6e844d
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -93,6 +93,7 @@ MonoBehaviour:
     - Inventory
     - Enemy
     - Sprite
+    - MyMonster
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 31a8327a75b471e4b9eb0d53d5f3dc00, type: 2}

@@ -1197,6 +1197,8 @@ MonoBehaviour:
     m_LabelString: Enemy
   sprite:
     m_LabelString: Sprite
+  mymonster:
+    m_LabelString: MyMonster
 --- !u!4 &1584272552
 Transform:
   m_ObjectHideFlags: 0

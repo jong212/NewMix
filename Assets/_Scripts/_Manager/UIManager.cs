@@ -19,11 +19,13 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private AlertUI _alertUI;
     [SerializeField] private ConfirmUI _confirmUI;
-    [SerializeField] private InventoryManager _inventoryUI;
+    [SerializeField] private InventoryManager _inventoryUI;    
+    [SerializeField] private MonsterInventoryManager _monsterInvenManager;
     [SerializeField] private GameObject _loading;
     [SerializeField] private EnemyInfoUI _enemyInfoUI;
     [SerializeField] private DamageTextPoolManager _damagePoolManager;
     [SerializeField] private DropItemPoolManager _dropItemPoolMaanger;
+    [SerializeField] private ExpHpMpContainer _ExpHpMpContainer;
     [SerializeField] private VariableJoystick _joystick;
     [SerializeField] private MainUI _mainUI;
 
@@ -69,12 +71,26 @@ public class UIManager : MonoBehaviour
         {
             return _dropItemPoolMaanger;
         }
+    }    
+    public ExpHpMpContainer ExpHpMpContainer
+    {
+        get
+        {
+            return _ExpHpMpContainer;
+        }
     }
     public InventoryManager ContentsInventoryUI
     {
         get
         {
             return _inventoryUI;
+        }
+    }
+    public MonsterInventoryManager MonsterInventoryManagerUI
+    {
+        get
+        {
+            return _monsterInvenManager;
         }
     }
     public VariableJoystick VariableJoystick

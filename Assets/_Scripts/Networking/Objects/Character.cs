@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Fusion.Addons.SimpleKCC;
-using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
+using System;
+using Random = UnityEngine.Random;
 
 public class Character : NetworkBehaviour
 {
+    public event Action OnStatsChanged;
+
+
     private bool _isInitialized = false;
     private VariableJoystick _joystick;
     private PlayerInput _prevInput;
@@ -53,6 +56,15 @@ public class Character : NetworkBehaviour
     [Networked] public int Def { get; set; }
     [Networked] public int FinalAtk { get; set; }
     [Networked] public int FinalHP { get; set; }
+    [Networked] public int CurrentHp { get; set; }
+    public void PlayerHit(int damage)
+    {
+        if(CurrentHp > 0)
+        {
+            CurrentHp = CurrentHp - damage;
+            OnStatsChanged?.Invoke();
+        }
+    }
     [Networked, OnChangedRender(nameof(OnChangeAttackSpeed))] public float FinalAtkSpeed { get; set; }
     [Networked, OnChangedRender(nameof(OnChangeMoveSpeed))] public float FinalMoveSpeed { get; set; }
     [Networked] public bool WaitingForAuthority { get; set; }
@@ -68,10 +80,16 @@ public class Character : NetworkBehaviour
             ModifyKCCCollider();    // 플레이어 물리 관련 초기화
             InitItem();             // 플레이어 장비 장착 정보 네트워크 변수에 초기화 (다른 클라 동기화)
             StaticManager.UI.ContentsInventoryUI.gameObject.SetActive(true);
-            StaticManager.UI.ContentsInventoryUI.FirstInit();
+            StaticManager.UI.ContentsInventoryUI.FirstInit();            
+            
+            StaticManager.UI.MonsterInventoryManagerUI.gameObject.SetActive(true);
+            StaticManager.UI.MonsterInventoryManagerUI.FirstInit();
+
+
             StaticManager.Instance.CashUdata = BackendGameData.Instance.userData;
             StaticManager.Instance.UniquePlayer = this;
             CalculateStatUI();
+            CurrentHp = FinalHP;
             StaticManager.Instance.Stat += CalculateStatUI;
             StaticManager.UI.Loading.gameObject.SetActive(false);
             StaticManager.UI.MainUI.Layout_TopRight.gameObject.SetActive(true);
@@ -184,21 +202,6 @@ public class Character : NetworkBehaviour
         if (Object.HasInputAuthority)
         {
             HandleMouseInput();
-          
-
-
-            
-/*        if (BackendGameData.Instance.userData != null)
-            {
-                if (BackendGameData.Instance.userData.mymonList != null)
-                {
-                    foreach(Mymon item in BackendGameData.Instance.userData.mymonList)
-                    {
-                        string listContent = string.Join(", ", item.mList);
-                        Debug.Log(item.columName + " : " + listContent);
-                    }
-                }
-            }*/
         }
     }
     private void HandleMouseInput()
@@ -534,5 +537,13 @@ public class Character : NetworkBehaviour
             FinalAtkSpeed = 1 + _FinalAtkSpeed;
             FinalMoveSpeed = 3 + _FinalMoveSpeed;
         }
+    }
+    public void InitHpUpdate()
+    {
+        if (OnStatsChanged != null)
+        {
+            OnStatsChanged?.Invoke();
+        }
+
     }
 }

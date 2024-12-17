@@ -14,7 +14,12 @@ public class EnemyAttackState : EnemyState
     public override void Enter()
     {
         base.Enter();
+        Character targetPlayer = enemy.closestPlayerTransform.GetComponent<Character>();
+        if(targetPlayer != null) {
+            targetPlayer.PlayerHit(enemy.Atk);
+        }
 
+            
     }
 
     public override void Update()

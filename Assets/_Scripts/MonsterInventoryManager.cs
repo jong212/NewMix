@@ -7,11 +7,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System;
 
-public class MonsterInentoryManager : MonoBehaviour
+public class MonsterInventoryManager : MonoBehaviour
 {
 
     [SerializeField] private List<Transform> tabParents; // 예: Tab1, Tab2, Tab3
-    [SerializeField] private List<Image> _inventoryBtnImage; // 예: Tab1, Tab2, Tab3
 
     [SerializeField] private List<DroppableUI> subInventory; // 예: 장비 착용 창
     [SerializeField] private GameObject itemPrefab;
@@ -70,7 +69,7 @@ public class MonsterInentoryManager : MonoBehaviour
                 // 아이템 프리팹을 슬롯의 자식으로 인스턴스화
                 foreach (MonsterInfoChart item in itemChart)
                 {
-                    if (slotClass.mList[0] == item.MonsterId)
+                    if (slotClass.mList.Count > 0 && slotClass.mList[0] == (int)item.MonsterId )
                     {
                         Sprite spriteImg = AddressableManager.instance.GetSprite(item.MyMonSpriteName);
                         if (spriteImg != null)
@@ -83,37 +82,34 @@ public class MonsterInentoryManager : MonoBehaviour
                     }
                 }
 
-/*                component.ivtmanager = this; // Pass the InventoryManager reference
-*/            }
+                component.myMonsterManager = this; // Pass the InventoryManager reference
+            }
         }
+        List<SetMymon> setMon = BackendGameData.Instance.userData.setMymonList;
 
-        List<int> setPlayeritem = BackendGameData.Instance.userData.setPlayerItems;
         int tIdx = 0;
-        foreach (int setInvenIdx in setPlayeritem)
+        foreach (SetMymon setInvenIdx in setMon)
         {
             GameObject itemInstance = Instantiate(itemPrefab, subInventory[tIdx].transform);
             if (itemInstance.TryGetComponent(out Btn component))
             {
-               /* foreach (ItemChart item in itemChart)
+                foreach (MonsterInfoChart item in itemChart)
                 {
-                    if (setInvenIdx == item.Itemid)
+                    if (setInvenIdx.setMonList.Count > 0 && setInvenIdx.setMonList[0] == (int)item.MonsterId)
                     {
-                        Sprite spriteImg = AddressableManager.instance.GetSprite(item.SpriteName);
+                        Sprite spriteImg = AddressableManager.instance.GetSprite(item.MyMonSpriteName);
                         if (spriteImg != null)
                         {
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
-                            component.Category = item.Category;
-
+                            /* component.Category = item.Category;*/
                         }
+                        break;
                     }
-                }*/
-/*                component.ivtmanager = this; // Pass the InventoryManager reference
-*/
+                }
+                component.myMonsterManager = this; // Pass the InventoryManager reference
             }
-
             tIdx++;
-
         }
     }
 
@@ -154,28 +150,31 @@ public class MonsterInentoryManager : MonoBehaviour
             // 더블 클릭 처리
             if (eventData.lastPress.TryGetComponent(out Btn component))
             {
-                if (component.Category == InventoryType.Weapon.ToString() ||
-                    component.Category == InventoryType.Armor.ToString() ||
-                    component.Category == InventoryType.Gluve.ToString() ||
-                    component.Category == InventoryType.Shose.ToString())
+                // 인벤에서 더블 클릭한 아이템을 장비창에 낄 것인지 검증하는 로직을 여기쯤 작성해야함 
+                foreach (var subidx in subInventory)
                 {
-                    // 인벤에서 더블 클릭한 아이템을 장비창에 낄 것인지 검증하는 로직을 여기쯤 작성해야함 
-                    foreach (var subidx in subInventory)
+                    Btn slotItem = subidx.GetComponentInChildren<Btn>();
+                    if(slotItem != null)
                     {
-                        if (subidx.InventoryType.ToString() == component.Category)
+                        if(slotItem.ActiveChk)
                         {
-                            // 
-                            StaticManager.Instance.DoubleClickItem(subidx.InventoryType, slotID);
-
-                            Btn slotItem = subidx.GetComponentInChildren<Btn>();
+                            continue;
+                        } else
+                        {
+                            StaticManager.Instance.SetDoubleClickItem(subidx.InventoryType, slotID);
                             slotItem.transform.SetParent(component.transform.parent.transform);
                             slotItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
                             component.transform.SetParent(subidx.transform);
                             component.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                            break;
                         }
                     }
-                }
 
+                       
+
+                       /* Btn slotItem = subidx.GetComponentInChildren<Btn>();*/
+                        
+                }
             }
             OnDoubleClick(slotID);
         }
@@ -216,7 +215,7 @@ public class MonsterInentoryManager : MonoBehaviour
     {
 
     }
-    private void OnEnable()
+   /* private void OnEnable()
     {
         tabParents[0].gameObject.SetActive(true);
         tabParents[1].gameObject.SetActive(false);
@@ -227,24 +226,6 @@ public class MonsterInentoryManager : MonoBehaviour
         tabParents[0].gameObject.SetActive(true);
         tabParents[1].gameObject.SetActive(false);
         tabParents[2].gameObject.SetActive(false);
-    }
-    public void OpenTab(int idx)
-    {
-        int tempIdx = 0;
-
-        foreach (var tab in tabParents)
-        {
-            if (idx == tempIdx)
-            {
-                tab.gameObject.SetActive(true);
-                _inventoryBtnImage[tempIdx].GetComponent<Image>().sprite = _btnNoClickImg;
-            }
-            else
-            {
-                tab.gameObject.SetActive(false);
-                _inventoryBtnImage[tempIdx].GetComponent<Image>().sprite = _btnClickImg;
-            }
-            tempIdx++;
-        }
-    }
+    }*/
+    
 }

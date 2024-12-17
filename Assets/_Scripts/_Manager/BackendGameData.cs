@@ -148,10 +148,11 @@ public class MonsterInfoChart
         IdleTime = int.Parse(json["IdleTime"].ToString());
         MoveTime = int.Parse(json["MoveTime"].ToString());
         BattleTime = int.Parse(json["BattleTime"].ToString());
-        
+
     }
 
 }
+
 /// <summary>
 /// mList 인덱스 순서별 뜻 >>>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
 /// </summary>
@@ -159,6 +160,11 @@ public class Mymon
 {
     public string columName;
     public List<int> mList = new List<int>();
+}
+public class SetMymon
+{
+    public string columName;
+    public List<int> setMonList = new List<int>();
 }
 
 public class Node
@@ -305,6 +311,7 @@ public class UserData
 
     public List<int> setPlayerItems = new List<int>();
     public List<Mymon> mymonList = new List<Mymon>();
+    public List<SetMymon> setMymonList = new List<SetMymon>();
     public void UpdatePlayerItemAt(int index, int newValue)
     {
         if (index >= 0 && index < setPlayerItems.Count)
@@ -401,6 +408,7 @@ public class BackendGameData
     private List<CharacterSrcChart> _characterChartList = new List<CharacterSrcChart>();
     private List<ItemChart> _itemChartList = new List<ItemChart>();
     private List<MonsterInfoChart> _monsterInfoList = new List<MonsterInfoChart>();
+    private Dictionary<int,int> _expInfo = new Dictionary<int, int>();
     public UserData userData { get; set; }
 
     public string NickName                      // 캐싱 - NickName
@@ -428,6 +436,33 @@ public class BackendGameData
         get => _monsterInfoList;
         set => _monsterInfoList = value;
     }
+
+    public Dictionary<int, int> ExpInfo                       // 캐싱 -테스트
+    {
+        get
+        {
+            return _expInfo; // _expInfo 반환
+        }
+        set
+        {
+            // value에서 새로운 값을 추가 (중복 키 처리)
+            if (value != null)
+            {
+                foreach (var pair in value)
+                {
+                    if (_expInfo.TryAdd(pair.Key, pair.Value))
+                    {
+                        Debug.Log($"Added: Key={pair.Key}, Value={pair.Value}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Failed to add: Key={pair.Key} already exists.");
+                    }
+                }
+            }
+        }
+    }
+
     public void SetNickname(string nickname)    // 캐싱 - 버튼 클릭 시 닉넴 캐싱 하는 건데 리펙토링 가능한지 체크해 봐야 할 듯 (중복코드라서)중복 버튼에서 바로 위 코드로 타는거가능한지 체크필요
     {
         NickName = nickname;
@@ -477,6 +512,12 @@ public class BackendGameData
                     MonsterInfoChart classRef = new MonsterInfoChart(row);
                     MonsterInfoList.Add(classRef);
                 }
+                break;           
+            case nameof(ExpInfo):
+                foreach (JsonData row in chartJson["rows"])
+                {
+                    ExpInfo.Add(int.Parse(row["Lv"].ToString()), int.Parse(row["MaxExp"].ToString()));
+                }
                 break;
         }
     }
@@ -515,6 +556,7 @@ public class BackendGameData
         param.Add("Hp", 100);
         param.Add("Inventory", inventoryJson); // Add inventory JSON to database
         param.Add("mymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+        param.Add("SetMymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("Character", param);
@@ -595,28 +637,52 @@ public class BackendGameData
                 userData.mymonList.Clear();
                 for(int i = 1; i <3; i++) // mymonster 1 부터 2까지의 컬럼을 serch
                 {
+                   // bool isValue = false;
                     if (gameDataJson[0].ContainsKey("mymon" + i) && gameDataJson[0]["mymon" + i].IsArray)
                     {
                         Mymon mymon = new Mymon();
-                        mymon.columName = mymon + i.ToString();
+                        mymon.columName = "mymon" + i.ToString();
 
                         foreach (JsonData item in gameDataJson[0]["mymon" + i])
                         {
                             if (int.TryParse(item.ToString(), out int value)) // 수정된 부분
                             {
                                 mymon.mList.Add(value);
+                                //isValue = true; 
+                            }
+                            else
+                            {
+                                //isValue = false;
+                                ///break;
+                                Debug.LogWarning($"Failed to parse item: {item}"); // 디버깅 메시지
+                            }
+                        }
+                        //if (!isValue) continue;
+                        userData.mymonList.Add(mymon);
+                    }
+                }
+                
+                userData.setMymonList.Clear();
+                for(int i = 1; i <3; i++) // SetMymon 1 부터 2까지의 컬럼을 serch
+                {
+                    if (gameDataJson[0].ContainsKey("SetMymon" + i) && gameDataJson[0]["SetMymon" + i].IsArray)
+                    {
+                        SetMymon mymon = new SetMymon();
+                        mymon.columName = mymon + i.ToString();
+
+                        foreach (JsonData item in gameDataJson[0]["SetMymon" + i])
+                        {
+                            if (int.TryParse(item.ToString(), out int value))  
+                            {
+                                mymon.setMonList.Add(value);
                                 
                             }
                             else
                             {
-                                Debug.LogWarning($"Failed to parse item: {item}"); // 디버깅 메시지
+                                Debug.LogWarning($"Failed to parse item: {item}");  
                             }
                         }
-                        userData.mymonList.Add(mymon);
-                    }
-                    else
-                    {
-                        Debug.Log(i + "dfsdsdfsd");
+                        userData.setMymonList.Add(mymon);
                     }
                 }
 

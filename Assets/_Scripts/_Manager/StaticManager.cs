@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public class StaticManager : MonoBehaviour
@@ -191,5 +193,161 @@ public class StaticManager : MonoBehaviour
         BackendGameData.Instance.userData.UpdatePlayerItemAt((int)type, v);
         UniquePlayer.InitItem();
     }
-   
+
+
+    public void SetInvenItemSwap(int changeA, int ChangeB)
+    {
+        EnqueueAction(() =>
+        {
+            SetInvenItemSwapQueue(changeA, ChangeB);
+        });
+    }
+    private void SetInvenItemSwapQueue(int beforeSloatId, int afterSloatId)
+    {
+
+        foreach(Mymon mon in CashUdata.mymonList)
+        {
+            if(mon.mList.Count > 0 && "mymon" + (beforeSloatId + 1) == mon.columName )
+            {
+                mon.columName = "mymon" + (afterSloatId + 1);
+                BackendGameData.Instance.GameDataUpdate<List<int>>(mon.columName, mon.mList);
+                continue;
+            }
+            if (mon.mList.Count > 0 && "mymon" + (afterSloatId + 1) == mon.columName)
+            {
+                mon.columName = "mymon" + (beforeSloatId + 1);
+                BackendGameData.Instance.GameDataUpdate<List<int>>(mon.columName, mon.mList);
+            }
+        }   
+    }
+    public void SetInvenItemMove(int changeA, int ChangeB)
+    {
+        EnqueueAction(() =>
+        {
+            SetInvenItemMoveQueue(changeA, ChangeB);
+        });
+    }
+    /// <summary>
+    /// 찝은 것을 빈 슬롯에 놓았을 때 실행되는 메서드
+    /// </summary>
+    /// <param name="beforeSloatId">찝은 슬롯의 인덱스 값</param>
+    /// <param name="afterSloatId">놓은 슬롯의 인덱스 값</param>
+    private void SetInvenItemMoveQueue(int beforeSloatId, int afterSloatId)
+    {
+        Mymon temp = null;
+
+        // 1. 기존 슬롯의 데이터는 백업 한다.
+        // 2. 기존 슬롯의 데이터 백업 후 0으로 세팅 한다.
+        for (int i = 0; i < CashUdata.mymonList.Count; i++)
+        {
+            Mymon mon = CashUdata.mymonList[i];
+            if (mon.mList.Count > 0 && "mymon" + (beforeSloatId + 1) == mon.columName)
+            {
+                // 1. 백업
+                temp = new Mymon
+                {
+                    columName = mon.columName,
+                    mList = new List<int>(mon.mList) // 깊은 복사
+                };
+
+                // 2. 백업 해두었으니 0으로 세팅
+                mon.mList = new List<int> { 0 };
+                BackendGameData.Instance.GameDataUpdate<List<int>>(mon.columName, mon.mList);
+                break; // 첫 번째 조건을 만족했으므로 탈출
+            }
+        }
+
+        // 두 번째 조건: afterSloatId에 해당하는 항목 업데이트
+        if (temp != null) // temp가 null이 아니어야 작업 진행
+        {
+            for (int i = 0; i < CashUdata.mymonList.Count; i++)
+            {
+                Mymon mon = CashUdata.mymonList[i];
+                if (mon.mList.Count > 0 && "mymon" + (afterSloatId + 1) == mon.columName)
+                {
+                    // 값 업데이트
+                    mon.mList = new List<int>(temp.mList);  
+                    BackendGameData.Instance.GameDataUpdate<List<int>>(mon.columName, mon.mList);
+                    break; // 작업 완료 후 탈출
+                }
+            }
+        }
+    }
+
+    public void SetSubInvenToInven(InventoryType type, int ChangeB)
+    {
+        EnqueueAction(() =>
+        {
+            SetSubInvenToInvenQueue(type, ChangeB);
+        });
+    }
+    private void SetSubInvenToInvenQueue(InventoryType type, int afterSloatId)
+    {
+        // 참조 캐싱
+        var tempUserdata = BackendGameData.Instance.userData;
+        foreach (SetMymon setCulum in tempUserdata.setMymonList)
+        {
+            if(setCulum.columName == type.ToString())
+            {
+                string tempCulName = setCulum.columName;
+
+                foreach(var dataChange in CashUdata.mymonList)
+                {
+                    if(dataChange.columName == "mymon" + (afterSloatId + 1))
+                    {
+                        dataChange.mList = setCulum.setMonList;
+                        BackendGameData.Instance.GameDataUpdate<List<int>>(dataChange.columName, dataChange.mList);
+                        BackendGameData.Instance.GameDataUpdate<List<int>>(tempCulName, new List<int> { 0 });
+                        setCulum.setMonList = new List<int> { 0 };
+                        return;
+                    }
+                }
+
+            }
+        } 
+    }
+    public void SetDoubleClickItem(InventoryType type, int subInvenIdx)
+    {
+        EnqueueAction(() =>
+        {
+            SetDoubleClickItemQueue(type, subInvenIdx);
+        });
+    }
+    void SetDoubleClickItemQueue(InventoryType type, int subInvenIdx)
+    {
+        Mymon temp = null;
+        for (int i = 0; i < CashUdata.mymonList.Count; i++)
+        {
+            Mymon mon = CashUdata.mymonList[i];
+            if (mon.mList.Count > 0 && "mymon" + (subInvenIdx + 1) == mon.columName)
+            {
+                // 1. 백업
+                temp = new Mymon
+                {
+                    columName = mon.columName,
+                    mList = new List<int>(mon.mList) // 깊은 복사
+                };
+
+                // 2. 백업 해두었으니 0으로 세팅
+                mon.mList = new List<int> { 0 };
+                BackendGameData.Instance.GameDataUpdate<List<int>>(mon.columName, mon.mList);
+                break; // 첫 번째 조건을 만족했으므로 탈출
+            }
+        }
+
+        if (temp != null) // temp가 null이 아니어야 작업 진행
+        {
+            for (int i = 0; i < CashUdata.setMymonList.Count; i++)
+            {
+                SetMymon mon = CashUdata.setMymonList[i];
+                if (mon.setMonList.Count > 0 && type.ToString() == mon.columName)
+                {
+                    // 값 업데이트
+                    mon.setMonList = new List<int>(temp.mList);
+                    BackendGameData.Instance.GameDataUpdate<List<int>>(mon.columName, mon.setMonList);
+                    break; // 작업 완료 후 탈출
+                }
+            }
+        }
+    }
 }

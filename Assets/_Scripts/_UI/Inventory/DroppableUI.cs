@@ -8,6 +8,10 @@ public enum InventoryType
     Armor = 1,
     Gluve = 2,
     Shose = 3,
+	MyMonster = 4,
+	SetMymon1 = 5,
+    SetMymon2 = 6,
+    SetMymon3 = 7
 }
 public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
@@ -60,13 +64,28 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 					// 인벤의 슬롯을 드래그 하였지만 제자리에 그냥 놓은 경우 실행 X
 					if(DragingPrefab.PreviousParent.name != gameObject.name)	
 					{
-                        if(gameObject.GetComponentInChildren<Btn>()?.ActiveChk == true)
+						if(InventoryType == InventoryType.MyMonster)
 						{
-							StaticManager.Instance.InvenItemSwap(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx,Idx);
+                            if (gameObject.GetComponentInChildren<Btn>()?.ActiveChk == true)
+                            {
+                                StaticManager.Instance.SetInvenItemSwap(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx, Idx);
+                            } else
+                            {
+                                StaticManager.Instance.SetInvenItemMove(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx, Idx);
+                            }
                         } else
 						{
-                            StaticManager.Instance.InvenItemMove(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx, Idx);
+                            if (gameObject.GetComponentInChildren<Btn>()?.ActiveChk == true)
+                            {
+                                StaticManager.Instance.InvenItemSwap(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx, Idx);
+                            }
+                            else
+                            {
+                                StaticManager.Instance.InvenItemMove(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().idx, Idx);
+                            }
                         }
+
+
                     } else
 					{
 						return;
@@ -85,7 +104,16 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 			{	// 장비창 아이템을 인벤창에 놓았는데 빈 슬롯인 경우에만 실행 되도록
 				 if (gameObject.GetComponentInChildren<Btn>()?.ActiveChk == false)
 				{
-					StaticManager.Instance.SubInvenToInven(DragingPrefab.PreviousParent.GetComponent<DroppableUI>()._inventorytype, Idx);
+                    if (DragingPrefab.PreviousParent.GetComponent<DroppableUI>().InventoryType == InventoryType.SetMymon1 ||
+                        DragingPrefab.PreviousParent.GetComponent<DroppableUI>().InventoryType == InventoryType.SetMymon2 ||
+                         DragingPrefab.PreviousParent.GetComponent<DroppableUI>().InventoryType == InventoryType.SetMymon3)
+					{
+                        StaticManager.Instance.SetSubInvenToInven(DragingPrefab.PreviousParent.GetComponent<DroppableUI>().InventoryType, Idx);
+
+					} else
+					{
+                        StaticManager.Instance.SubInvenToInven(DragingPrefab.PreviousParent.GetComponent<DroppableUI>()._inventorytype, Idx);
+					}
                 }
 			} else
 			{

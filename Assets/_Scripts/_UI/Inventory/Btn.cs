@@ -11,6 +11,7 @@ public class Btn : MonoBehaviour, IPointerClickHandler
     public bool   ActiveChk { get => _activeChk;  set => _activeChk  = value; }
     public string Category  { get => _category;   set => _category   = value; }
     public InventoryManager ivtmanager;
+    public MonsterInventoryManager myMonsterManager;
 
 
     public void OnPointerClick(PointerEventData eventData)
@@ -18,6 +19,9 @@ public class Btn : MonoBehaviour, IPointerClickHandler
         if (ivtmanager != null)
         {
             ivtmanager.OnItemClicked(eventData, transform.GetComponentInParent<DroppableUI>().Idx);
+        } else
+        {
+            myMonsterManager.OnItemClicked(eventData, transform.GetComponentInParent<DroppableUI>().Idx);
         }
     }
 }

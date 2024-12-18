@@ -382,7 +382,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8288316680663572423}
-  - component: {fileID: 2733826815161971786}
   m_Layer: 5
   m_Name: ExpHpMp_Container
   m_TagString: Untagged
@@ -413,22 +412,6 @@ RectTransform:
   m_AnchoredPosition: {x: -108, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2733826815161971786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290627735403995968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15611bade19549a40b77881cf2b6a33a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerExpBar: {fileID: 6934904266611000859}
-  _playerHp: {fileID: 8388944595122757996}
-  _playerMp: {fileID: 769911908901968228}
-  _playerProfileImage: {fileID: 5798344360684063052}
 --- !u!1 &325138036238411209
 GameObject:
   m_ObjectHideFlags: 0
@@ -5441,6 +5424,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2670671959554480599}
+  - component: {fileID: 8130242253204727611}
   m_Layer: 5
   m_Name: mon1
   m_TagString: Untagged
@@ -5469,6 +5453,22 @@ RectTransform:
   m_AnchoredPosition: {x: -504, y: -53.5}
   m_SizeDelta: {x: 150, y: 173}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8130242253204727611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3306582083829740932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4117d7142291f0845adc19eed8b13a75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mon1ExpBar: {fileID: 6741410243750058841}
+  _mon1Hp: {fileID: 896146426074908711}
+  _mon1Mp: {fileID: 6082511346506089934}
+  _mon1ProfileImage: {fileID: 4138393439652521517}
 --- !u!1 &3331880431836429960
 GameObject:
   m_ObjectHideFlags: 0
@@ -6003,6 +6003,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3041176545260615258}
+  - component: {fileID: 6589278135408913242}
   m_Layer: 5
   m_Name: mon2
   m_TagString: Untagged
@@ -6031,6 +6032,22 @@ RectTransform:
   m_AnchoredPosition: {x: -314.3, y: -53.5}
   m_SizeDelta: {x: 150, y: 173}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6589278135408913242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748698100309411559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4117d7142291f0845adc19eed8b13a75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mon1ExpBar: {fileID: 0}
+  _mon1Hp: {fileID: 0}
+  _mon1Mp: {fileID: 0}
+  _mon1ProfileImage: {fileID: 0}
 --- !u!1 &3804444313051019821
 GameObject:
   m_ObjectHideFlags: 0
@@ -6944,6 +6961,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 253051170910335833}
+  - component: {fileID: 8377725709036607769}
   m_Layer: 5
   m_Name: Player
   m_TagString: Untagged
@@ -6972,6 +6990,22 @@ RectTransform:
   m_AnchoredPosition: {x: -691.9, y: -53.5}
   m_SizeDelta: {x: 150, y: 173}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8377725709036607769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4236423231833421123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15611bade19549a40b77881cf2b6a33a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerExpBar: {fileID: 6934904266611000859}
+  _playerHp: {fileID: 8388944595122757996}
+  _playerMp: {fileID: 769911908901968228}
+  _playerProfileImage: {fileID: 5798344360684063052}
 --- !u!1 &4244949324004154809
 GameObject:
   m_ObjectHideFlags: 0
@@ -7217,6 +7251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3456214212432360854}
+  - component: {fileID: 2442640189000854952}
   m_Layer: 5
   m_Name: mon3
   m_TagString: Untagged
@@ -7245,6 +7280,22 @@ RectTransform:
   m_AnchoredPosition: {x: -126.9, y: -53.5}
   m_SizeDelta: {x: 150, y: 173}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2442640189000854952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4568032960506905190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4117d7142291f0845adc19eed8b13a75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mon1ExpBar: {fileID: 0}
+  _mon1Hp: {fileID: 0}
+  _mon1Mp: {fileID: 0}
+  _mon1ProfileImage: {fileID: 0}
 --- !u!1 &4571835518160600947
 GameObject:
   m_ObjectHideFlags: 0
@@ -10441,7 +10492,7 @@ MonoBehaviour:
   _enemyInfoUI: {fileID: 1501091576834396737}
   _damagePoolManager: {fileID: 68676963323153901}
   _dropItemPoolMaanger: {fileID: 4132651944214276134}
-  _ExpHpMpContainer: {fileID: 2733826815161971786}
+  _ExpHpMpContainer: {fileID: 8377725709036607769}
   _joystick: {fileID: 3358900902185918260}
   _mainUI: {fileID: 759539231474733215}
   _worldNicknameUI: {fileID: 6409792631830009774, guid: 553a27002faed4147bb438d39701e961, type: 3}
@@ -11312,6 +11363,10 @@ MonoBehaviour:
   _layout_TopRight: {fileID: 6739198896432547000}
   _layout_BottomLeft: {fileID: 3344364324923761683}
   _layout_BottomRight: {fileID: 7926958078734117041}
+  _MonUIList:
+  - {fileID: 8130242253204727611}
+  - {fileID: 6589278135408913242}
+  - {fileID: 2442640189000854952}
 --- !u!1 &6585042535971823457
 GameObject:
   m_ObjectHideFlags: 0
@@ -14045,7 +14100,7 @@ GameObject:
   - component: {fileID: 3595591338063319968}
   - component: {fileID: 4138393439652521517}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: Profiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

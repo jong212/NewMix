@@ -130,7 +130,7 @@ public class StaticManager : MonoBehaviour
         {
             InvenItemMoveQueue(changeA, ChangeB);
         });
-    }
+    } 
     private void InvenItemMoveQueue(int beforeSloatId, int afterSloatId)
     {
         var copyBeforeItemId = CashUdata.InventorySlots[beforeSloatId].ItemId;

@@ -81,13 +81,12 @@ public class Character : NetworkBehaviour
             InitItem();             // 플레이어 장비 장착 정보 네트워크 변수에 초기화 (다른 클라 동기화)
             StaticManager.UI.ContentsInventoryUI.gameObject.SetActive(true);
             StaticManager.UI.ContentsInventoryUI.FirstInit();            
-            
-            StaticManager.UI.MonsterInventoryManagerUI.gameObject.SetActive(true);
-            StaticManager.UI.MonsterInventoryManagerUI.FirstInit();
-
 
             StaticManager.Instance.CashUdata = BackendGameData.Instance.userData;
             StaticManager.Instance.UniquePlayer = this;
+
+            StaticManager.UI.MonsterInventoryManagerUI.gameObject.SetActive(true);
+            StaticManager.UI.MonsterInventoryManagerUI.FirstInit();
             CalculateStatUI();
             CurrentHp = FinalHP;
             StaticManager.Instance.Stat += CalculateStatUI;

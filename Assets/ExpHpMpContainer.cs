@@ -11,7 +11,8 @@ public class ExpHpMpContainer : MonoBehaviour
     [SerializeField] private Image _playerExpBar;
     [SerializeField] private Image _playerHp;
     [SerializeField] private Image _playerMp;
-    [SerializeField] private Image _playerProfileImage;
+    [SerializeField] private Image _playerProfileImage; 
+
     void Awake()
     {
     }
@@ -21,22 +22,8 @@ public class ExpHpMpContainer : MonoBehaviour
         character = StaticManager.Instance.UniquePlayer;
         character.OnStatsChanged += UpdateStats;
         character.InitHpUpdate();
-        /*StartCoroutine(getPlayer());*/
-
-    }
-
-    /*private IEnumerator getPlayer()
-    {
-        yield return null;
-        
-       
-    
-    }*/
-    private void Update()
-    {
-        Debug.Log(character);
-
-    }
+ 
+    } 
     private void OnDisable()
     {
        character.OnStatsChanged -= UpdateStats;

@@ -94,7 +94,9 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 		Runner = null;
 		if (shutdownReason == ShutdownReason.Ok)
 		{
-			SceneManager.LoadScene("Menu");
+			//팅길때 처리하는 곳 
+
+			//SceneManager.LoadScene("Menu");
 /*            UIScreen.activeScreen.BackTo(InterfaceManager.instance.kitchenConnectScreen);
 */		}
 		else

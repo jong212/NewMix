@@ -78,6 +78,7 @@ public class MonsterInventoryManager : MonoBehaviour
                             component.ActiveChk = true;
                            /* component.Category = item.Category;*/
                         }
+                       
                         break;
                     }
                 }
@@ -102,6 +103,7 @@ public class MonsterInventoryManager : MonoBehaviour
                         {
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
+                            GameManager.instance.InsertMyMonsters(tIdx,item);
                             /* component.Category = item.Category;*/
                         }
                         break;
@@ -169,11 +171,6 @@ public class MonsterInventoryManager : MonoBehaviour
                             break;
                         }
                     }
-
-                       
-
-                       /* Btn slotItem = subidx.GetComponentInChildren<Btn>();*/
-                        
                 }
             }
             OnDoubleClick(slotID);
@@ -215,17 +212,4 @@ public class MonsterInventoryManager : MonoBehaviour
     {
 
     }
-   /* private void OnEnable()
-    {
-        tabParents[0].gameObject.SetActive(true);
-        tabParents[1].gameObject.SetActive(false);
-        tabParents[2].gameObject.SetActive(false);
-    }
-    private void OnDisable()
-    {
-        tabParents[0].gameObject.SetActive(true);
-        tabParents[1].gameObject.SetActive(false);
-        tabParents[2].gameObject.SetActive(false);
-    }*/
-    
 }

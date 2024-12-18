@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyMonsterGroundedState : MyMonsterState
+public class MyMonsterGroundedState : Mstate
 {
-    protected MycoreCommon enemy;
-    public MyMonsterGroundedState(MycoreStates _enemyBase, MyMonsterStateMachine _stateMachine, string _animBoolName, MycoreCommon _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
+    protected Mentity enemy;
+    public MyMonsterGroundedState(MAi _enemyBase, MStateMachine _stateMachine, string _animBoolName, Mentity _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
     {
         this.enemy = _enemy;
     }

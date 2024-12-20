@@ -279,7 +279,7 @@ Animator:
   m_GameObject: {fileID: 1257087489846175758}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: f005410198c31884b8cf727e2cf445ee, type: 3}
-  m_Controller: {fileID: 9100000, guid: db53b4cb63386064382d8201fb95e6de, type: 2}
+  m_Controller: {fileID: 9100000, guid: ed91fad5bbe84024faea8ab3708f719a, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1169,11 +1169,13 @@ GameObject:
   - component: {fileID: 473026759639642658}
   - component: {fileID: 3901600442813068076}
   - component: {fileID: -3630243333851463070}
-  - component: {fileID: -6880436890373463894}
   - component: {fileID: 6715843726876892681}
   - component: {fileID: 1843352663235160571}
   - component: {fileID: 6769342582772138539}
   - component: {fileID: 9197558828593702471}
+  - component: {fileID: 3852586776271040867}
+  - component: {fileID: 4222003822557161591}
+  - component: {fileID: 145698673276598258}
   m_Layer: 3
   m_Name: mon1
   m_TagString: Untagged
@@ -1247,22 +1249,6 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 84
   m_CollisionDetection: 2
---- !u!114 &-6880436890373463894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2350303833550570012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
 --- !u!114 &6715843726876892681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1307,13 +1293,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 1569887515
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: -6880436890373463894}
   - {fileID: 6715843726876892681}
   - {fileID: 1843352663235160571}
   - {fileID: 9197558828593702471}
+  - {fileID: 3852586776271040867}
+  - {fileID: 145698673276598258}
 --- !u!114 &9197558828593702471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1326,6 +1313,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e6dd035a5403f41a3b647f3678717b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MyMonsterMovement: {fileID: 3852586776271040867}
+--- !u!114 &3852586776271040867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59c2ebcd497c12b44bc23be0f877b2cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  rotationSpeed: 3600
+  simpleKCC: {fileID: 145698673276598258}
+  character: {fileID: 0}
+  pathfinding: {fileID: 4222003822557161591}
+  CanMove: 0
+--- !u!114 &4222003822557161591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6c46890e0a24e4c9a9c9c11820b1ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseManager: {fileID: 0}
+--- !u!114 &145698673276598258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350303833550570012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1869825851, guid: 977dbcf975465374990f471e1497f563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _settings:
+    Shape: 1
+    IsTrigger: 0
+    Radius: 0.35
+    Height: 1.8
+    Extent: 0.035
+    ColliderLayer: 0
+    CollisionLayerMask:
+      serializedVersion: 2
+      m_Bits: 1
+    ProxyInterpolationMode: 0
+    TeleportThreshold: 1
+    AntiJitterDistance: {x: 0.025, y: 0.01}
+    CompressNetworkPosition: 0
+    ForcePredictedLookRotation: 0
+    StepHeight: 0.5
+    StepDepth: 0.2
+    StepSpeed: 1
+    StepMinPushBack: 0.5
+    StepGroundCheckRadiusScale: 0.5
+    StepRequireGroundTarget: 0
+    SnapDistance: 0.25
+    SnapSpeed: 4
 --- !u!1 &4335755581001208978
 GameObject:
   m_ObjectHideFlags: 0

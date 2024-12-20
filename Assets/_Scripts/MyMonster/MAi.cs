@@ -38,7 +38,10 @@ public class MAi : Mentity
     {
         if (Object.HasStateAuthority)
         {
-            base.FixedUpdate();
+            //base.FixedUpdate();
+            stateMachine.currentState.FixedUpdate();
+
+
         }
     }
 }

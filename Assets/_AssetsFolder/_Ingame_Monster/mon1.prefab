@@ -1215,6 +1215,7 @@ MonoBehaviour:
   nearbyPlayerObjects: []
   _NetworkedStateId: 0
   _nearbyPlayers: []
+  _resetSetActiveObj: []
   Obstacle: {fileID: 8082270149814068328}
   ObstacleCheckDistance: 5
   wallCheck: {fileID: 0}
@@ -1227,6 +1228,9 @@ MonoBehaviour:
   ObstacleLayer:
     serializedVersion: 2
     m_Bits: 256
+  _DropItemIdx: 
+  _DropItemPercent: 
+  _MonsterId: 0
   _MonsterName: 0
   _Lv: 0
   _Exp: 0

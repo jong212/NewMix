@@ -25,20 +25,24 @@ public class MIdleState : MyMonsterGroundedState
     public override void Update()
     {
         base.Update();
-      if( _player != null && _player.PlayerMovement.path != null)
-        {            
+      
+    } 
+    public override void FixedUpdate()
+    {
+
+        if (_player != null && _player.PlayerMovement.path != null )
+        {
             if (_player.currentState == Character.chrState.TargetMove)
             {
-                Debug.Log("targetIng");
+             
+                    enemy.mymonsterMovement.CanMove = true;
             }
             else
             {
+                enemy.mymonsterMovement.CanMove = false;
+
                 Debug.Log("Notarget");
             }
         }
-    }
-    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
     }
 }

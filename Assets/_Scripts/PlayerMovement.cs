@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Fusion.Addons.SimpleKCC;
-using IngameDebugConsole;
-using Unity.VisualScripting;
 
 public class PlayerMovement : NetworkBehaviour
 {
@@ -16,7 +14,8 @@ public class PlayerMovement : NetworkBehaviour
 
     //  Private Field //
     private Vector3 currentWaypoint;
-    private Grid    grid;
+    private Grid grid;
+
 
     //  Getter Setter TO DO 변수 용도 각각 메모하기
     public Pathfinding Pathfinding => pathfinding;
@@ -64,6 +63,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (path != null && path.Count > 0)
         {
+            character.currentState = Character.chrState.TargetMove;
             //최종 목적지 위치값을 path[path.Count-1].worldPosition 으로 구하고 플레이어의 현 위치를 빼면 거리가 나오는데 1 미만인 경우에는 공격로직 타도록했음
             if (Vector3.Distance(simpleKCC.transform.position, path[path.Count-1].worldPosition) < 1f) 
             {
@@ -82,6 +82,7 @@ public class PlayerMovement : NetworkBehaviour
 
             // 아래 로직을 않았을 때 작성하지 않고 Pahtfinder 스크립트의 Update문의 Pathfind 함수를 1초로 하면 플레이어가 currentWaypoint에 도착시 다음 도착지점이 있음에도 불구하고 도차간 지점에서 더이상 변경사항이 없기 때문에  제자리에서 도는 문제가 발생한다
             // 
+            Debug.Log(path.Count + "거리 개수");
             if (Vector3.Distance(simpleKCC.transform.position, currentWaypoint) < 0.1f)
             {
                 int tempIdx = 0;
@@ -127,23 +128,4 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
-    /// <summary>
-    ///  Gizmos를 사용하여 플레이어 이동 방향 시각화
-    /// </summary>
-   /*
-    void OnDrawGizmos()
-    {
-        if ( path != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, currentWaypoint);
-
-            // 이동 방향 표시
-            Vector3 direction = currentWaypoint - transform.position;
-            direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position, transform.position + direction * 2f);
-        }
-    }
-   */
 }

@@ -32,7 +32,14 @@ public class Character : NetworkBehaviour
         get => _isAttack;
         set => _isAttack = value;
     }
-
+    public enum chrState
+    {
+        Stop,
+        TargetMove,
+        JoyStickMove,
+        Attack
+    }
+    public chrState currentState;
     [field: SerializeField]
     public CharacterSpecs Specs { get; private set; }
     public PlayerMovement PlayerMovement { get => _playerMovement; }
@@ -242,7 +249,6 @@ public class Character : NetworkBehaviour
             _isInitialized = true;
             OnSetitemList();
         }
-        Debug.Log(FinalMoveSpeed);
         float movementSpeed = _kcc.RealSpeed > 0 ? _kcc.RealSpeed / FinalMoveSpeed : 0;
         _anim.SetFloat("Movement", movementSpeed);
 
@@ -268,7 +274,8 @@ public class Character : NetworkBehaviour
             // 조이스틱 값이 있을 때 isMoveAble을 true로 해서 Astar로 움직이지 못 하도록 한다
             if (_joystickInput.magnitude > 0)
             {
-                _isMoveAble = true; 
+                _isMoveAble = true;
+                currentState = chrState.JoyStickMove;
                 MoveCharacter(_joystickInput);  // JoyStick Move Logic
             }
             else 
@@ -353,6 +360,7 @@ public class Character : NetworkBehaviour
         }
         else if (targetMonster.NetworkedHealth - finalAtk <= 0)
         {
+            currentState = chrState.Stop;
             targetMonster.DealDamageRpc(finalAtk);
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;

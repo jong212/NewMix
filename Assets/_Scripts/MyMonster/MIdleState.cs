@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class MIdleState : MyMonsterGroundedState
 {
-    
+
+    public Character _player { get; private set; }
     public MIdleState(MAi _enemyBase, MStateMachine _stateMachine, string _animBoolName, Mentity _enemy) : base(_enemyBase, _stateMachine, _animBoolName, _enemy)
     {
     }
@@ -12,8 +13,7 @@ public class MIdleState : MyMonsterGroundedState
     public override void Enter()
     {
         base.Enter();
-      /*  stateTimer = enemy.idleTime;
-        enemyBase.SetZeroVelocity();*/
+        _player = StaticManager.Instance.UniquePlayer;
     }
 
     public override void Exit()
@@ -25,14 +25,17 @@ public class MIdleState : MyMonsterGroundedState
     public override void Update()
     {
         base.Update();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            enemy.Runner.Despawn(enemy.Object); // NetworkObject Á¦°Å
+      if( _player != null && _player.PlayerMovement.path != null)
+        {            
+            if (_player.currentState == Character.chrState.TargetMove)
+            {
+                Debug.Log("targetIng");
+            }
+            else
+            {
+                Debug.Log("Notarget");
+            }
         }
-        if (stateTimer < 0)
-        {
-/*            stateMachine.ChangeState(enemy.moveState);
-*/        }
     }
     public override void FixedUpdate()
     {

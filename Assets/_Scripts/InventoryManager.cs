@@ -37,9 +37,17 @@ public class InventoryManager : MonoBehaviour
     private Dictionary<int, int> slotClickCounts = new Dictionary<int, int>(); // 클릭 카운트 및 코루틴 관리를 위한 딕셔너리
     private Dictionary<int, Coroutine> slotCoroutines = new Dictionary<int, Coroutine>();
 
-
+    bool SceneChangeInit = false;
     public void FirstInit()
     {
+        if(!SceneChangeInit)
+        {
+            SceneChangeInit = true;
+        } else
+        {
+            gameObject.SetActive(false);
+            return;
+        }
         InitMergeSloat();
         InitializeSlots();
         gameObject.SetActive(false);

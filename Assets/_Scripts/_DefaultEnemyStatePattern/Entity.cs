@@ -1,5 +1,6 @@
 using Fusion;
 using Fusion.Addons.SimpleKCC;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -293,16 +294,23 @@ public class Entity : NetworkBehaviour
             }
         }
     }
-   
+    public event Action OnDestroyed; // 몬스터가 파괴될 때 호출되는 이벤트
     public virtual void Die()
     {
          Debug.Log("Monster died.");
+        OnDestroyed?.Invoke(); // 이벤트 호출
+
         // 사망 처리 로직 (예: 몬스터 제거)
+        StaticManager.Instance.UniquePlayer.currentState = Character.chrState.AttackStop;
         if (_monsterManager == null) _monsterManager = FindObjectOfType<MonsterManager>();
         _monsterManager.DespawnMonster(this);
+        
     }
     #endregion
-
+    private void OnDestroy()
+    {
+        OnDestroyed?.Invoke(); // OnDestroy에서도 이벤트 호출 (안전장치)
+    }
     protected virtual void ReturnDefaultSpeed()
     {
         anim.speed = 1;

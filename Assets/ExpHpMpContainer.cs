@@ -32,6 +32,5 @@ public class ExpHpMpContainer : MonoBehaviour
     private void UpdateStats()
     {
         _playerHp.fillAmount = (float)character.CurrentHp / character.FinalHP;
-        Debug.Log(character.CurrentHp + "ddd" + character.FinalHP);
     }
 }

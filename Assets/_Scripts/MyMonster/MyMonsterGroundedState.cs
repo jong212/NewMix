@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class MyMonsterGroundedState : Mstate
 {
-    protected Mentity enemy;
-    public MyMonsterGroundedState(MAi _enemyBase, MStateMachine _stateMachine, string _animBoolName, Mentity _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
+    public MyMonsterGroundedState(MAi _enemyBase, MStateMachine _stateMachine, string _animBoolName, Mentity _enemy) : base(_enemyBase, _stateMachine, _animBoolName,_enemy)
     {
-        this.enemy = _enemy;
     }
 
     public override void Enter()

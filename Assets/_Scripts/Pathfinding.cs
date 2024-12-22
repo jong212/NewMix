@@ -165,7 +165,7 @@ public class Pathfinding : MonoBehaviour
 
         grid.path = path;
         if(path.Count == 0) return;
-         Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
+         //Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
 
         // 경로 업데이트 이벤트 호출
         OnPathUpdated?.Invoke(path);

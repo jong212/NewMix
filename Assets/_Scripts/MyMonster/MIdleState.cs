@@ -4,7 +4,6 @@ using UnityEngine;
 public class MIdleState : MyMonsterGroundedState
 {
 
-    public Character _player { get; private set; }
     public MIdleState(MAi _enemyBase, MStateMachine _stateMachine, string _animBoolName, Mentity _enemy) : base(_enemyBase, _stateMachine, _animBoolName, _enemy)
     {
     }
@@ -13,13 +12,13 @@ public class MIdleState : MyMonsterGroundedState
     public override void Enter()
     {
         base.Enter();
-        _player = StaticManager.Instance.UniquePlayer;
+        //_enemy.mymonsterMovement.CanMove = false;
+
     }
 
     public override void Exit()
     {
         base.Exit();
-
     }
 
     public override void Update()
@@ -29,20 +28,21 @@ public class MIdleState : MyMonsterGroundedState
     } 
     public override void FixedUpdate()
     {
-
-        if (_player != null && _player.PlayerMovement.path != null )
+        Debug.Log(_enemy._noAttack + "dddfsdfssds");
+         if (_enemy._player != null && _enemy._player.PlayerMovement.path != null )
         {
-            if (_player.currentState == Character.chrState.TargetMove)
+          if (_enemy._player.currentState == Character.chrState.TargetMove)
             {
-             
-                    enemy.mymonsterMovement.CanMove = true;
-            }
-            else
+                enemyBase.stateMachine.ChangeState(enemyBase.moveState);
+            } else if (_enemy._player.currentState == Character.chrState.Attack && !_enemy._noAttack)
             {
-                enemy.mymonsterMovement.CanMove = false;
+                enemyBase.stateMachine.ChangeState(enemyBase.attackState);
 
-                Debug.Log("Notarget");
             }
-        }
+            /*else if (_enemy._player.currentState == Character.chrState.Attack && _enemy.CheckAgroDistance() && !_enemy.IsAttack)
+            {
+                enemyBase.stateMachine.ChangeState(enemyBase.attackState);
+            }*/
+        } 
     }
 }

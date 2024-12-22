@@ -58,11 +58,12 @@ public class MyMonsterMovement : NetworkBehaviour
 
     public bool CanMove;
     public override void FixedUpdateNetwork()
-
     {
-        if (CanMove)
+        if (!Object.HasStateAuthority) return;
+
+            if (Pathfinding.target != null && !character._player.IsMoveAble)
         {
-            Movement();
+                Movement();
         }
     }
     /// <summary>
@@ -71,18 +72,14 @@ public class MyMonsterMovement : NetworkBehaviour
     /// </summary>
     public void Movement()
     {
-
+        if (Pathfinding.target == null) return;
         if (path != null && path.Count > 0)
         {
             //최종 목적지 위치값을 path[path.Count-1].worldPosition 으로 구하고 플레이어의 현 위치를 빼면 거리가 나오는데 1 미만인 경우에는 공격로직 타도록했음
-            if (Vector3.Distance(simpleKCC.transform.position, path[path.Count-1].worldPosition) < 1f) 
+            if (Vector3.Distance(simpleKCC.transform.position, path[path.Count-1].worldPosition) < 3f) 
             {
                     simpleKCC.Move(Vector3.zero);
-                  
-                    if(!character.IsAttack)
-                    {
-                        /*character.PerformAttack()*/;
-                    }
+                       character.PerformAttack();
                     return; 
 
 
@@ -96,7 +93,7 @@ public class MyMonsterMovement : NetworkBehaviour
 
             // 아래 로직을 않았을 때 작성하지 않고 Pahtfinder 스크립트의 Update문의 Pathfind 함수를 1초로 하면 플레이어가 currentWaypoint에 도착시 다음 도착지점이 있음에도 불구하고 도차간 지점에서 더이상 변경사항이 없기 때문에  제자리에서 도는 문제가 발생한다
             // 
-            Debug.Log(path.Count + "거리 개수");
+            //Debug.Log(path.Count + "거리 개수");
             if (Vector3.Distance(simpleKCC.transform.position, currentWaypoint) < 0.1f)
             {
                 int tempIdx = 0;
@@ -106,7 +103,7 @@ public class MyMonsterMovement : NetworkBehaviour
                     {
                         if (tempIdx + 1 >= path.Count)
                         {
-                            Debug.Log("다음 인덱스가 범위를 초과합니다. 루프를 종료합니다.");
+                            //Debug.Log("다음 인덱스가 범위를 초과합니다. 루프를 종료합니다.");
                             break; // 범위를 초과하므로 루프 종료
                         }
                         currentWaypoint = path[tempIdx + 1].worldPosition;

@@ -21,7 +21,10 @@ public class Character : NetworkBehaviour
     /// true => 조이스틱 값이 있을 때 <br></br>
     /// false => 조이스틱 값이 없을 때
     /// </summary>
-    private bool _isMoveAble; 
+    private bool _isMoveAble;
+    public bool IsMoveAble {
+        get => _isMoveAble;
+    }
 
     private bool _isAttack;
     /// <summary>
@@ -34,7 +37,7 @@ public class Character : NetworkBehaviour
     }
     public enum chrState
     {
-        Stop,
+        AttackStop,
         TargetMove,
         JoyStickMove,
         Attack
@@ -101,6 +104,7 @@ public class Character : NetworkBehaviour
             StaticManager.UI.MainUI.Layout_TopRight.gameObject.SetActive(true);
             StaticManager.UI.DamagePoolUI.gameObject.SetActive(true);
             StaticManager.UI.DropItemPoolManager.gameObject.SetActive(true);
+            GameManager.instance.SpawnMonsterData(); 
 
         } else
         {
@@ -158,7 +162,7 @@ public class Character : NetworkBehaviour
     }
     private void OnChangeMoveSpeed()
     {
-        Debug.Log(FinalMoveSpeed);
+        //Debug.Log(FinalMoveSpeed);
         if (FinalMoveSpeed != 3)
         {
             _anim.SetFloat("MoveSpd", FinalMoveSpeed - 3);
@@ -275,11 +279,12 @@ public class Character : NetworkBehaviour
             if (_joystickInput.magnitude > 0)
             {
                 _isMoveAble = true;
-                currentState = chrState.JoyStickMove;
+                currentState = chrState.AttackStop;
                 MoveCharacter(_joystickInput);  // JoyStick Move Logic
+
             }
             else 
-            {
+            { 
                 HandleIdleMovement();           // Astar Move Logic
             }
         }
@@ -322,6 +327,7 @@ public class Character : NetworkBehaviour
         // Astar Move Logic
         if (_playerMovement.Pathfinding.target && !_isMoveAble)
         {
+
             _playerMovement.Movement();
             return;
         }
@@ -351,6 +357,7 @@ public class Character : NetworkBehaviour
     // 죽이면 타겟 해제한느거랑 ㅔ쳑 100 하는거 해야함
     public void AttackRpc(Enemy targetMonster,float finalAtk)
     {
+        currentState = chrState.Attack;
         NetworkObject nObject = targetMonster.GetComponent<NetworkObject>();
         if (targetMonster.NetworkedHealth <= 0)
         {
@@ -360,7 +367,7 @@ public class Character : NetworkBehaviour
         }
         else if (targetMonster.NetworkedHealth - finalAtk <= 0)
         {
-            currentState = chrState.Stop;
+           
             targetMonster.DealDamageRpc(finalAtk);
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;

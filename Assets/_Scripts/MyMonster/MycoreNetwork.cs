@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class MycoreNetwork : NetworkBehaviour
 {
+    [Networked] public int Lv { get; set; }
+    [Networked] public int Atk{ get; set; }
+    [Networked] public int Def{ get; set; }
+    [Networked] public int Hp{ get; set; }
+    
+
     protected virtual void Awake()
     {
     }
@@ -13,7 +19,6 @@ public class MycoreNetwork : NetworkBehaviour
     }
     protected virtual void Update()
     {
-       
     }    
     protected virtual void FixedUpdate()
     {

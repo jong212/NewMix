@@ -1,6 +1,7 @@
 // Pathfinding.cs
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -16,7 +17,24 @@ public class MyMonsterPathfinding : MonoBehaviour
                  Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
                 return;
             }
+
+            // 기존 타겟의 OnDestroyed 이벤트 구독 해제
+            if (_target != null)
+            {
+                var previousTarget = _target.GetComponent<Enemy>();
+                if (previousTarget != null)
+                    previousTarget.OnDestroyed -= HandleTargetDestroyed;
+            }
+
             _target = value;
+
+            // 새로운 타겟의 OnDestroyed 이벤트 구독
+            if (_target != null)
+            {
+                var newTarget = _target.GetComponent<Enemy>();
+                if (newTarget != null)
+                    newTarget.OnDestroyed += HandleTargetDestroyed;
+            }
         }
     }// 현재 타겟 (몬스터)
     
@@ -25,6 +43,7 @@ public class MyMonsterPathfinding : MonoBehaviour
 
     // 경로가 업데이트될 때 호출되는 이벤트
     public event Action<List<Node>> OnPathUpdated;
+    public event Action DestoryTarget;
 
     void Awake()
     {
@@ -48,10 +67,15 @@ public class MyMonsterPathfinding : MonoBehaviour
             mouseManager.OnMonsterClicked -= SetTarget;
         }
     }
-
+    void HandleTargetDestroyed()
+    {
+        Debug.Log("타겟 몬스터가 파괴되었습니다.");
+        target = null; // 타겟을 null로 설정
+    }
     void SetTarget(Transform monsterTransform)
     {
         Debug.Log("Montest");
+
         target = monsterTransform;
     }
 
@@ -132,7 +156,7 @@ public class MyMonsterPathfinding : MonoBehaviour
             }
         }
 
-         Debug.LogWarning("경로를 찾지 못했습니다.");
+        /// Debug.LogWarning("경로를 찾지 못했습니다.");
         OnPathUpdated?.Invoke(null);
     }
 
@@ -147,7 +171,7 @@ public class MyMonsterPathfinding : MonoBehaviour
             currentNode = currentNode.parent;
             if (currentNode == null)
             {
-                 Debug.LogError("경로 추적 중 부모 노드가 null입니다.");
+             //    Debug.LogError("경로 추적 중 부모 노드가 null입니다.");
                 OnPathUpdated?.Invoke(null);
                 return;
             }
@@ -156,7 +180,7 @@ public class MyMonsterPathfinding : MonoBehaviour
 
         grid.path = path;
         if(path.Count == 0) return;
-         Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
+      //   Debug.Log("경로가 생성되었습니다. 노드 수: " + path.Count);
 
         // 경로 업데이트 이벤트 호출
         OnPathUpdated?.Invoke(path);

@@ -41,6 +41,11 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
     // TO DO 몬스터 스폰
     public override void Spawned()
     {
+         
+        if (StaticManager.UI.MonsterInventoryManagerUI.SceneChangeInit == true)
+        {
+
+        }
     }
 
     public override void Render()
@@ -51,7 +56,28 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
     public override void FixedUpdateNetwork()
     {
     }
-    public void InsertMyMonsters(int idx, MonsterInfoChart monsterChart)
+    public void SpawnMonsterData()
+    {
+        List<SetMymon> setMon = BackendGameData.Instance.userData.setMymonList;
+        List<MonsterInfoChart> itemChart = BackendGameData.Instance.MonsterInfoList;
+
+        foreach (SetMymon setInvenIdx in setMon)
+        {
+                foreach (MonsterInfoChart item in itemChart)
+                {
+                    if (setInvenIdx.setMonList.Count > 0 && setInvenIdx.setMonList[0] == (int)item.MonsterId)
+                    {
+                        Sprite spriteImg = AddressableManager.instance.GetSprite(item.MyMonSpriteName);
+                        if (spriteImg != null)
+                        {
+                            InsertMyMonsters(setInvenIdx, item);
+                        }
+                        break;
+                    }
+                }
+        }
+    }
+    public void InsertMyMonsters(SetMymon myMonsterStat, MonsterInfoChart monsterChart)
     {
         
 
@@ -66,6 +92,11 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
             {
                 if (res.IsSpawned)
                 {
+                    MycoreNetwork Network = res.Object.GetComponent<MycoreNetwork>();
+                    Network.Lv = myMonsterStat.setMonList[1];
+                    Network.Atk = myMonsterStat.setMonList[2];
+                    Network.Def = myMonsterStat.setMonList[3];
+                    Network.Hp = myMonsterStat.setMonList[4];
                     // Send the player info to the master client using a static RPC
                 }
             }

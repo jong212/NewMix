@@ -161,6 +161,9 @@ public class Mymon
     public string columName;
     public List<int> mList = new List<int>();
 }
+/// <summary>
+/// setMonList : 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+/// </summary>
 public class SetMymon
 {
     public string columName;

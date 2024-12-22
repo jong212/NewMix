@@ -7,6 +7,9 @@ using UnityEngine;
 public class MAi : Mentity
 {
     public MIdleState idleState { get; private set; }
+    public MMoveState moveState { get; private set; }
+    public MAttackState attackState { get; private set; }
+    public MBattleState battleState{ get; private set; }
 
     public MStateMachine stateMachine { get; private set; } 
     protected override void Awake()
@@ -14,8 +17,10 @@ public class MAi : Mentity
         base.Awake();
         stateMachine = new MStateMachine();
         idleState = new MIdleState(this, stateMachine, "Idle", this);
-  /*      moveState = new EnemyMoveState(this, stateMachine, "Move", this);
-        battleState = new EnemyBattleState(this, stateMachine, "Battle", this);
+        moveState = new MMoveState(this, stateMachine, "Move", this);
+        attackState = new MAttackState(this, stateMachine, "Attack", this);
+        battleState = new MBattleState(this, stateMachine, "Battle", this);
+ /*       battleState = new EnemyBattleState(this, stateMachine, "Battle", this);
         attackState = new EnemyAttackState(this, stateMachine, "Attack", this);
  */
     }

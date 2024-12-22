@@ -26,7 +26,7 @@ public class DataSetManager : MonoBehaviour
 
     public void SetCharacterItem(NetworkArray<int> playerItemInfo, List<Transform> objPartsList, List<Transform> objPartsPair)
     {
-        Debug.Log(playerItemInfo);
+        //Debug.Log(playerItemInfo);
         var chartItemInfo = BackendGameData.Instance.ItemChartList;
         int idx = 0;
 

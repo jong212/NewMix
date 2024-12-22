@@ -10,15 +10,18 @@ public class Mstate
     // 각 상태 클래스에서 현재 상태를 알 수 있도록 
     protected MStateMachine stateMachine;
     public MAi enemyBase;
+    public Mentity _enemy;
     protected Rigidbody rb;
 
     private string animBoolName;
     protected float stateTimer;
     protected bool triggerCalled;
 
-    public Mstate(MAi _enemyBase, MStateMachine _stateMachine, string _animBoolName)
+    public Mstate(MAi _enemyBase, MStateMachine _stateMachine, string _animBoolName,Mentity _enemy)
     {
         this.enemyBase = _enemyBase;
+        this._enemy = _enemy;
+        this._enemy._mai = _enemyBase;
         this.stateMachine = _stateMachine;
         this.animBoolName = _animBoolName;
     }
@@ -38,7 +41,7 @@ public class Mstate
     {
         triggerCalled = false;
         rb = enemyBase.rb; //각 상태에서 enemyBase.rb 이렇게 길게 쓰기 귀찮아서 rb로 사용할 수 있도록 처리
-        enemyBase.anim.SetBool(animBoolName, true);
+            enemyBase.anim.SetBool(animBoolName, true);
 
     }
 

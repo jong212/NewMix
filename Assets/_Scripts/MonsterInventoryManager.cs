@@ -38,7 +38,7 @@ public class MonsterInventoryManager : MonoBehaviour
     private Dictionary<int, int> slotClickCounts = new Dictionary<int, int>(); // 클릭 카운트 및 코루틴 관리를 위한 딕셔너리
     private Dictionary<int, Coroutine> slotCoroutines = new Dictionary<int, Coroutine>();
 
-    bool SceneChangeInit = false;
+    public bool SceneChangeInit = false;
     public void FirstInit()
     {
         if (!SceneChangeInit)
@@ -97,7 +97,7 @@ public class MonsterInventoryManager : MonoBehaviour
         }
         List<SetMymon> setMon = BackendGameData.Instance.userData.setMymonList;
 
-        int tIdx = 0;
+        int tIdx = 0;        
         foreach (SetMymon setInvenIdx in setMon)
         {
             GameObject itemInstance = Instantiate(itemPrefab, subInventory[tIdx].transform);
@@ -112,7 +112,7 @@ public class MonsterInventoryManager : MonoBehaviour
                         {
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
-                            GameManager.instance.InsertMyMonsters(tIdx,item);
+                            //GameManager.instance.InsertMyMonsters(setInvenIdx, item);
                             /* component.Category = item.Category;*/
                         }
                         break;

@@ -23,24 +23,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - player
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a00f35947c22cf14b9b13e919028102c
-    m_Address: Stickman_White
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SelectPlayer
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c946ddf49e957dd4ab976f356152c0b2
-    m_Address: Stickman_Red
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SelectPlayer
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 34b4a01a70d248e45a483dfe88a3f8b5
-    m_Address: Stickman_Yellow
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SelectPlayer
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 25b4ee956cf817247999579a1e6de4b9
     m_Address: Assets/Markus Art/Props/Weapons/Fantasy_Weapons/Prefab/Sword1.prefab
     m_ReadOnly: 0
@@ -154,6 +136,54 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cde5f310c0df164b95aca53034a7148
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayer 2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba25938999ade04438d6dbec40a78447
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayer 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f001bd400dc63641a198154e30f5735
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayerS2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8cf319a4e46dd7244af0c9758a079370
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayerS1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 642e635687374444aa42d74e967c4c7e
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayerS3.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a00f35947c22cf14b9b13e919028102c
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/Stickman_White.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SelectPlayer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c946ddf49e957dd4ab976f356152c0b2
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/Stickman_Red.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SelectPlayer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 34b4a01a70d248e45a483dfe88a3f8b5
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/Stickman_Yellow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SelectPlayer
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}

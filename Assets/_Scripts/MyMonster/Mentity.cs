@@ -1,15 +1,22 @@
 using Fusion;
 using Fusion.Addons.SimpleKCC;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 using static Character;
 
 public class Mentity : MycoreNetwork
 {
-    public Character _player { get;  set; }
-    public MAi _mai { get;  set; }
+    public event Action OnStatsChanged;
+
+    public Character _player { get; set; }
+    public Sprite prifileImg {  get; set; }
+    public MAi _mai { get; set; }
+    public int spawnidx {get;set;}
     public string _playerNickname { get; private set; }
     public float _attackCooldown = 3.0f; // 공격 쿨타임 (3초)
     public float _lastAttackTime = -3.0f; // 마지막 공격 시간 (게임 시작 시 바로 공격 가능하도록 초기화)
@@ -39,6 +46,13 @@ public class Mentity : MycoreNetwork
             }
         }
         return false;
+    }
+    public void InitHpUpdate()
+    {
+        if (OnStatsChanged != null)
+        {
+            OnStatsChanged?.Invoke();
+        }
     }
     public float GetHorizontalDistance(Vector3 pos1, Vector3 pos2)
     {
@@ -155,6 +169,7 @@ public class Mentity : MycoreNetwork
         {
         _player = StaticManager.Instance.UniquePlayer;
         _playerNickname = _player.Nickname.ToString();
+            
         }
         var kccColliderTransform = transform.Find("KCCCollider");
         if (kccColliderTransform != null)
@@ -166,6 +181,12 @@ public class Mentity : MycoreNetwork
                 // 추가적인 Collider 설정이 필요하면 여기에 작성
             }
         }
+        
+    }
+    protected override void OnNicknameChanged()
+    {
+        StaticManager.UI.MainUI.MonUIList[spawnidx].init(this);
+        StaticManager.UI.MainUI.MonUIList[spawnidx].SetProfileImg(prifileImg);
     }
     protected override void Update()
     {

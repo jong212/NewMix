@@ -628,7 +628,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7b7e51ee4a4c17f4faeaab1cb60f5aa0, type: 2}
+  - {fileID: 2100000, guid: fb1eb559a6495b54c9128a623b05088d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1031,7 +1031,7 @@ GameObject:
   - component: {fileID: 7830859497705297337}
   - component: {fileID: 6918437905952539738}
   m_Layer: 6
-  m_Name: defaultPlayer
+  m_Name: defaultPlayer 2
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1205,7 +1205,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 3989172803
+  SortKey: 2284463257
   ObjectInterest: 1
   Flags: 526593
   NestedObjects: []

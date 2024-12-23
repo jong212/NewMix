@@ -33,12 +33,14 @@ public class CharacterSrcChart
     public int    charId { get; private set; }
     public string labName { get; private set; }
     public string prefName { get; private set; }
+    public string profileSpriteName { get; private set; }
 
     public CharacterSrcChart(JsonData json)
     {
         charId   = int.Parse(json["charId"].ToString());
         labName  = json["labName"].ToString();
         prefName = json["prefName"].ToString();
+        profileSpriteName = json["profileSpriteName"].ToString();
     }
 }
 

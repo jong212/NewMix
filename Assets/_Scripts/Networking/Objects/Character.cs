@@ -104,6 +104,7 @@ public class Character : NetworkBehaviour
             StaticManager.UI.MainUI.Layout_TopRight.gameObject.SetActive(true);
             StaticManager.UI.DamagePoolUI.gameObject.SetActive(true);
             StaticManager.UI.DropItemPoolManager.gameObject.SetActive(true);
+            StaticManager.UI.ExpHpMpContainer.init();
             GameManager.instance.SpawnMonsterData(); 
 
         } else
@@ -558,6 +559,5 @@ public class Character : NetworkBehaviour
         {
             OnStatsChanged?.Invoke();
         }
-
     }
 }

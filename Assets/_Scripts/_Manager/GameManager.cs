@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Fusion;
+using UnityEngine.UIElements;
 // DetectChanges() 함수 호출:이 함수가 호출되면, ChangeDetector는 두 개의 버퍼를 비교합니다.비교 대상은 네트워크 동기화된 프로퍼티들입니다. 예를 들어, Networked 속성이 붙어있는 OrderList, OrdersSpawned, OrderTimer 등의 속성들이 해당됩니다.두 버퍼를 비교하여 변경된 속성을 문자열 형태로 반환합니다. 예를 들어, OrderList가 변경되었으면, change로 "OrderList"라는 문자열이 반환됩니다.이 변경 사항은 DetectChanges() 함수에서 반환된 리스트에 포함되며, 이후 switch (change) 문에서 처리됩니다.
 
 
@@ -60,7 +61,7 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
     {
         List<SetMymon> setMon = BackendGameData.Instance.userData.setMymonList;
         List<MonsterInfoChart> itemChart = BackendGameData.Instance.MonsterInfoList;
-
+        int idxTemp = 0;
         foreach (SetMymon setInvenIdx in setMon)
         {
                 foreach (MonsterInfoChart item in itemChart)
@@ -70,14 +71,15 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
                         Sprite spriteImg = AddressableManager.instance.GetSprite(item.MyMonSpriteName);
                         if (spriteImg != null)
                         {
-                            InsertMyMonsters(setInvenIdx, item);
+                            InsertMyMonsters(setInvenIdx, item, idxTemp, spriteImg);
                         }
                         break;
                     }
                 }
+            idxTemp++;
         }
     }
-    public void InsertMyMonsters(SetMymon myMonsterStat, MonsterInfoChart monsterChart)
+    public void InsertMyMonsters(SetMymon myMonsterStat, MonsterInfoChart monsterChart,int idx,Sprite proFileImg)
     {
         
 
@@ -92,11 +94,14 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
             {
                 if (res.IsSpawned)
                 {
-                    MycoreNetwork Network = res.Object.GetComponent<MycoreNetwork>();
+                    Mentity Network = res.Object.GetComponent<Mentity>();
                     Network.Lv = myMonsterStat.setMonList[1];
                     Network.Atk = myMonsterStat.setMonList[2];
                     Network.Def = myMonsterStat.setMonList[3];
                     Network.Hp = myMonsterStat.setMonList[4];
+                    Network.CurrentHp = myMonsterStat.setMonList[4];
+                    Network.spawnidx = idx;
+                    Network.prifileImg = proFileImg;
                     // Send the player info to the master client using a static RPC
                 }
             }

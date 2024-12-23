@@ -8,9 +8,13 @@ public class MycoreNetwork : NetworkBehaviour
     [Networked] public int Lv { get; set; }
     [Networked] public int Atk{ get; set; }
     [Networked] public int Def{ get; set; }
-    [Networked] public int Hp{ get; set; }
-    
+    [Networked, OnChangedRender(nameof(OnNicknameChanged))] public int Hp{ get; set; }
+    [Networked] public int CurrentHp{ get; set; }
+    protected virtual void OnNicknameChanged()
+    {
+     
 
+    }
     protected virtual void Awake()
     {
     }

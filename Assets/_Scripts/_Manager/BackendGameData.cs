@@ -312,7 +312,22 @@ public class UserData
             }
         }
     }
-   
+    private int _curExp;
+    public int CurExp
+    {
+        get { return _curExp; }
+        set
+        {
+            if (_curExp != value)
+            {
+                _curExp = value;
+                if (!_isInitializing)
+                {
+                    BackendGameData.Instance.ExpDataUpdate<int>("currentExp", value);
+                }
+            }
+        }
+    }
 
     public List<int> setPlayerItems = new List<int>();
     public List<Mymon> mymonList = new List<Mymon>();
@@ -528,6 +543,7 @@ public class BackendGameData
     }
 
     private string gameDataRowInDate = string.Empty;
+    private string LevelExpgameDataRowInDate = string.Empty;
 
     // 닉네임을 설정하면서 유저 기본 정보 세팅 후 서버에 저장
     public void GameDataInsert(int? chrIdx)
@@ -551,6 +567,8 @@ public class BackendGameData
 
          Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
+        Param lvParam = new Param();
+
         param.Add("Level", 1);
         param.Add("Money", 10000);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
@@ -563,15 +581,22 @@ public class BackendGameData
         param.Add("mymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
         param.Add("SetMymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
 
+        lvParam.Add("currentExp", 0);
+
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("Character", param);
+        var LevelExp = Backend.GameData.Insert("LevelExp", lvParam);
+
+
         userData.EndInit();
+
         if (bro.IsSuccess())
         {
              Debug.Log("게임 정보 데이터 삽입에 성공했습니다. : " + bro);
 
             //삽입한 게임 정보의 고유값입니다.  
             gameDataRowInDate = bro.GetInDate();
+            LevelExpgameDataRowInDate = LevelExp.GetInDate();
         }
         else
         {
@@ -583,9 +608,11 @@ public class BackendGameData
     public void GetPlayerData()
     {
         var bro = Backend.GameData.GetMyData("Character", new Where());
+        var LevelExp = Backend.GameData.GetMyData("LevelExp", new Where());
         if (bro.IsSuccess())
         {
             LitJson.JsonData gameDataJson = bro.FlattenRows(); // Json으로 리턴된 데이터를 받아옵니다.  
+            LitJson.JsonData LevelExpGameDataJson = LevelExp.FlattenRows(); // Json으로 리턴된 데이터를 받아옵니다.  
 
             if (gameDataJson.Count <= 0) // 받아온 데이터의 갯수가 0이라면 데이터가 존재하지 않는 것입니다.  
             {
@@ -596,6 +623,7 @@ public class BackendGameData
             else
             {
                 gameDataRowInDate = gameDataJson[0]["inDate"].ToString(); //불러온 게임 정보의 고유값입니다.  
+                LevelExpgameDataRowInDate = LevelExpGameDataJson[0]["inDate"].ToString(); //불러온 게임 정보의 고유값입니다.  
 
                 userData = new UserData();
                 userData.BeginInit();
@@ -607,6 +635,7 @@ public class BackendGameData
                 userData.Atk = int.Parse(gameDataJson[0]["Atk"].ToString());
                 userData.Def = int.Parse(gameDataJson[0]["Def"].ToString());
                 userData.Hp = int.Parse(gameDataJson[0]["Hp"].ToString());
+                userData.CurExp = int.Parse(LevelExpGameDataJson[0]["currentExp"].ToString());
                 
 
                 userData.InventorySlots.Clear();
@@ -640,7 +669,7 @@ public class BackendGameData
                     userData.InventorySlots.Add(new InventorySlot(slotId, itemId, quantity));
                 }
                 userData.mymonList.Clear();
-                for(int i = 1; i <3; i++) // mymonster 1 부터 2까지의 컬럼을 serch
+                for(int i = 1; i < 9; i++) // mymonster 1 부터 8까지의 컬럼을 serch
                 {
                    // bool isValue = false;
                     if (gameDataJson[0].ContainsKey("mymon" + i) && gameDataJson[0]["mymon" + i].IsArray)
@@ -668,7 +697,7 @@ public class BackendGameData
                 }
                 
                 userData.setMymonList.Clear();
-                for(int i = 1; i <3; i++) // SetMymon 1 부터 2까지의 컬럼을 serch
+                for(int i = 1; i <4; i++) // SetMymon 1 부터 2까지의 컬럼을 serch
                 {
                     if (gameDataJson[0].ContainsKey("SetMymon" + i) && gameDataJson[0]["SetMymon" + i].IsArray)
                     {
@@ -731,5 +760,27 @@ public class BackendGameData
              Debug.LogError("뒤끝 : 게임 정보 데이터 수정에 실패했습니다. : " + bro);
         }
     }
+    public void ExpDataUpdate<T>(string columName, T Parameter)
+    {
+        if (userData == null)
+        {
+            Debug.LogError("서버에서 다운받거나 새로 삽입한 데이터가 존재하지 않습니다. Insert 혹은 Get을 통해 데이터를 생성해주세요.");
+            return;
+        }
 
+        Param param = new Param();
+        param.Add(columName, Parameter);
+
+        var bro = Backend.GameData.UpdateV2("LevelExp", LevelExpgameDataRowInDate, Backend.UserInDate, param);
+
+
+        if (bro.IsSuccess())
+        {
+            Debug.Log("LevelExp : 게임 정보 데이터 수정에 성공했습니다. : " + bro);
+        }
+        else
+        {
+            Debug.LogError("LevelExp : 게임 정보 데이터 수정에 실패했습니다. : " + bro);
+        }
+    }
 }

@@ -11,12 +11,14 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	}		// 해당 오브젝트가 직전에 소속되어 있었던 부모 Transfron
 	private	RectTransform	rect;				// UI 위치 제어를 위한 RectTransform
 	private	CanvasGroup		canvasGroup;		// UI의 알파값과 상호작용 제어를 위한 CanvasGroup
+	private	Btn	btn;	
 
 	private void Awake()
 	{
 		canvas		= GetComponentInParent<Canvas>().transform;
 		rect		= GetComponent<RectTransform>();
 		canvasGroup	= GetComponent<CanvasGroup>();
+        btn = GetComponent<Btn>();
 	}
 
 	/// <summary>
@@ -24,6 +26,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	/// </summary>
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		if (!btn.ActiveChk) return;
 		// 드래그 직전에 소속되어 있던 부모 Transform 정보 저장
 		previousParent = transform.parent;
 
@@ -42,8 +45,9 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	/// </summary>
 	public void OnDrag(PointerEventData eventData)
 	{
-		// 현재 스크린상의 마우스 위치를 UI 위치로 설정 (UI가 마우스를 쫓아다니는 상태)
-		rect.position = eventData.position;
+        if (!btn.ActiveChk) return;
+        // 현재 스크린상의 마우스 위치를 UI 위치로 설정 (UI가 마우스를 쫓아다니는 상태)
+        rect.position = eventData.position;
 	}
 
 	/// <summary>
@@ -51,10 +55,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	/// </summary>
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		// 드래그를 시작하면 부모가 canvas로 설정되기 때문에
-		// 드래그를 종료할 때 부모가 canvas이면 아이템 슬롯이 아닌 엉뚱한 곳에
-		// 드롭을 했다는 뜻이기 때문에 드래그 직전에 소속되어 있던 아이템 슬롯으로 아이템 이동
-		if ( transform.parent == canvas )
+        if (!btn.ActiveChk) return;
+        // 드래그를 시작하면 부모가 canvas로 설정되기 때문에
+        // 드래그를 종료할 때 부모가 canvas이면 아이템 슬롯이 아닌 엉뚱한 곳에
+        // 드롭을 했다는 뜻이기 때문에 드래그 직전에 소속되어 있던 아이템 슬롯으로 아이템 이동
+        if ( transform.parent == canvas )
 		{
 			// 마지막에 소속되어있었던 previousParent의 자식으로 설정하고, 해당 위치로 설정
 			transform.SetParent(previousParent);

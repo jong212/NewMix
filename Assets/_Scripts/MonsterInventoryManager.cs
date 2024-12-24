@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System;
+using ExitGames.Client.Photon;
 
 public class MonsterInventoryManager : MonoBehaviour
 {
@@ -16,23 +17,20 @@ public class MonsterInventoryManager : MonoBehaviour
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private float doubleClickThreshold = 0.3f; // 더블 클릭 인식 시간 간격 (초)
 
+    [SerializeField] private Text _name;
+    [SerializeField] private Text _lv;
     [SerializeField] private Text _power;
     [SerializeField] private Text _def;
-    [SerializeField] private Text _hp;
-    [SerializeField] private Text _LastPower;
-    [SerializeField] private Text _LastHP;
-    [SerializeField] private Text _LastAtkSpeed;
-    [SerializeField] private Text _LastMoveSpeed;
+    [SerializeField] private Text _hp; 
     [SerializeField] private Sprite _btnClickImg;
     [SerializeField] private Sprite _btnNoClickImg;
 
+    public Text Name { get => _name; set => _name = value; }
+    public Text Lv { get => _lv; set => _lv = value; }
     public Text Power { get => _power; set => _power = value; }
     public Text Def { get => _def; set => _def = value; }
     public Text Hp { get => _hp; set => _hp = value; }
-    public Text LastPower { get => _LastPower; set => _LastPower = value; }
-    public Text LastHp { get => _LastHP; set => _LastHP = value; }
-    public Text LastAtkSpeed { get => _LastAtkSpeed; set => _LastAtkSpeed = value; }
-    public Text LastMoveSpeed { get => _LastMoveSpeed; set => _LastMoveSpeed = value; }
+ 
 
     private List<Transform> allSlots = new List<Transform>(); // 모든 슬롯을 저장할 리스트
     private Dictionary<int, int> slotClickCounts = new Dictionary<int, int>(); // 클릭 카운트 및 코루틴 관리를 위한 딕셔너리
@@ -83,9 +81,15 @@ public class MonsterInventoryManager : MonoBehaviour
                         Sprite spriteImg = AddressableManager.instance.GetSprite(item.MyMonSpriteName);
                         if (spriteImg != null)
                         {
+                            //몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
-                           /* component.Category = item.Category;*/
+                            component.Lv = slotClass.mList[1].ToString();
+                            component.Str = slotClass.mList[2].ToString();
+                            component.Def = slotClass.mList[3].ToString();
+                            component.Hp = slotClass.mList[4].ToString();
+                            component.Name = item.MonsterName;
                         }
                        
                         break;
@@ -112,8 +116,11 @@ public class MonsterInventoryManager : MonoBehaviour
                         {
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
-                            //GameManager.instance.InsertMyMonsters(setInvenIdx, item);
-                            /* component.Category = item.Category;*/
+                            component.Lv = setInvenIdx.setMonList[1].ToString();
+                            component.Str = setInvenIdx.setMonList[2].ToString();
+                            component.Def = setInvenIdx.setMonList[3].ToString();
+                            component.Hp = setInvenIdx.setMonList[4].ToString();
+                            component.Name = item.MonsterName;
                         }
                         break;
                     }
@@ -151,8 +158,14 @@ public class MonsterInventoryManager : MonoBehaviour
 
         if (slotClickCounts[slotID] == 1)
         {
+
+            if(slotID == null || eventData == null)
+            {
+                slotClickCounts[slotID] = 0;
+                yield break;
+            }
             // 단일 클릭 처리
-            OnSingleClick(slotID);
+            OnSingleClick(eventData);
         }
         else if (slotClickCounts[slotID] == 2)
         {
@@ -190,10 +203,24 @@ public class MonsterInventoryManager : MonoBehaviour
     }
 
     // 단일 클릭 처리 메서드
-    private void OnSingleClick(int slotID)
+    private void OnSingleClick(PointerEventData eData)
     {
-        Debug.Log($"Slot {slotID} Single Clicked");
-        ShowTooltip(slotID);
+        if(eData.lastPress == null)
+        {
+            return;
+        } 
+        if (eData.lastPress.TryGetComponent(out Btn component))
+        {
+            if (!component.ActiveChk) return;
+            Name.text = component?.Name;
+            Lv.text = component?.Lv;
+            Power.text = component?.Str;
+            Def.text = component?.Def;
+            Hp.text = component?.Hp;
+        } else
+        {
+            Debug.Log("?D?D");
+        }
     }
 
     // 더블 클릭 처리 메서드

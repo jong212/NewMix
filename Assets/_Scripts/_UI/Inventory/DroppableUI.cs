@@ -50,11 +50,12 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 	/// </summary>
 	public void OnDrop(PointerEventData eventData)
 	{
-		// pointerDrag는 현재 드래그하고 있는 대상(=아이템)
-		if ( eventData.pointerDrag != null )
+         
+        // pointerDrag는 현재 드래그하고 있는 대상(=아이템)
+        if ( eventData.pointerDrag != null )
 		{
             DraggableUI DragingPrefab = eventData.pointerDrag.GetComponent<DraggableUI>();
-
+			if (DragingPrefab.PreviousParent == null) return;
 			// 인벤창에서 드래그 시작한 경우 (장비 X)
             if (DragingPrefab && DragingPrefab.PreviousParent.name.Contains("Sloat"))			
 			{

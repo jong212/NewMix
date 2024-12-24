@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MonExpHpMpContainer : MonoBehaviour
 {
     private Mentity _Mymonster;
+    public bool SetObjectCheck { get; private set; }
 
     [Header("mon1")]
     [SerializeField] private Image _mon1ExpBar;
@@ -25,7 +26,6 @@ public class MonExpHpMpContainer : MonoBehaviour
     public void SetProfileImg(Sprite sprite)
     {
         _mon1ProfileImage.sprite = sprite;
-
         // 기존의 색상 값을 가져오고 알파 값만 수정
         Color currentColor = _mon1ProfileImage.color;
         currentColor.a = 1.0f;  // 알파 값을 1로 설정 (불투명)
@@ -39,10 +39,30 @@ public class MonExpHpMpContainer : MonoBehaviour
         _Mymonster.OnStatsChanged += UpdateStats;
         _Mymonster.InitHpUpdate();
         _mon1Mp.fillAmount = 1;
+        SetObjectCheck = true;
+    }
+    public void resetObject()
+    {
+        SetObjectCheck = false;
+
+        _Mymonster.OnStatsChanged -= UpdateStats;
+        _Mymonster.Despawn();
+        _mon1Hp.fillAmount = 0;
+        _mon1Mp.fillAmount = 0;
+        _mon1ProfileImage.sprite = null;
+        Color currentColor = _mon1ProfileImage.color;
+        currentColor.a = 0;
+        _mon1ProfileImage.color = currentColor;
+
+
     }
     private void OnDisable()
     {
-        _Mymonster.OnStatsChanged -= UpdateStats;
+        if(_Mymonster != null)
+        {
+            _Mymonster.OnStatsChanged -= UpdateStats;
+        }
+        
 
     }
     private void UpdateStats()

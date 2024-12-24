@@ -71,7 +71,10 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
                         Sprite spriteImg = AddressableManager.instance.GetSprite(item.MyMonSpriteName);
                         if (spriteImg != null)
                         {
-                            InsertMyMonsters(setInvenIdx, item, idxTemp, spriteImg);
+                            if (!StaticManager.UI.MainUI.MonUIList[idxTemp].SetObjectCheck)
+                            {
+                                InsertMyMonsters(setInvenIdx, item, idxTemp, spriteImg);
+                            }
                         }
                         break;
                     }

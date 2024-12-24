@@ -196,4 +196,8 @@ public class Mentity : MycoreNetwork
     {
         base.FixedUpdate();
     } 
+    public void Despawn()
+    {
+        Runner.Despawn(Object);
+    }
 }

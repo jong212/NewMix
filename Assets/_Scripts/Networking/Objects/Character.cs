@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class Character : NetworkBehaviour
 {
     public event Action OnStatsChanged;
+    public event Action OnExpChanged;
 
 
     private bool _isInitialized = false;
@@ -46,6 +47,7 @@ public class Character : NetworkBehaviour
     [field: SerializeField]
     public CharacterSpecs Specs { get; private set; }
     public PlayerMovement PlayerMovement { get => _playerMovement; }
+    private Dictionary<int, int> ExpInfo;
 
     [SerializeField] private List<Transform> itemList;
     [SerializeField] private List<Transform> itemParitsList;
@@ -62,6 +64,18 @@ public class Character : NetworkBehaviour
 
     [Networked] public int Level { get; set; }
     [Networked] public int Attack { get; set; }
+    [Networked] public int CurExp { get; set; }
+    public void AddExp(int Exp)
+    {
+         foreach(var lvKey in ExpInfo)
+        {
+            if(lvKey.Key == Level)
+            {
+
+            }
+        }
+            //ExpInfo
+    }
     [Networked] public int Health { get; set; }
     [Networked] public int Def { get; set; }
     [Networked] public int FinalAtk { get; set; }
@@ -105,8 +119,8 @@ public class Character : NetworkBehaviour
             StaticManager.UI.DamagePoolUI.gameObject.SetActive(true);
             StaticManager.UI.DropItemPoolManager.gameObject.SetActive(true);
             StaticManager.UI.ExpHpMpContainer.init();
-            GameManager.instance.SpawnMonsterData(); 
-
+            GameManager.instance.SpawnMonsterData();
+            ExpInfo = BackendGameData.Instance.ExpInfo;
         } else
         {
             // 다른 플레이어가 내 방에 들어왔을 때 그 플레이어의 이동속도나 공격속도는 네트워크 변수를 통해 알 수 있지만 애니메이터에 반영된 것은 아니여서 따로 세팅을 해줘야 하기에 else인 경우에 세팅하도록 하였다.
@@ -180,6 +194,7 @@ public class Character : NetworkBehaviour
         Attack = userData.Atk;
         Health = userData.Hp;
         Def = userData.Def;
+        CurExp = userData.CurExp;
         Debug.Log($"플레이어 오브젝트에 스텟 적용 Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
     public void InitItem() 

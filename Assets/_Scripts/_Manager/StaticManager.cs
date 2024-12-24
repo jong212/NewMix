@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -285,6 +286,10 @@ public class StaticManager : MonoBehaviour
     {
         // 참조 캐싱
         var tempUserdata = BackendGameData.Instance.userData;
+
+        Match match = Regex.Match(type.ToString(), @"\d+");
+        int number = int.Parse(match.Value); // 숫자 변환
+
         foreach (SetMymon setCulum in tempUserdata.setMymonList)
         {
             if(setCulum.columName == type.ToString())
@@ -295,6 +300,7 @@ public class StaticManager : MonoBehaviour
                 {
                     if(dataChange.columName == "mymon" + (afterSloatId + 1))
                     {
+                        StaticManager.UI.MainUI.MonUIList[number - 1].resetObject();
                         dataChange.mList = setCulum.setMonList;
                         BackendGameData.Instance.GameDataUpdate<List<int>>(dataChange.columName, dataChange.mList);
                         BackendGameData.Instance.GameDataUpdate<List<int>>(tempCulName, new List<int> { 0 });
@@ -345,6 +351,7 @@ public class StaticManager : MonoBehaviour
                     // 값 업데이트
                     mon.setMonList = new List<int>(temp.mList);
                     BackendGameData.Instance.GameDataUpdate<List<int>>(mon.columName, mon.setMonList);
+                    GameManager.instance.SpawnMonsterData();
                     break; // 작업 완료 후 탈출
                 }
             }

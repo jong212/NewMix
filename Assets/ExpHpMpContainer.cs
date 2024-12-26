@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,7 @@ public class ExpHpMpContainer : MonoBehaviour
     {
         character = StaticManager.Instance.UniquePlayer;
         character.OnStatsChanged += UpdateStats;
+        character.OnExpChanged += UpdateExp;
         character.InitHpUpdate();
 
         int cType = BackendGameData.Instance.userData.ChrType;
@@ -49,10 +51,23 @@ public class ExpHpMpContainer : MonoBehaviour
     private void OnDisable()
     {
        character.OnStatsChanged -= UpdateStats;
+       character.OnExpChanged -= UpdateExp;
 
     }
     private void UpdateStats()
     {
         _playerHp.fillAmount = (float)character.CurrentHp / character.FinalHP;
+    }
+    private void UpdateExp()
+    {
+         foreach (var lvKey in character.ExpInfo)
+        {
+            if (lvKey.Key == character.Level) // 현재 레벨과 일치하는 레벨 찾기
+            {
+                
+                    _playerExpBar.fillAmount = (float)character.CurExp / lvKey.Value;
+            }
+        }
+                    
     }
 }

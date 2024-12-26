@@ -5,6 +5,7 @@ using Fusion.Addons.SimpleKCC;
 using UnityEngine.EventSystems;
 using System;
 using Random = UnityEngine.Random;
+using UnityEngine.UIElements;
 
 public class Character : NetworkBehaviour
 {
@@ -47,7 +48,7 @@ public class Character : NetworkBehaviour
     [field: SerializeField]
     public CharacterSpecs Specs { get; private set; }
     public PlayerMovement PlayerMovement { get => _playerMovement; }
-    private Dictionary<int, int> ExpInfo;
+    public Dictionary<int, int> ExpInfo;
 
     [SerializeField] private List<Transform> itemList;
     [SerializeField] private List<Transform> itemParitsList;
@@ -67,14 +68,43 @@ public class Character : NetworkBehaviour
     [Networked] public int CurExp { get; set; }
     public void AddExp(int Exp)
     {
-         foreach(var lvKey in ExpInfo)
-        {
-            if(lvKey.Key == Level)
-            {
+        // 임시 변수로 현재 경험치를 저장
+        int tempExp = CurExp + Exp;
 
+        foreach (var lvKey in ExpInfo)
+        {
+            if (lvKey.Key == Level) // 현재 레벨과 일치하는 레벨 찾기
+            {
+                if (tempExp < lvKey.Value) // Max 경험치보다 작은 경우
+                {
+                    // 레벨이 올라가지 않았으므로, 경험치를 업데이트
+                    CurExp = tempExp;
+                    StaticManager.Instance.CashUdata.CurExp = tempExp;
+                    OnExpChanged?.Invoke(); // 경험치 변경 이벤트 호출
+                    return;
+                }
+                else // Max 경험치를 넘으면 레벨업
+                {
+                    // 경험치를 넘겼으므로 레벨업 처리
+                    int levelUps = 0;
+                    while (tempExp >= lvKey.Value)
+                    {
+                        tempExp -= lvKey.Value;
+                        levelUps++;
+                    }
+
+                    // 레벨업 후 남은 경험치를 다시 할당
+                    Level += levelUps;
+                    CurExp = tempExp;
+                    StaticManager.Instance.CashUdata.CurExp = tempExp;
+                    StaticManager.Instance.CashUdata.Level = Level;
+                    // 새로운 레벨에 맞는 경험치와 관련된 처리를 추가할 수 있음
+                    OnExpChanged?.Invoke(); // 경험치 변경 이벤트 호출
+
+                    return;
+                }
             }
         }
-            //ExpInfo
     }
     [Networked] public int Health { get; set; }
     [Networked] public int Def { get; set; }
@@ -228,6 +258,10 @@ public class Character : NetworkBehaviour
         if (Object.HasInputAuthority)
         {
             HandleMouseInput();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                AddExp(10);
+            }
         }
     }
     private void HandleMouseInput()

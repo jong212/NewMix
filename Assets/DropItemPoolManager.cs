@@ -5,40 +5,34 @@ using UnityEngine;
 
 public class DropItemPoolManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _dropItemPrefab;
-    public int poolSize = 60;
+    private WorldCanvas _worldCanvas;
 
-    private Queue<GameObject> pool = new Queue<GameObject>();
 
     private void Start()
     {
-        // 풀 생성
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject obj = Instantiate(_dropItemPrefab, transform);
-            obj.SetActive(false);
-            pool.Enqueue(obj);
-        }
+        _worldCanvas = GetComponentInParent<WorldCanvas>();
     }
 
     public void ShowDropItem(NetworkObject trs, float ItemId,string Nickname,int dropIdx)
     {
-        
-        if (pool.Count > 0)
-        {
-            GameObject obj = pool.Dequeue();
-            obj.transform.position = trs.gameObject.transform.position;
-            obj.SetActive(true);
+        Vector3 randomOffset = new Vector3(
+            UnityEngine.Random.Range(-3.0f, 3.0f),  // X축 랜덤 오프셋
+            0f,                                     // Y축 고정 (기존 위치와 동일)
+            UnityEngine.Random.Range(-3.0f, 3.0f)   // Z축 랜덤 오프셋
+        );
+        GameObject obj = _worldCanvas.GetPoolObject(PoolObjectType.DropItem);
+       
+        obj.transform.position = trs.gameObject.transform.position + randomOffset;
+        obj.SetActive(true);
 
-            // 텍스트 초기화
-            DropItemPrefab damageText = obj.GetComponent<DropItemPrefab>();
-            damageText.Initialize(trs.gameObject.transform, ItemId, Nickname, dropIdx);
-        }
+        // 텍스트 초기화
+        DropItemPrefab damageText = obj.GetComponent<DropItemPrefab>();
+        damageText.Initialize(trs.gameObject.transform, ItemId, Nickname, dropIdx);
+       
     }
 
     public void ReturnToPool(GameObject obj)
     {
-        obj.SetActive(false);
-        pool.Enqueue(obj);
+        _worldCanvas.CoolObject(obj, PoolObjectType.DropItem);
     }
 }

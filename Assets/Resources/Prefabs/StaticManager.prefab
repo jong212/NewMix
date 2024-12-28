@@ -6989,7 +6989,7 @@ RectTransform:
   m_GameObject: {fileID: 4571835518160600947}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7950359662906020658}
@@ -7011,8 +7011,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345d5f449193a4443b23d6a77be451a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dropItemPrefab: {fileID: 4330834030079454389, guid: 65b4138e544906e4ab1cb69398f5991a, type: 3}
-  poolSize: 60
 --- !u!1 &4571883148538075394
 GameObject:
   m_ObjectHideFlags: 0
@@ -8458,7 +8456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &378435566493477123
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8490,8 +8488,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 760c888834465654c9d08936eff145fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageTextPrefab: {fileID: 4997787123307024975, guid: 82bdba44602f67042817d6452f224cdf, type: 3}
-  poolSize: 20
 --- !u!1 &5549783358491567394
 GameObject:
   m_ObjectHideFlags: 0
@@ -13500,6 +13496,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ed533c64fcd3d94a8f4a81d67455726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  listOfPool:
+  - type: 0
+    amount: 60
+    prefab: {fileID: 4997787123307024975, guid: 82bdba44602f67042817d6452f224cdf, type: 3}
+    container: {fileID: 5509539836661097681}
+    pool: []
+  - type: 1
+    amount: 60
+    prefab: {fileID: 4330834030079454389, guid: 65b4138e544906e4ab1cb69398f5991a, type: 3}
+    container: {fileID: 4571835518160600947}
+    pool: []
 --- !u!1 &8552710420758784752
 GameObject:
   m_ObjectHideFlags: 0

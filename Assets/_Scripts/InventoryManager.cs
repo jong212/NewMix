@@ -57,6 +57,31 @@ public class InventoryManager : MonoBehaviour
        allSlots = tabParents.SelectMany(tab => tab.Cast<Transform>()).ToList();
     }
 
+    public void updateSloat(int sloatidx, int idx )
+    {
+        List<ItemChart> itemChart = BackendGameData.Instance.ItemChartList;
+        Btn btnobject = allSlots[sloatidx -1].GetComponentInChildren<Btn>();
+        if (btnobject != null)
+            {
+            // 아이템 프리팹을 슬롯의 자식으로 인스턴스화
+            foreach (ItemChart item in itemChart)
+            {
+                if (idx == item.Itemid)
+                {
+                    Sprite spriteImg = AddressableManager.instance.GetSprite(item.SpriteName);
+                    if (spriteImg != null)
+                    {
+                        btnobject.SpriteImg = spriteImg;
+                        btnobject.ActiveChk = true;
+                        btnobject.Category = item.Category;
+                    }
+                    break;
+                }
+            }
+
+            btnobject.ivtmanager = this; // Pass the InventoryManager reference
+        }
+    }
     // 슬롯 초기화 및 아이템 프리팹 추가 메서드
     private void InitializeSlots()
     {
@@ -81,6 +106,9 @@ public class InventoryManager : MonoBehaviour
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
                             component.Category = item.Category;
+                            component.Lv = item.SetLevel;
+                            component.Str = item.Damage;
+                            component.Hp = item.Hp;
                         }
                     break;
                     }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 523396358876116505}
   - component: {fileID: 745263526860196027}
+  - component: {fileID: 3302587182436364342}
   m_Layer: 0
   m_Name: DropItemPrefab
   m_TagString: Untagged
@@ -48,6 +49,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SetDropItem: {fileID: 6889897660919061375}
   ItemText: {fileID: 9172782653656745512}
+--- !u!114 &3302587182436364342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4330834030079454389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3534273966
+  ObjectInterest: 1
+  Flags: 524289
+  NestedObjects: []
+  NetworkedBehaviours: []
 --- !u!1 &5102947924849168479
 GameObject:
   m_ObjectHideFlags: 0

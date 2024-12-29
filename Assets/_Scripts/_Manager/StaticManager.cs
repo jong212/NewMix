@@ -111,6 +111,7 @@ public class StaticManager : MonoBehaviour
             InvenItemSwapQueue(changeA, ChangeB);
         });
     }
+
     private void InvenItemSwapQueue(int beforeSloatId, int afterSloatId)
     {
         var copyBeforeItemId   = CashUdata.InventorySlots[beforeSloatId].ItemId;
@@ -357,4 +358,34 @@ public class StaticManager : MonoBehaviour
             }
         }
     }
+
+
+
+    public bool GetDropItemAction(int itemNumber)
+    {
+        bool b = default;
+        EnqueueAction(() =>
+        {
+            b = GetDropItem(itemNumber);
+        });
+        return b;
+    }
+    private bool GetDropItem(int itemNumber)
+    {
+        List<InventorySlot> tempSloat = CashUdata.InventorySlots;
+        foreach ( var item in tempSloat)
+        {
+            if(item.ItemId == null)
+            {
+                item.ItemId = itemNumber;
+                UI.ContentsInventoryUI.updateSloat(item.SlotId, itemNumber);
+                Debug.Log(item.SlotId + " 이SloatID는 널이였고, 얻은 아이템은"+ itemNumber + "였음");
+                string inventoryJson = JsonMapper.ToJson(new { slots = CashUdata.InventorySlots });
+                BackendGameData.Instance.GameDataUpdate<string>("Inventory", inventoryJson);
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

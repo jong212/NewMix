@@ -472,7 +472,7 @@ public class Character : NetworkBehaviour
 
         }
     }
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+//    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RpcItemDropMethod(NetworkObject trs, float monsterid,string Nickname,int dropIdx)
     {
         StaticManager.UI.DropItemPoolManager.ShowDropItem(trs,monsterid, Nickname, dropIdx);

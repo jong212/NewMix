@@ -63,7 +63,6 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (path != null && path.Count > 0)
         {
-            Debug.Log("11111");
             character.currentState = Character.chrState.TargetMove;
 
             //최종 목적지 위치값을 path[path.Count-1].worldPosition 으로 구하고 플레이어의 현 위치를 빼면 거리가 나오는데 1 미만인 경우에는 공격로직 타도록했음

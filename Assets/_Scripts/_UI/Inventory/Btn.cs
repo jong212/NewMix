@@ -10,10 +10,10 @@ public class Btn : MonoBehaviour, IPointerClickHandler
     [SerializeField] Image _img;
     [SerializeField] string _category;
     [SerializeField] string _name;
-    [SerializeField] string _lv;
-    [SerializeField] string _str;
-    [SerializeField] string _def;
-    [SerializeField] string _hp;
+    [SerializeField] int _lv;
+    [SerializeField] int _str;
+    [SerializeField] int _def;
+    [SerializeField] int _hp;
     public Sprite SpriteImg { 
         get => _img.sprite; 
         set 
@@ -27,10 +27,10 @@ public class Btn : MonoBehaviour, IPointerClickHandler
     public bool   ActiveChk { get => _activeChk;  set => _activeChk  = value; }
     public string Category  { get => _category;   set => _category   = value; }
     public string Name  { get => _name;   set => _name = value; }
-    public string Lv  { get => _lv;   set => _lv = value; }
-    public string Str  { get => _str;   set => _str = value; }
-    public string Def  { get => _def;   set => _def = value; }
-    public string Hp  { get => _hp;   set => _hp = value; }
+    public int Lv  { get => _lv;   set => _lv = value; }
+    public int Str  { get => _str;   set => _str = value; }
+    public int Def  { get => _def;   set => _def = value; }
+    public int Hp  { get => _hp;   set => _hp = value; }
     public InventoryManager ivtmanager;
     public MonsterInventoryManager myMonsterManager;
 

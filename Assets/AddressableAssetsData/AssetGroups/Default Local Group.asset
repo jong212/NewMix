@@ -89,8 +89,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sprite
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6e0f9a9db07e5c946a86156834babb23
-    m_Address: Assets/_Prefabs/AddressSprite/foot1S.png
+  - m_GUID: f678a86f76ef6fa48873f0f7ca888d17
+    m_Address: Assets/_AssetsFolder/_AddressSprite/foot3S.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite
@@ -184,6 +184,60 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - SelectPlayer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c055d7f19e5f58449c03f4f53d12b3d
+    m_Address: Assets/_AssetsFolder/_AddressSprite/sword3S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 279573acd417f3a41924740de3e170a1
+    m_Address: Assets/_AssetsFolder/_AddressSprite/sword2S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 131dcfb8e2a15ad47aa4eaf749a4bb03
+    m_Address: Assets/_AssetsFolder/_AddressSprite/sword5S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dec931b16cdfdd9408361ef44d355dd4
+    m_Address: Assets/_AssetsFolder/_AddressSprite/sword4S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec57b55ec08f75244972cf791d6ff3e4
+    m_Address: Assets/_AssetsFolder/_AddressSprite/sword6S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3064cc66c9babe4381e97556070f262
+    m_Address: Assets/_AssetsFolder/_AddressSprite/foot2S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b3db7fc1d97ae848b9c7cdb045145d5
+    m_Address: Assets/_AssetsFolder/_AddressSprite/foot5S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9af1bff1580c7144823147b873695d4
+    m_Address: Assets/_AssetsFolder/_AddressSprite/foot1S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b90a85dcb3e0a84439d074692bddc5f0
+    m_Address: Assets/_AssetsFolder/_AddressSprite/foot4S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}

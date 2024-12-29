@@ -85,10 +85,10 @@ public class MonsterInventoryManager : MonoBehaviour
 
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
-                            component.Lv = slotClass.mList[1].ToString();
-                            component.Str = slotClass.mList[2].ToString();
-                            component.Def = slotClass.mList[3].ToString();
-                            component.Hp = slotClass.mList[4].ToString();
+                            component.Lv = slotClass.mList[1];
+                            component.Str = slotClass.mList[2];
+                            component.Def = slotClass.mList[3];
+                            component.Hp = slotClass.mList[4];
                             component.Name = item.MonsterName;
                         }
                        
@@ -116,10 +116,10 @@ public class MonsterInventoryManager : MonoBehaviour
                         {
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
-                            component.Lv = setInvenIdx.setMonList[1].ToString();
-                            component.Str = setInvenIdx.setMonList[2].ToString();
-                            component.Def = setInvenIdx.setMonList[3].ToString();
-                            component.Hp = setInvenIdx.setMonList[4].ToString();
+                            component.Lv = setInvenIdx.setMonList[1];
+                            component.Str = setInvenIdx.setMonList[2];
+                            component.Def = setInvenIdx.setMonList[3];
+                            component.Hp = setInvenIdx.setMonList[4];
                             component.Name = item.MonsterName;
                         }
                         break;
@@ -212,11 +212,11 @@ public class MonsterInventoryManager : MonoBehaviour
         if (eData.lastPress.TryGetComponent(out Btn component))
         {
             if (!component.ActiveChk) return;
-            Name.text = component?.Name;
-            Lv.text = component?.Lv;
-            Power.text = component?.Str;
-            Def.text = component?.Def;
-            Hp.text = component?.Hp;
+            Name.text = component?.Name.ToString();
+            Lv.text = component?.Lv.ToString();
+            Power.text = component?.Str.ToString();
+            Def.text = component?.Def.ToString();
+            Hp.text = component?.Hp.ToString();
         } else
         {
             Debug.Log("?D?D");

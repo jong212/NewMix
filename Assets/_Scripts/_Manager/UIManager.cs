@@ -235,21 +235,34 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void RegisterButtonCallback (GameObject obj, UnityAction action)
-    {
-        string baseName = obj.name.Replace("(Clone)", "").Trim();
-
-        switch (baseName)
+        void RegisterButtonCallback (GameObject obj, UnityAction action)
         {
-            case nameof(UIType.BtnAttack) : {
-                Button attackButton = obj.GetComponent<Button>();
-                if (attackButton != null)
-                {
-                    attackButton.onClick.AddListener(action);
-                }
+            string baseName = obj.name.Replace("(Clone)", "").Trim();
+
+            switch (baseName)
+            {
+                case nameof(UIType.BtnAttack) : {
+                    Button attackButton = obj.GetComponent<Button>();
+                    if (attackButton != null)
+                    {
+                        attackButton.onClick.AddListener(action);
+                    }
                     break;
                 }
-        }
 
-    }
+                case "BackEndSetName": {
+                    RectTransform rectTransform = obj.GetComponent<RectTransform>();
+                    obj.transform.localScale = new Vector3(1, 1, 1);
+                    if (rectTransform != null)
+                    {
+                        Vector2 newPosition = rectTransform.anchoredPosition;
+                        newPosition.y = 391; // 원하는 y 값으로 변경
+                        rectTransform.anchoredPosition = newPosition;
+                    }
+                    break;
+                }
+
+            }
+
+        }
 }

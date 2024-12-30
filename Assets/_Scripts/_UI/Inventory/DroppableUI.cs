@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public enum InventoryType
 {
     Weapon = 0,
-    Armor = 1,
+    Shield = 1,
     Gluve = 2,
     Shose = 3,
 	MyMonster = 4,

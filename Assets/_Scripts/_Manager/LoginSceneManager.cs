@@ -91,7 +91,7 @@ public class LoginSceneManager : MonoBehaviour
 
             if (string.IsNullOrEmpty(nick))                              // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             {
-                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform, true);
+                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform,true, ()=> Debug.Log("test") );
                 Selecter.gameObject.SetActive(true);
             }
             else                                                         // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요
@@ -127,7 +127,7 @@ public class LoginSceneManager : MonoBehaviour
 
             if (string.IsNullOrEmpty(nick))                 // 닉네임이 비어있음 > 닉네임 설정 UI 오픈
             {
-                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform, true);
+                StaticManager.UI.CommonOpen(UIType.BackEndName, LoginUICanvas.transform,true , () => Debug.Log("test"));
                 Selecter.gameObject.SetActive(true);
             }
             else // TO DO 닉네임 설정 되어있음 > 이후 처리 로직 작성 필요

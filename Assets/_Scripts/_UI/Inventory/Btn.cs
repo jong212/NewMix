@@ -14,6 +14,8 @@ public class Btn : MonoBehaviour, IPointerClickHandler
     [SerializeField] int _str;
     [SerializeField] int _def;
     [SerializeField] int _hp;
+    [SerializeField] float _attackSpeed;
+    [SerializeField] float _moveSpeed;
     public Sprite SpriteImg { 
         get => _img.sprite; 
         set 
@@ -31,6 +33,8 @@ public class Btn : MonoBehaviour, IPointerClickHandler
     public int Str  { get => _str;   set => _str = value; }
     public int Def  { get => _def;   set => _def = value; }
     public int Hp  { get => _hp;   set => _hp = value; }
+    public float AttackSpeed  { get => _attackSpeed;   set => _attackSpeed = value; }
+    public float MoveSpeed  { get => _moveSpeed;   set => _moveSpeed = value; }
     public InventoryManager ivtmanager;
     public MonsterInventoryManager myMonsterManager;
 

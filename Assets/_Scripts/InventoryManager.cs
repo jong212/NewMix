@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using System.ComponentModel;
+using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour   
 {
@@ -15,9 +17,19 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private float doubleClickThreshold = 0.3f; // 더블 클릭 인식 시간 간격 (초)
 
+    [Header("TopInfo")]
     [SerializeField] private Text _power;
     [SerializeField] private Text _def;
     [SerializeField] private Text _hp;
+
+    [Header("BottomInfo")]
+    [SerializeField] private Text _itemName;
+    [SerializeField] private Text _setLevel;
+    [SerializeField] private Text _livePower;
+    [SerializeField] private Text _liveHp;
+    [SerializeField] private Text _liveAtkSpd;
+    [SerializeField] private Text _liveMoveSpd;
+    [Header("BottomInfo")]
     [SerializeField] private Text _LastPower;
     [SerializeField] private Text _LastHP;
     [SerializeField] private Text _LastAtkSpeed;
@@ -74,6 +86,12 @@ public class InventoryManager : MonoBehaviour
                         btnobject.SpriteImg = spriteImg;
                         btnobject.ActiveChk = true;
                         btnobject.Category = item.Category;
+                        btnobject.Lv = item.SetLevel;
+                        btnobject.Str = item.Damage;
+                        btnobject.Hp = item.Hp;
+                        btnobject.Name = item.ItemName;
+                        btnobject.AttackSpeed = item.AtkSpeed;
+                        btnobject.MoveSpeed = item.MoveSpeed;
                     }
                     break;
                 }
@@ -109,6 +127,9 @@ public class InventoryManager : MonoBehaviour
                             component.Lv = item.SetLevel;
                             component.Str = item.Damage;
                             component.Hp = item.Hp;
+                            component.Name = item.ItemName;
+                            component.AttackSpeed = item.AtkSpeed;
+                            component.MoveSpeed = item.MoveSpeed;
                         }
                     break;
                     }
@@ -135,6 +156,12 @@ public class InventoryManager : MonoBehaviour
                             component.SpriteImg = spriteImg;
                             component.ActiveChk = true;
                             component.Category = item.Category;
+                            component.Lv = item.SetLevel;
+                            component.Str = item.Damage;
+                            component.Hp = item.Hp;
+                            component.Name = item.ItemName;
+                            component.AttackSpeed = item.AtkSpeed;
+                            component.MoveSpeed = item.MoveSpeed;
 
                         }
                     }
@@ -176,7 +203,23 @@ public class InventoryManager : MonoBehaviour
         if (slotClickCounts[slotID] == 1)
         {
             // 단일 클릭 처리
-            OnSingleClick(slotID);
+            if (eventData.lastPress.TryGetComponent(out Btn component))
+            {
+                if (component.Category == InventoryType.Weapon.ToString() ||
+                    component.Category == InventoryType.Shield.ToString() ||
+                    component.Category == InventoryType.Gluve.ToString() ||
+                    component.Category == InventoryType.Shose.ToString())
+                {
+                    // 인벤에서 더블 클릭한 아이템을 장비창에 낄 것인지 검증하는 로직을 여기쯤 작성해야함 
+                    _itemName.text = component.Name;
+                    _setLevel.text = component.Lv.ToString();
+                    _livePower.text = component.Str.ToString();
+                    _liveHp.text = component.Hp.ToString();
+                    _liveAtkSpd.text = component.AttackSpeed.ToString();
+                    _liveMoveSpd.text = component.MoveSpeed.ToString();
+                }
+
+            }
         }
         else if (slotClickCounts[slotID] == 2)
         {
@@ -186,7 +229,7 @@ public class InventoryManager : MonoBehaviour
             if (eventData.lastPress.TryGetComponent(out Btn component))
             {
                 if (component.Category == InventoryType.Weapon.ToString() ||
-                    component.Category == InventoryType.Armor.ToString()  ||
+                    component.Category == InventoryType.Shield.ToString()  ||
                     component.Category == InventoryType.Gluve.ToString()  ||
                     component.Category == InventoryType.Shose.ToString()  )
                 {

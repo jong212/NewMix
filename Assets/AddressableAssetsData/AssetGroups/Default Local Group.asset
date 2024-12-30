@@ -239,6 +239,66 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68f3c122ac67ed2498244c39b8b0a1c9
+    m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield7.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3e3d28124f06c245a4118c06fdc08d9
+    m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e503b479f0c2274c8420107a5a1c2fa
+    m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2797b9cde2aeb8f45b5d85077aa6c209
+    m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 281e18e8b97ae574997fe5a412c9c05f
+    m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield6.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c12b268c1b2b102439e545b7590dd4d2
+    m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 427e558955764e5458de66961f1bef4f
+    m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield5.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aae0d319a27909d4d969b2ea1f43f00e
+    m_Address: Assets/_AssetsFolder/_AddressSprite/shield2S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e8f92dd0ba4318478c1ff994ce604ff
+    m_Address: Assets/_AssetsFolder/_AddressSprite/shield1S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 260b64cc6365c384d9bac4e89b871f2e
+    m_Address: Assets/_AssetsFolder/_AddressSprite/shield3S.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
   m_SchemaSet:

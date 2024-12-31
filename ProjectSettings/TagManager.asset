@@ -15,10 +15,10 @@ TagManager:
   - Player
   - Object
   - Obstacle
-  - 
-  - 
-  - 
-  - 
+  - MinimapCamera_Player
+  - MinimapCamera_PlayerModel
+  - MinimapCamera_Enemy
+  - MinimapCamera_EnemyModel
   - 
   - 
   - 

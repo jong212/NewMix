@@ -28,13 +28,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private ExpHpMpContainer _ExpHpMpContainer;
     [SerializeField] private VariableJoystick _joystick;
     [SerializeField] private MainUI _mainUI;
+    [SerializeField] private CopyPosition _miniMap;
+    [Header("------ UI Prefabs -----")]
+    [SerializeField] private WorldNickname _worldNicknameUI;
 
 
     private Dictionary<UIType, GameObject> _createdUIDic = new Dictionary<UIType, GameObject>(); // _createdUIDic 딕셔너리에 있으면 하이어라키에 존재한단 뜻    
     private HashSet<UIType> _openedUIDic = new HashSet<UIType>(); // _openedUIDic 여기 담겨있으면 SetActive True인 것임
     
-    [Header("------ UI Prefabs -----")]
-    [SerializeField] private WorldNickname _worldNicknameUI;
 
     // Popup
     public AlertUI AlertUI
@@ -51,76 +52,17 @@ public class UIManager : MonoBehaviour
             return _confirmUI;
         }
     }
-    public MainUI MainUI
-    {
-        get
-        {
-            return _mainUI;
-        }
-    }
-    public DamageTextPoolManager DamagePoolUI
-    {
-        get
-        {
-            return _damagePoolManager;
-        }
-    }
-    public DropItemPoolManager DropItemPoolManager
-    {
-        get
-        {
-            return _dropItemPoolMaanger;
-        }
-    }    
-    public ExpHpMpContainer ExpHpMpContainer
-    {
-        get
-        {
-            return _ExpHpMpContainer;
-        }
-    }
-    public InventoryManager ContentsInventoryUI
-    {
-        get
-        {
-            return _inventoryUI;
-        }
-    }
-    public MonsterInventoryManager MonsterInventoryManagerUI
-    {
-        get
-        {
-            return _monsterInvenManager;
-        }
-    }
-    public VariableJoystick VariableJoystick
-    {
-        get
-        {
-            return _joystick;
-        }
-    }
-    public GameObject Loading
-    {
-        get
-        {
-            return _loading;
-        }
-    }
-    public WorldNickname WorldNickNameUI
-    {
-        get
-        {
-            return _worldNicknameUI;
-        }
-    }
-    public EnemyInfoUI EnemyInfoUI
-    {
-        get
-        {
-            return _enemyInfoUI;
-        }
-    }
+    public MainUI MainUI                           { get => _mainUI; }
+    public DamageTextPoolManager DamagePoolUI      { get => _damagePoolManager; }
+    public DropItemPoolManager DropItemPoolManager { get => _dropItemPoolMaanger; }
+    public ExpHpMpContainer ExpHpMpContainer       { get => _ExpHpMpContainer; }
+    public InventoryManager ContentsInventoryUI    { get => _inventoryUI; }
+    public VariableJoystick VariableJoystick       { get => _joystick; }
+    public GameObject Loading                      { get => _loading; }
+    public WorldNickname WorldNickNameUI           { get => _worldNicknameUI; }
+    public EnemyInfoUI EnemyInfoUI                 { get => _enemyInfoUI; }
+    public MonsterInventoryManager MonsterInventoryManagerUI { get => _monsterInvenManager; }
+    public CopyPosition MiniMap { get => _miniMap; }
     private void Awake()
     {
         if(AlertUI == null || ConfirmUI == null || MainUI == null || ContentsInventoryUI == null || WorldNickNameUI == null || EnemyInfoUI == null)

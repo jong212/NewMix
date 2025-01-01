@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MonExpHpMpContainer : MonoBehaviour
 {
-    private Mentity _Mymonster;
+    public Mentity _Mymonster;
     public bool SetObjectCheck { get; private set; }
 
     [Header("mon1")]
@@ -44,6 +44,7 @@ public class MonExpHpMpContainer : MonoBehaviour
     public void resetObject()
     {
         SetObjectCheck = false;
+        if (_Mymonster == null) return;
 
         _Mymonster.OnStatsChanged -= UpdateStats;
         _Mymonster.Despawn();

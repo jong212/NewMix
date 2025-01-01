@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using System;
 using Random = UnityEngine.Random;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class Character : NetworkBehaviour
 {
@@ -131,6 +132,9 @@ public class Character : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
+            StaticManager.UI.MainUI.MonUIList[0].resetObject();
+            StaticManager.UI.MainUI.MonUIList[1].resetObject();
+            StaticManager.UI.MainUI.MonUIList[2].resetObject();
             AudioManager.instance.bgmPlayer.Stop();
             AudioManager.instance.battleSource.Play();
             InitializeJoystick();   // ¡∂¿ÃΩ∫∆Ω On

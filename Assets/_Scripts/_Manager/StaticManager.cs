@@ -59,7 +59,7 @@ public class StaticManager : MonoBehaviour
         while (InventoryQueue.Count > 0)
         {
             Action currentAction = InventoryQueue.Dequeue();
-            currentAction.Invoke(); // 작업 실행
+            currentAction?.Invoke(); // 작업 실행
             Stat?.Invoke(); 
             yield return null; // 다음 프레임까지 대기
         }

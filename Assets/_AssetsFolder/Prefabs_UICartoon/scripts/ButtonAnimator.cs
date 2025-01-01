@@ -18,7 +18,9 @@ public class ButtonAnimator : MonoBehaviour, IPointerExitHandler, IPointerDownHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
         buttonAnimator.SetTrigger("Pressed");
+
     }
 
     public void OnPointerUp(PointerEventData eventData)

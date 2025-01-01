@@ -492,7 +492,7 @@ public class BackendGameData
 
     public void InitSetting()
     {
-        BackendGameData.Instance.GetPlayerData(); // 서버에서 데이터 새로 받아오기 위해 중복 초기화?
+         BackendGameData.Instance.GetPlayerData(); // 서버에서 데이터 새로 받아오기 위해 중복 초기화?
 
         foreach (var chartName in GetCharLocalListname)
         {

@@ -1,4 +1,5 @@
 ﻿using BackEnd;
+using Fusion;
 using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,6 +54,7 @@ public class BackEndSetName : BaseUI
         {
              Debug.Log("닉네임 설정 완료");
             int chrIndex = LoginSceneManager.Instance.Selecter.selectedCharacter;
+            BackendGameData.Instance.SetNickname(nickname);
             BackendGameData.Instance.GameDataInsert(chrIndex);
             LoginSceneManager.Instance.SetWaitRoom();
         });

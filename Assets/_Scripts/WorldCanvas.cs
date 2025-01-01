@@ -6,7 +6,8 @@ using UnityEngine;
 public enum PoolObjectType
 {
     AttackViewText,
-    DropItem
+    DropItem,
+    LevelUp
 }
 [Serializable]
 public class PoolInfo
@@ -16,7 +17,7 @@ public class PoolInfo
     public GameObject prefab;
     public GameObject container;
 
-    [HideInInspector]
+    /*[HideInInspector]*/
     public List<GameObject> pool = new List<GameObject>();
 }
 
@@ -37,6 +38,7 @@ public class WorldCanvas : MonoBehaviour
         for (int i = 0; i < info.amount; i++)
         {
             GameObject obInstance = null;
+            info.prefab.SetActive(false);
             obInstance = Instantiate(info.prefab, info.container.transform);
             obInstance.gameObject.SetActive(false);
             obInstance.transform.position = defaultPos;

@@ -98,6 +98,9 @@ public class Character : NetworkBehaviour
                     CurExp = tempExp;
                     StaticManager.Instance.CashUdata.CurExp = tempExp;
                     StaticManager.Instance.CashUdata.Level = Level;
+
+                    GameObject lvObj = StaticManager.Instance.WorldCanvas.GetPoolObject(PoolObjectType.LevelUp);
+                    lvObj.SetActive(true);
                     // 새로운 레벨에 맞는 경험치와 관련된 처리를 추가할 수 있음
                     OnExpChanged?.Invoke(); // 경험치 변경 이벤트 호출
 
@@ -128,6 +131,8 @@ public class Character : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
+            AudioManager.instance.bgmPlayer.Stop();
+            AudioManager.instance.battleSource.Play();
             InitializeJoystick();   // 조이스틱 On
             InitUI();               // 공격 버튼 On, 카메라 플레이어 Follow 하도록 초기화
             InitPlayer();           // 닉네임, 스텟 초기화
@@ -143,6 +148,7 @@ public class Character : NetworkBehaviour
             StaticManager.UI.MonsterInventoryManagerUI.FirstInit();
             CalculateStatUI();
             CurrentHp = FinalHP;
+            ExpInfo = BackendGameData.Instance.ExpInfo;
             StaticManager.Instance.Stat += CalculateStatUI;
             StaticManager.UI.Loading.gameObject.SetActive(false);
             StaticManager.UI.MainUI.Layout_TopRight.gameObject.SetActive(true);
@@ -150,7 +156,6 @@ public class Character : NetworkBehaviour
             StaticManager.UI.DropItemPoolManager.gameObject.SetActive(true);
             StaticManager.UI.ExpHpMpContainer.init();
             GameManager.instance.SpawnMonsterData();
-            ExpInfo = BackendGameData.Instance.ExpInfo;
             StaticManager.UI.MiniMap.gameObject.SetActive(true);
             StaticManager.UI.MiniMap.Target = this.transform;
         } else
@@ -262,7 +267,8 @@ public class Character : NetworkBehaviour
             HandleMouseInput();
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                AddExp(10);
+                
+                
             }
         }
     }
@@ -393,6 +399,7 @@ public class Character : NetworkBehaviour
             Enemy targetMonster = _playerMovement.Pathfinding.target.GetComponent<Enemy>();
             if (targetMonster != null)
             {
+                AudioManager.instance.PlaySfx(AudioManager.Sfx.Attack);
                 AttackRpc(targetMonster, FinalAtk);
             }
             else
@@ -419,7 +426,7 @@ public class Character : NetworkBehaviour
         }
         else if (targetMonster.NetworkedHealth - finalAtk <= 0)
         {
-           
+            AddExp((int)targetMonster.Exp);
             targetMonster.DealDamageRpc(finalAtk);
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;
@@ -609,6 +616,12 @@ public class Character : NetworkBehaviour
         if (OnStatsChanged != null)
         {
             OnStatsChanged?.Invoke();
+            
+        }
+        if (OnExpChanged != null)
+        {
+            OnExpChanged?.Invoke();
+            
         }
     }
 }

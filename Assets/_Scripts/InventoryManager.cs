@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
-using System.ComponentModel;
-using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour   
 {
@@ -223,6 +221,7 @@ public class InventoryManager : MonoBehaviour
         }
         else if (slotClickCounts[slotID] == 2)
         {
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.Itemsloat);
             if (slotID == 100 || slotID == 101 || slotID == 102 || slotID == 103) yield break;
             
             // 더블 클릭 처리

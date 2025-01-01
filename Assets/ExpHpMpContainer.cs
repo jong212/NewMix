@@ -9,6 +9,7 @@ public class ExpHpMpContainer : MonoBehaviour
     private Character character;
 
     [Header("Player")]
+    [SerializeField] private GameObject _exp;
     [SerializeField] private Image _playerExpBar;
     [SerializeField] private Image _playerHp;
     [SerializeField] private Image _playerMp;
@@ -24,6 +25,7 @@ public class ExpHpMpContainer : MonoBehaviour
     } 
     public void init()
     {
+        _exp.gameObject.SetActive(true);
         character = StaticManager.Instance.UniquePlayer;
         character.OnStatsChanged += UpdateStats;
         character.OnExpChanged += UpdateExp;
@@ -64,7 +66,6 @@ public class ExpHpMpContainer : MonoBehaviour
         {
             if (lvKey.Key == character.Level) // 현재 레벨과 일치하는 레벨 찾기
             {
-                
                     _playerExpBar.fillAmount = (float)character.CurExp / lvKey.Value;
             }
         }

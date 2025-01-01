@@ -71,10 +71,10 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
                         Sprite spriteImg = AddressableManager.instance.GetSprite(item.MyMonSpriteName);
                         if (spriteImg != null)
                         {
-                            if (!StaticManager.UI.MainUI.MonUIList[idxTemp].SetObjectCheck)
-                            {
+                            /*if (!StaticManager.UI.MainUI.MonUIList[idxTemp].SetObjectCheck)
+                            {*/
                                 InsertMyMonsters(setInvenIdx, item, idxTemp, spriteImg);
-                            }
+                            /*}*/
                         }
                         break;
                     }
@@ -138,14 +138,6 @@ public class GameManager : NetworkBehaviour, IStateAuthorityChanged, IPlayerLeft
         // 방에서 마스터 클라이언트가 나가면 담에 남은 클라에게 새로운 마스터 클라이언트로 자동 임명되고 아래 코드를 통해 새로 임명된 클라에게 StateAuthority 권한 주는 코드
         if (Runner.IsSharedModeMasterClient)
         {
-            // 움직이는 Plane
-            var platforms = FindObjectsOfType<NetworkMovingPlatform>()
-                .Where(p => !p.Object.HasStateAuthority);
-            foreach (var platform in platforms)
-            {
-                platform.Object.RequestStateAuthority();
-            }
-
             var Enemys = FindObjectsOfType<EnemyAi>()
                 .Where(e => !e.Object.HasStateAuthority);
             foreach (var platform in Enemys)

@@ -6,12 +6,9 @@ using UnityEngine;
 
 public class DropItemPoolManager : MonoBehaviour
 {
-    public GameObject SetDropItem;
-
     private WorldCanvas _worldCanvas;
     private Character _uniquePlayer;
 
-    [SerializeField] GameObject DropItemPrefab;
     List<ItemChart> itemList;
     public float delayTime = .6f;       // 무기가 이동하기 전에 기다리는 시간
     private void Awake()

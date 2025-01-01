@@ -1504,6 +1504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7182962500995420321}
   - component: {fileID: 718719888387418482}
+  - component: {fileID: 7182962500995420322}
   m_Layer: 0
   m_Name: AddressableManager
   m_TagString: Untagged
@@ -1971,6 +1972,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7182962500995420322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890766473290373330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150e373e7f6919341ac000b0cb4a7d41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: 3a5b46a512b09b348a587ae7d3377ed4, type: 3}
+  bgmVolume: 0.2
+  bgmPlayer: {fileID: 0}
+  battleClip: {fileID: 8300000, guid: f3d27346e504f5a41b13d4be85b41873, type: 3}
+  battleVolume: 0.2
+  battleSource: {fileID: 0}
+  sfxClips:
+  - {fileID: 8300000, guid: c458b6714dab015479d507b21fd2cead, type: 3}
+  - {fileID: 8300000, guid: fd25a15f9797641458336cccfb445343, type: 3}
+  - {fileID: 8300000, guid: 2f093ffd36a24e74097f7afafee04887, type: 3}
+  sfxVolume: 0.5
+  channels: 4
+  sfxPlayers: []
 --- !u!222 &7404815393245545817
 CanvasRenderer:
   m_ObjectHideFlags: 0

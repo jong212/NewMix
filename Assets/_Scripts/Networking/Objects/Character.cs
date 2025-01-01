@@ -127,7 +127,12 @@ public class Character : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnChangeMoveSpeed))] public float FinalMoveSpeed { get; set; }
     [Networked] public bool WaitingForAuthority { get; set; }
     [Networked] public Item HeldItem { get; set; }
+    [Networked, OnChangedRender(nameof(OnChangeLvPoint))] public int LvPoint { get; set; }
 
+    void OnChangeLvPoint()
+    {        
+        BackendGameData.Instance.userData.LvUpPoint = LvPoint;
+    }
     public override void Spawned()
     {
         if (Object.HasStateAuthority)
@@ -236,6 +241,7 @@ public class Character : NetworkBehaviour
         Health = userData.Hp;
         Def = userData.Def;
         CurExp = userData.CurExp;
+        LvPoint = userData.LvUpPoint;
         Debug.Log($"플레이어 오브젝트에 스텟 적용 Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
     public void InitItem() 
@@ -271,8 +277,7 @@ public class Character : NetworkBehaviour
             HandleMouseInput();
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                
-                
+                ++LvPoint;
             }
         }
     }

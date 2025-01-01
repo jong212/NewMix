@@ -329,9 +329,28 @@ public class UserData
         }
     }
 
+    private int _lvUpPoint;
+    public int LvUpPoint { 
+        get => _lvUpPoint;
+        set
+        {
+            if(_lvUpPoint != value)
+            {
+                _lvUpPoint = value;
+                if (!_isInitializing)
+                {
+                    BackendGameData.Instance.ExpDataUpdate<int>("LvPoint", value);
+                }
+            }
+        }
+
+    }
     public List<int> setPlayerItems = new List<int>();
     public List<Mymon> mymonList = new List<Mymon>();
     public List<SetMymon> setMymonList = new List<SetMymon>();
+
+
+
     public void UpdatePlayerItemAt(int index, int newValue)
     {
         if (index >= 0 && index < setPlayerItems.Count)
@@ -580,6 +599,7 @@ public class BackendGameData
         param.Add("Inventory", inventoryJson); // Add inventory JSON to database
         param.Add("mymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
         param.Add("SetMymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+        param.Add("LvPoint", 10); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
 
         lvParam.Add("currentExp", 0);
 
@@ -636,6 +656,7 @@ public class BackendGameData
                 userData.Def = int.Parse(gameDataJson[0]["Def"].ToString());
                 userData.Hp = int.Parse(gameDataJson[0]["Hp"].ToString());
                 userData.CurExp = int.Parse(LevelExpGameDataJson[0]["currentExp"].ToString());
+                userData.LvUpPoint = int.Parse(gameDataJson[0]["LvPoint"].ToString());
                 
 
                 userData.InventorySlots.Clear();

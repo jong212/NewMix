@@ -56,7 +56,6 @@ public class AudioManager : MonoBehaviour
         battleSource.playOnAwake = false;
         battleSource.volume = battleVolume;
         battleSource.clip = battleClip;
-        battleSource.Play();
         battleSource.loop = true;
 
         // 효과음 초기화

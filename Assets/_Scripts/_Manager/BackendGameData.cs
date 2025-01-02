@@ -339,7 +339,7 @@ public class UserData
                 _lvUpPoint = value;
                 if (!_isInitializing)
                 {
-                    BackendGameData.Instance.ExpDataUpdate<int>("LvPoint", value);
+                    BackendGameData.Instance.GameDataUpdate<int>("LvPoint", value);
                 }
             }
         }

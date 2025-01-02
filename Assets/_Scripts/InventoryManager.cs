@@ -19,8 +19,11 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private Text _power;
     [SerializeField] private Text _def;
     [SerializeField] private Text _hp;
+    [SerializeField] private Button _powerUpBtn;
+    [SerializeField] private Button _defUpBtn;
+    [SerializeField] private Button _hpUpBtn;
 
-    [Header("BottomInfo")]
+    [Header("Middle")]
     [SerializeField] private Text _itemName;
     [SerializeField] private Text _setLevel;
     [SerializeField] private Text _livePower;
@@ -37,7 +40,11 @@ public class InventoryManager : MonoBehaviour
 
     public Text Power { get => _power; set => _power = value; }
     public Text Def { get => _def; set => _def = value; }
-    public Text Hp { get => _hp; set => _hp = value; }
+    public Text Hp { get => _hp; set => _hp = value; }    
+    public Button PowerUpBtn { get => _powerUpBtn; set => _powerUpBtn = value; }
+    public Button DefUpBtn { get => _defUpBtn; set => _defUpBtn = value; }
+    public Button HpUpBtn { get => _hpUpBtn; set => _hpUpBtn = value; }
+    public Text StatPoint;
     public Text LastPower { get => _LastPower; set => _LastPower = value; }
     public Text LastHp { get => _LastHP; set => _LastHP = value; }
     public Text LastAtkSpeed { get => _LastAtkSpeed; set => _LastAtkSpeed = value; }

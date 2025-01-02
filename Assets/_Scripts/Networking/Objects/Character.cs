@@ -65,7 +65,11 @@ public class Character : NetworkBehaviour
     [Networked, Capacity(4), OnChangedRender(nameof(OnSetitemList))] public NetworkArray<int> setItemIndexs { get; }
 
     [Networked] public int Level { get; set; }
-    [Networked] public int Attack { get; set; }
+    [Networked, OnChangedRender(nameof(OnChangeAtkStaUp))] public int Attack { get; set; }
+    void OnChangeAtkStaUp()
+    {
+        BackendGameData.Instance.userData.Atk = Attack;
+    }
     [Networked] public int CurExp { get; set; }
     public void AddExp(int Exp)
     {
@@ -93,7 +97,7 @@ public class Character : NetworkBehaviour
                         tempExp -= lvKey.Value;
                         levelUps++;
                     }
-
+                    LvPoint += 4 * levelUps;
                     // 레벨업 후 남은 경험치를 다시 할당
                     Level += levelUps;
                     CurExp = tempExp;
@@ -110,8 +114,16 @@ public class Character : NetworkBehaviour
             }
         }
     }
-    [Networked] public int Health { get; set; }
-    [Networked] public int Def { get; set; }
+    [Networked, OnChangedRender(nameof(OnChangeHpStaUp))] public int Health { get; set; }
+    void OnChangeHpStaUp()
+    {
+        BackendGameData.Instance.userData.Hp = Health;
+    }
+    [Networked, OnChangedRender(nameof(OnChangeDefStaUp))] public int Def { get; set; }
+    void OnChangeDefStaUp()
+    {
+        BackendGameData.Instance.userData.Def = Def;
+    }
     [Networked] public int FinalAtk { get; set; }
     [Networked] public int FinalHP { get; set; }
     [Networked] public int CurrentHp { get; set; }
@@ -167,6 +179,21 @@ public class Character : NetworkBehaviour
             GameManager.instance.SpawnMonsterData();
             StaticManager.UI.MiniMap.gameObject.SetActive(true);
             StaticManager.UI.MiniMap.Target = this.transform;
+
+            StaticManager.UI.ContentsInventoryUI.PowerUpBtn.onClick.RemoveAllListeners();
+            StaticManager.UI.ContentsInventoryUI.PowerUpBtn.onClick.AddListener(() => {
+                CheckStatPowerUp();
+            });
+
+            StaticManager.UI.ContentsInventoryUI.DefUpBtn.onClick.RemoveAllListeners();
+            StaticManager.UI.ContentsInventoryUI.DefUpBtn.onClick.AddListener(() => {
+                CheckStatDef();
+            });
+
+            StaticManager.UI.ContentsInventoryUI.HpUpBtn.onClick.RemoveAllListeners();
+            StaticManager.UI.ContentsInventoryUI.HpUpBtn.onClick.AddListener(() => {
+                CheckStatHp();
+            });
         } else
         {
             // 다른 플레이어가 내 방에 들어왔을 때 그 플레이어의 이동속도나 공격속도는 네트워크 변수를 통해 알 수 있지만 애니메이터에 반영된 것은 아니여서 따로 세팅을 해줘야 하기에 else인 경우에 세팅하도록 하였다.
@@ -175,6 +202,33 @@ public class Character : NetworkBehaviour
         }
         InitializeNicknameUI();
 
+    }
+    void CheckStatPowerUp()
+    {
+        if(LvPoint != null && LvPoint > 0)
+        {
+            LvPoint = LvPoint - 1;
+            Attack++;
+            CalculateStatUI();
+        }
+    }
+    void CheckStatDef()
+    {
+        if (LvPoint != null && LvPoint > 0)
+        {
+            LvPoint = LvPoint - 1;
+            Def++;
+            CalculateStatUI();
+        }
+    }
+    void CheckStatHp()
+    {
+        if (LvPoint != null && LvPoint > 0)
+        {
+            LvPoint = LvPoint - 1;
+            Health++;
+            CalculateStatUI();
+        }
     }
     private void OnDisable()
     {
@@ -594,6 +648,7 @@ public class Character : NetworkBehaviour
             InventoryUI.Power.text = Attack.ToString();
             InventoryUI.Def.text = Def.ToString();
             InventoryUI.Hp.text = Health.ToString();
+            InventoryUI.StatPoint.text = LvPoint.ToString();
             
             foreach (var stat in setItemIndexs)
             {                

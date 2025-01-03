@@ -347,7 +347,7 @@ public class StaticManager : MonoBehaviour
             for (int i = 0; i < CashUdata.setMymonList.Count; i++)
             {
                 SetMymon mon = CashUdata.setMymonList[i];
-                if (mon.setMonList.Count > 0 && type.ToString() == mon.columName)
+                if (mon.setMonList.Count < 2 && type.ToString() == mon.columName)
                 {
                     // 값 업데이트
                     mon.setMonList = new List<int>(temp.mList);

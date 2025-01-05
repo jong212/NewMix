@@ -15,11 +15,11 @@ MonoBehaviour:
   clientAppID: 8bb14c50-8ab9-11ef-aa1a-11aee30d471e8525
   signatureKey: 8ea5fb40-8ab9-11ef-926a-99bd25742ed98525
   functionAuthKey: 
-  packageName: com.MixMix.Jonghwa
+  packageName: 
   sendLogReport: 1
   timeOutSec: 100
-  Version: 5.14.1
-  autoRefreshToken: 1
+  Version: 
+  autoRefreshToken: 0
   retryWhenClientRequestFailError: 1
   retryWhenServerError: 1
   initFailWhenDeviceIdUnknown: 1

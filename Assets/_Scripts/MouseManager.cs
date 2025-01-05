@@ -12,9 +12,15 @@ public class MouseManager : MonoBehaviour
     private Ray lastRay;              // 디버그용 
     private bool lastHit; 
 
-    public bool ClickCheck()
+    public void ClickCheck(Transform BtnClick = null)
     {
-        
+        if(BtnClick != null)
+        {
+
+            OnMonsterClicked?.Invoke(BtnClick);
+            lastHit = true;
+            return;
+        }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             
             Vector3 adjustedOrigin = ray.origin;                      // Debug.Log("카메라 위치 레이저 시작점: " + ray.origin);            
@@ -33,12 +39,10 @@ public class MouseManager : MonoBehaviour
                 // 이벤트 발생
                 OnMonsterClicked?.Invoke(monsterTransform);
                 lastHit = true;
-                return true;
             }
             else
             {
             Debug.Log("클릭한 위치에 몬스터가 없습니다.");
-            return false;
         }
          
     }

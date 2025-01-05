@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEngine.GraphicsBuffer;
 
 public class MyMonsterPathfinding : MonoBehaviour
 {
@@ -21,9 +22,10 @@ public class MyMonsterPathfinding : MonoBehaviour
             // 기존 타겟의 OnDestroyed 이벤트 구독 해제
             if (_target != null)
             {
-                var previousTarget = _target.GetComponent<Enemy>();
-                if (previousTarget != null)
-                    previousTarget.OnDestroyed -= HandleTargetDestroyed;
+                if(_target.TryGetComponent(out Enemy previousTarget))
+                {
+                  previousTarget.OnDestroyed -= HandleTargetDestroyed;
+                }
             }
 
             _target = value;
@@ -31,9 +33,12 @@ public class MyMonsterPathfinding : MonoBehaviour
             // 새로운 타겟의 OnDestroyed 이벤트 구독
             if (_target != null)
             {
-                var newTarget = _target.GetComponent<Enemy>();
-                if (newTarget != null)
+                if(_target.TryGetComponent(out Enemy newTarget))
+                {
                     newTarget.OnDestroyed += HandleTargetDestroyed;
+
+                }
+                /*var newTarget = _target.GetComponent<Enemy>();*/
             }
         }
     }// 현재 타겟 (몬스터)

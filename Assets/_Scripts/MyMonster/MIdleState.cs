@@ -28,7 +28,6 @@ public class MIdleState : MyMonsterGroundedState
     } 
     public override void FixedUpdate()
     {
-        Debug.Log(_enemy._noAttack + "dddfsdfssds");
          if (_enemy._player != null && _enemy._player.PlayerMovement.path != null )
         {
           if (_enemy._player.currentState == Character.chrState.TargetMove)

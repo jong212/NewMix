@@ -1184,6 +1184,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ff032d6fd30fc46ab0be24b47caa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 4.95
+  layer:
+    serializedVersion: 2
+    m_Bits: 8
+  colliders: []
+  short_enemy: {fileID: 0}
   currentState: 0
   <Specs>k__BackingField: {fileID: 11400000, guid: c58d325ab294b7a448d73e28b88ba63e, type: 2}
   itemList:
@@ -1219,6 +1225,7 @@ MonoBehaviour:
   _FinalMoveSpeed: 0
   _WaitingForAuthority: 0
   _HeldItem: {fileID: 0}
+  _LvPoint: 0
 --- !u!114 &7563667420301727312
 MonoBehaviour:
   m_ObjectHideFlags: 0

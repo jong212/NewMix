@@ -61,10 +61,10 @@ public class MyMonsterMovement : NetworkBehaviour
     {
         if (!Object.HasStateAuthority) return;
 
-            if (Pathfinding.target != null && !character._player.IsMoveAble)
+        if (Pathfinding.target != null)
         {
-                Movement();
-        }
+            Movement();
+        } 
     }
     /// <summary>
     /// 조이스틱 이동이 아닌 Astar를 통해 몬스터에게 이동하는 로직이다 
@@ -81,10 +81,6 @@ public class MyMonsterMovement : NetworkBehaviour
                     simpleKCC.Move(Vector3.zero);
                        character.PerformAttack();
                     return; 
-
-
-
-
             }
 
             // 아래 코드는 다음과 같이 비유할 수 있다.

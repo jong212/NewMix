@@ -20,14 +20,16 @@ public class Character : NetworkBehaviour
     private WorldNickname _nicknameUI;
     private Vector2 _joystickInput;
 
+    public float radius = 0f;
+    public LayerMask layer;
+    public Collider[] colliders;
+    public Collider short_enemy;
+
     /// <summary>
     /// true => 조이스틱 값이 있을 때 <br></br>
     /// false => 조이스틱 값이 없을 때
     /// </summary>
     private bool _isMoveAble;
-    public bool IsMoveAble {
-        get => _isMoveAble;
-    }
 
     private bool _isAttack;
     /// <summary>
@@ -329,10 +331,6 @@ public class Character : NetworkBehaviour
         if (Object.HasInputAuthority)
         {
             HandleMouseInput();
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                ++LvPoint;
-            }
         }
     }
     private void HandleMouseInput()
@@ -348,19 +346,7 @@ public class Character : NetworkBehaviour
             // 3. B 몬스터 클릭 (타겟 B상태에서 B 클릭한거라 _isMoveable = false 되서 공격하러감)
             // 이유는 공격버튼은 그냥 가장 가까이에 있는 몬스터한테 달려가면서 공격하도록 되어 있는데 몬스터를 터치한 이유는 그 몬스터의 레벨이나 정보를 보기 위함이라 타겟이 없으면 한 번 클릭해서 타겟 시켜놓고 또 몬스터를 클릭해서 공격하게끔 유도하기 위함
             // 그래서 previousTargetTransform 클릭 전 타겟 값을 TEMP 해놓고 있는 것이고 클릭했을 때 몬스터를 클릭했는지 여부에 대해 bool값으로 리턴 받아서 몬스터를 클릭한 경우에 조건이 일치하도록 했ㄲ고 결과적으로 클릭한 몬스터가 타겟 몬스터와 같은지를 체크한 후 모든 조건이 일치한다면 ismoveble 변수를 false로 만든다
-            if (_playerMovement.Pathfinding.target != null) 
-            {
-                Transform previousTargetTransform = _playerMovement.Pathfinding.target;
-                var currentClickValue = _mouseManager.ClickCheck();
-                if(_joystickInput.magnitude <= 0 && previousTargetTransform == _playerMovement.Pathfinding.target && currentClickValue)
-                {
-                    _isMoveAble = false;
-                }
-            } else
-            {
                 _mouseManager.ClickCheck();
-                _isMoveAble = true;
-            }
         }
     }
 
@@ -399,18 +385,30 @@ public class Character : NetworkBehaviour
             // 조이스틱 값이 있을 때 isMoveAble을 true로 해서 Astar로 움직이지 못 하도록 한다
             if (_joystickInput.magnitude > 0)
             {
-                _isMoveAble = true;
+                Check();
                 currentState = chrState.AttackStop;
                 MoveCharacter(_joystickInput);  // JoyStick Move Logic
-
+                PlayerMovement.Pathfinding.target = null;
             }
             else 
-            { 
+            {
+                
                 HandleIdleMovement();           // Astar Move Logic
             }
         }
     }
-
+    void Check()
+    {
+        int tempIdx = 0;
+        foreach (MonExpHpMpContainer myMonster in StaticManager.UI.MainUI.MonUIList)
+        {
+            if (myMonster._Mymonster != null && myMonster._Mymonster.mymonsterMovement.Pathfinding.target != this.transform)
+            {
+                myMonster._Mymonster.mymonsterMovement.Pathfinding.target = this.transform;
+                //myMonster._Mymonster._mai.stateMachine.ChangeState(myMonster._Mymonster._mai.moveState);
+            };
+        }
+    }
     /// <summary>
     /// 조이스틱값을 통해 플레이어 이동 및 회전처리 하는 메서드이다.
     /// </summary>
@@ -446,7 +444,7 @@ public class Character : NetworkBehaviour
     {
         // 조이스틱 값이 없는 경우에만 아래 로직을 탈 수 있다.
         // Astar Move Logic
-        if (_playerMovement.Pathfinding.target && !_isMoveAble)
+        if (_playerMovement.Pathfinding.target)
         {
 
             _playerMovement.Movement();
@@ -517,23 +515,7 @@ public class Character : NetworkBehaviour
 
             //PushMonster(targetMonster);
         }
-    }
-    private void PushMonster(Entity monster)
-    {
-        Rigidbody monsterRb = monster.GetComponent<Rigidbody>();
-        Vector3 pushDirection = (monster.transform.position - transform.position).normalized;
-        float pushForce = 50f;
-
-        if (monsterRb != null)
-        {
-            monsterRb.isKinematic = false;
-            monsterRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
-        }
-        else
-        {
-            monster.transform.position += pushDirection * 0.5f;
-        }
-    }
+    } 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void PlayAttackAnimationRpc(float damage,NetworkObject trs)
     {
@@ -623,9 +605,39 @@ public class Character : NetworkBehaviour
     // Movement Property Change
     private void ChangeMoveProperty()
     {
-        _isMoveAble = false;
-    }
+        colliders = null;
+        short_enemy = null;
 
+        colliders = Physics.OverlapSphere(transform.position, radius, layer);
+
+        if (colliders.Length > 0)
+        {
+            float short_distance = Vector3.Distance(transform.position, colliders[0].transform.position);
+            foreach (Collider col in colliders)
+            {
+                if (!col.TryGetComponent(out EnemyAi a)) continue;
+                float short_distance2 = Vector3.Distance(transform.position, col.transform.position);
+                if (short_distance > short_distance2)
+                {
+                    short_distance = short_distance2;
+                    short_enemy = col;
+                }
+            }
+            if(short_enemy == null)
+            {
+                short_enemy = colliders[0];
+            }
+            if (short_enemy == null || short_enemy.gameObject.activeSelf == false) return;
+            
+                _mouseManager.ClickCheck(short_enemy.transform);
+            
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, radius);
+    }
     // 플레이어 공격 애니메이션 시작,종료 프레임 이벤트
     public void AttackingCheck(int isAttacking)
     {

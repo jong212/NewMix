@@ -24,7 +24,7 @@ public class PlayerWaitRoomInfo : MonoBehaviour
 
     private void Awake()
     {
-        if (nickNameLayout == null || lvLayout == null || atkLayout == null ||  hpLayout == null || defLayout == null || lastLocationLayout == null || deleteCharacter == null || gameStartButton == null)
+        if (nickNameLayout == null || lvLayout == null || atkLayout == null ||  hpLayout == null || defLayout == null || lastLocationLayout == null|| gameStartButton == null)
         {
             Debug.LogError("캐릭터 선택 화면 : UI 요소가 연결되지 않았습니다!");
         }

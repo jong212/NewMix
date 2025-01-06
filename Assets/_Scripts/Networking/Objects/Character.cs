@@ -179,6 +179,7 @@ public class Character : NetworkBehaviour
             StaticManager.UI.DropItemPoolManager.gameObject.SetActive(true);
             StaticManager.UI.ExpHpMpContainer.init();
             GameManager.instance.SpawnMonsterData();
+            StaticManager.UI.MiniMapParents.gameObject.SetActive(true);
             StaticManager.UI.MiniMap.gameObject.SetActive(true);
             StaticManager.UI.MiniMap.Target = this.transform;
 

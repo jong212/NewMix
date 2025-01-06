@@ -58,5 +58,6 @@ public class BackEndSetName : BaseUI
             BackendGameData.Instance.GameDataInsert(chrIndex);
             LoginSceneManager.Instance.SetWaitRoom();
         });
+        gameObject.SetActive(false);
     }
 }

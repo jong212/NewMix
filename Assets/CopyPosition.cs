@@ -5,7 +5,7 @@ using UnityEngine;
 public class CopyPosition : MonoBehaviour
 {
     [SerializeField] private bool x, y, z;
-    [SerializeField] private Transform target;
+    [SerializeField] private Transform target; 
     public Transform Target {
         get => target; 
         set => target = value;

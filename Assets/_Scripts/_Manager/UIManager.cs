@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private VariableJoystick _joystick;
     [SerializeField] private MainUI _mainUI;
     [SerializeField] private CopyPosition _miniMap;
+    [SerializeField] private Transform _miniMapParents;
     [Header("------ UI Prefabs -----")]
     [SerializeField] private WorldNickname _worldNicknameUI;
 
@@ -63,6 +64,7 @@ public class UIManager : MonoBehaviour
     public EnemyInfoUI EnemyInfoUI                 { get => _enemyInfoUI; }
     public MonsterInventoryManager MonsterInventoryManagerUI { get => _monsterInvenManager; }
     public CopyPosition MiniMap { get => _miniMap; }
+    public Transform MiniMapParents { get => _miniMapParents; }
     private void Awake()
     {
         if(AlertUI == null || ConfirmUI == null || MainUI == null || ContentsInventoryUI == null || WorldNickNameUI == null || EnemyInfoUI == null)
@@ -198,7 +200,7 @@ public class UIManager : MonoBehaviour
                     if (rectTransform != null)
                     {
                         Vector2 newPosition = rectTransform.anchoredPosition;
-                        newPosition.y = 391; // 원하는 y 값으로 변경
+                        newPosition.y = 0; // 원하는 y 값으로 변경
                         rectTransform.anchoredPosition = newPosition;
                     }
                     break;

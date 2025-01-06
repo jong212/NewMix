@@ -2080,7 +2080,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: OK
+  m_Text: "\uD655\uC778"
 --- !u!1 &1229344753835341033
 GameObject:
   m_ObjectHideFlags: 0
@@ -2096,7 +2096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &495597717987314384
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10558,6 +10558,7 @@ MonoBehaviour:
   _joystick: {fileID: 3358900902185918260}
   _mainUI: {fileID: 759539231474733215}
   _miniMap: {fileID: 4386145759959482099}
+  _miniMapParents: {fileID: 495597717987314384}
   _worldNicknameUI: {fileID: 6409792631830009774, guid: 553a27002faed4147bb438d39701e961, type: 3}
 --- !u!1 &6064801244121110534
 GameObject:
@@ -11643,7 +11644,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: OK
+  m_Text: "\uCDE8\uC18C"
 --- !u!1 &6627122380224066688
 GameObject:
   m_ObjectHideFlags: 0

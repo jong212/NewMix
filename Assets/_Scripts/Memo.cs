@@ -6,6 +6,7 @@ public class Memo
 {
     ////////////////////////////////////////Common Memo//////////////////////////////////////
 
+  
     // 어드레서블 초기화 시점은 2Down Scene 임 
     // 모든 라벨은 2Down Scene의 DownManager 오브젝트의 DownManager.cs 의 PatchFiles()와CheckUpdateFiles() 메서드 함수 정의 부분의 라벨을 따로 추가해야 게임 시작 단계에서 AWS 리소스파일 가져온거에서 체크된 라벨에 해당하는 파일을 가져올 수 있음. 
     // Statu Authoriy 권한 변경 : 방장 클라가 나가면 자동으로 기존 클라중 한 명이 마스터 클라이언트가 되지만 오브젝트의 StatuAtuthority 옵션은 자동으로 체크 되지 않는다 GameManager.cs에서 AssignMasterClientAuthority 에 등록한 클래스에 한해서만 권한이 바뀜 따라서 방장 클라에서만 StatuAuthoiry가 필요한 경우 방장이 나가는 경울를 대비하여 GameManager AssignMasterClientAuthority 메서드에 클래스를 등록한다.
@@ -34,5 +35,8 @@ public class Memo
     // 메모리 : Mono 상속 x , 스태틱 인스턴스 O , 씬 전환시 메모리 유지
     // 순서  모노 상속 안 한 설계도 모음이라 순서 상관 x
 
-
+    // 개선 리스트
+    // 250106 - FPS 떨어지는 현상 있어서 보니 DrowGrid? 그거 선그려주는것 때문에 그랬음 주석 처리 하니 상승했음
+    // 250106 - 레벨업, 아이텝드랍 처리를 동기에서 비동기로 변경하니 끊김 현상이 해결 됨
+    // 
 }

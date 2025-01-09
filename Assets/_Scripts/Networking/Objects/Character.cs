@@ -488,12 +488,12 @@ public class Character : NetworkBehaviour
         }
         else if (targetMonster.NetworkedHealth - finalAtk <= 0)
         {
+
             AddExp((int)targetMonster.Exp);
             targetMonster.DealDamageRpc(finalAtk);
             _playerMovement.path.Clear();
             _playerMovement.Pathfinding.target = null;
             PlayAttackAnimationRpc(finalAtk, nObject);
-
             int tempIdx = 0;
             foreach(var item in targetMonster.DropItemPercent)
             {

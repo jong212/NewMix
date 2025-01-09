@@ -769,17 +769,20 @@ public class BackendGameData
         Param param = new Param();
         param.Add(columName, Parameter);
 
-        var bro = Backend.GameData.UpdateV2("Character", gameDataRowInDate, Backend.UserInDate, param);
 
+        Backend.GameData.UpdateV2("Character", gameDataRowInDate, Backend.UserInDate, param, (callback) =>
+        {
+            if (callback.IsSuccess())
+            {
+                Debug.Log("뒤끝 : 게임 정보 데이터 수정에 성공했습니다. : " + callback);
+            }
+            else
+            {
+                Debug.LogError("뒤끝 : 게임 정보 데이터 수정에 실패했습니다. : " + callback);
+            }
+        });
 
-        if (bro.IsSuccess())
-        {
-             Debug.Log("뒤끝 : 게임 정보 데이터 수정에 성공했습니다. : " + bro);
-        }
-        else
-        {
-             Debug.LogError("뒤끝 : 게임 정보 데이터 수정에 실패했습니다. : " + bro);
-        }
+        
     }
     public void ExpDataUpdate<T>(string columName, T Parameter)
     {
@@ -792,16 +795,15 @@ public class BackendGameData
         Param param = new Param();
         param.Add(columName, Parameter);
 
-        var bro = Backend.GameData.UpdateV2("LevelExp", LevelExpgameDataRowInDate, Backend.UserInDate, param);
-
-
-        if (bro.IsSuccess())
-        {
-            Debug.Log("LevelExp : 게임 정보 데이터 수정에 성공했습니다. : " + bro);
-        }
-        else
-        {
-            Debug.LogError("LevelExp : 게임 정보 데이터 수정에 실패했습니다. : " + bro);
-        }
+       Backend.GameData.UpdateV2("LevelExp", LevelExpgameDataRowInDate, Backend.UserInDate, param, (callback) => {
+           if (callback.IsSuccess())
+           {
+               Debug.Log("뒤끝 : EXP 정보 데이터 수정에 성공했습니다. : " + callback);
+           }
+           else
+           {
+               Debug.LogError("뒤끝 : EXP 정보 데이터 수정에 실패했습니다. : " + callback);
+           }
+       });
     }
 }

@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.U2D;
 //https://chatgpt.com/share/671545ed-6cd0-800b-ae52-d92b932c3177
 public class AddressableManager : MonoBehaviour
 {
     public static AddressableManager instance;
     private Dictionary<string, List<GameObject>> prefabCache = new Dictionary<string, List<GameObject>>();
-    private Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+    private Dictionary<string, SpriteAtlas> spriteCache = new Dictionary<string, SpriteAtlas>();
 
 
     private void Awake()
@@ -126,7 +127,7 @@ public class AddressableManager : MonoBehaviour
     }
     public void LoadSpritesWithLabel(string label, Action onLoaded)
     {
-        Addressables.LoadAssetsAsync<Sprite>(label, null).Completed += handle =>
+        Addressables.LoadAssetsAsync<SpriteAtlas>(label, null).Completed += handle =>
         {
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
@@ -148,9 +149,9 @@ public class AddressableManager : MonoBehaviour
     }
     public Sprite GetSprite(string spriteName)
     {
-        if (spriteCache.TryGetValue(spriteName, out Sprite sprite))
+        if (spriteCache.TryGetValue("New Sprite Atlas", out SpriteAtlas sprite))
         {
-            return sprite;
+             return sprite.GetSprite(spriteName);
         }
          Debug.LogError($"Sprite '{spriteName}' not found in cache.");
         return null;

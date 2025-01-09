@@ -83,18 +83,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Inventory
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b7081dca86c13f54380bdd5a8ebe9f46
-    m_Address: Assets/_Prefabs/AddressSprite/sword1S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f678a86f76ef6fa48873f0f7ca888d17
-    m_Address: Assets/_AssetsFolder/_AddressSprite/foot3S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e0c90730efcdb4341abb2d8edd21f3f5
     m_Address: Assets/_Prefabs/monster/mon3.prefab
     m_ReadOnly: 0
@@ -112,30 +100,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - MyMonster
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 581c2b09c36410947b0916d8cd10d7cc
-    m_Address: Assets/_AssetsFolder/_AddressSprite/mon1sprite.jpg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cc970a8b97506c64bb7ee739d168bc2e
-    m_Address: Assets/_AssetsFolder/_AddressSprite/mon3sprite.jpg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0fd624617d0cd284ea8c9815b883e16f
-    m_Address: Assets/_AssetsFolder/_AddressSprite/mon2sprite.jpg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5078d2f3cd4724d4f87e32f52d0a3dc7
-    m_Address: Assets/_AssetsFolder/_AddressSprite/mon4sprite.jpg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5cde5f310c0df164b95aca53034a7148
     m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayer 2.prefab
@@ -185,60 +149,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - SelectPlayer
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7c055d7f19e5f58449c03f4f53d12b3d
-    m_Address: Assets/_AssetsFolder/_AddressSprite/sword3S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 279573acd417f3a41924740de3e170a1
-    m_Address: Assets/_AssetsFolder/_AddressSprite/sword2S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 131dcfb8e2a15ad47aa4eaf749a4bb03
-    m_Address: Assets/_AssetsFolder/_AddressSprite/sword5S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dec931b16cdfdd9408361ef44d355dd4
-    m_Address: Assets/_AssetsFolder/_AddressSprite/sword4S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ec57b55ec08f75244972cf791d6ff3e4
-    m_Address: Assets/_AssetsFolder/_AddressSprite/sword6S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b3064cc66c9babe4381e97556070f262
-    m_Address: Assets/_AssetsFolder/_AddressSprite/foot2S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7b3db7fc1d97ae848b9c7cdb045145d5
-    m_Address: Assets/_AssetsFolder/_AddressSprite/foot5S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d9af1bff1580c7144823147b873695d4
-    m_Address: Assets/_AssetsFolder/_AddressSprite/foot1S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b90a85dcb3e0a84439d074692bddc5f0
-    m_Address: Assets/_AssetsFolder/_AddressSprite/foot4S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 68f3c122ac67ed2498244c39b8b0a1c9
     m_Address: Assets/_AssetsFolder/_AddressSetEquipment/shield7.prefab
     m_ReadOnly: 0
@@ -281,20 +191,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Inventory
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aae0d319a27909d4d969b2ea1f43f00e
-    m_Address: Assets/_AssetsFolder/_AddressSprite/shield2S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8e8f92dd0ba4318478c1ff994ce604ff
-    m_Address: Assets/_AssetsFolder/_AddressSprite/shield1S.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 260b64cc6365c384d9bac4e89b871f2e
-    m_Address: Assets/_AssetsFolder/_AddressSprite/shield3S.png
+  - m_GUID: d51ea91b5392c6446812ff110dacccf9
+    m_Address: Assets/_AssetsFolder/_AddressSpriteAtlas/New Sprite Atlas.spriteatlas
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite

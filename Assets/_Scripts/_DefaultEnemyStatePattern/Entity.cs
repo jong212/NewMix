@@ -297,6 +297,7 @@ public class Entity : NetworkBehaviour
     public event Action OnDestroyed; // 몬스터가 파괴될 때 호출되는 이벤트
     public virtual void Die()
     {
+
          Debug.Log("Monster died.");
         OnDestroyed?.Invoke(); // 이벤트 호출
 

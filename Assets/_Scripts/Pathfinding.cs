@@ -13,7 +13,6 @@ public class Pathfinding : MonoBehaviour
         {
             if (_target == value)
             {
-                 Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
                 return;
             }
             // 기존 타겟의 파티클 멈춤

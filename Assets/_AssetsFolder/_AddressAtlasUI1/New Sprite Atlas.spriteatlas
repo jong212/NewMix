@@ -1,0 +1,205 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: New Sprite Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: fe0cd31e04bc0e74e8c99d41622534e6, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 31546440fb796ae469f2fe25226f74aa: 21300000
+    - 0fd624617d0cd284ea8c9815b883e16f: 21300000
+    - 2ccfd881c56ee9340a77f625aa296e3e: 21300000
+    - 6a82aaa157991a64eb9663828ae8e8a9: 21300000
+    - dc82bba1f6b706e4cae38259344a08f8: 21300000
+    - dec931b16cdfdd9408361ef44d355dd4: 21300000
+    - 0c4fc8c1078d5d7439390277cac23d0a: 21300000
+    - 8a2dcad190928fc4bbebb569df682a4a: 21300000
+    - 98e38c120d9823c4ead41420883945c3: 21300000
+    - f6d52e123a0f3194dade6d4921830545: 21300000
+    - 16d764324d60b0349a0bac13917de968: 21300000
+    - 61d16342d43baa543af628d705352798: 21300000
+    - 9e0d6d72bd92b954cb35668f92bf6398: 21300000
+    - 010a6e5305fa7004f89c5d317b7b47d4: 21300000
+    - 5078d2f3cd4724d4f87e32f52d0a3dc7: 21300000
+    - 11612c94cc2d70f498f60d704a4498e7: 21300000
+    - 8cf319a4e46dd7244af0c9758a079370: 21300000
+    - 7181f1b48a99701488314dc4fa0d9285: 21300000
+    - 8f001bd400dc63641a198154e30f5735: 21300000
+    - 642e635687374444aa42d74e967c4c7e: 21300000
+    - b3064cc66c9babe4381e97556070f262: 21300000
+    - c9e378e695515694ba48e9d18ce4749d: 21300000
+    - fa64f9074f7e6934885c23f3843ce417: 21300000
+    - bde8203770e60704c847a946ae6a280e: 21300000
+    - 16f08537e20d1e943a7849bfea6c6e41: 21300000
+    - fa186257838b63843b49a2715a8a1d25: 21300000
+    - cb2d822819b8ccd479917dff9bfc7d8b: 21300000
+    - 2015da58b9bbbec408374f688d296d27: 21300000
+    - 131dcfb8e2a15ad47aa4eaf749a4bb03: 21300000
+    - 2522d9c898807274e8d2a360a0049864: 21300000
+    - 581c2b09c36410947b0916d8cd10d7cc: 21300000
+    - aae0d319a27909d4d969b2ea1f43f00e: 21300000
+    - b7081dca86c13f54380bdd5a8ebe9f46: 21300000
+    - 5b56d9fa0e8bd6e409ed188db38a692c: 21300000
+    - cc970a8b97506c64bb7ee739d168bc2e: 21300000
+    - 38a66d2c3db67394ca7a1cda0a60a738: 21300000
+    - 279573acd417f3a41924740de3e170a1: 21300000
+    - 260b64cc6365c384d9bac4e89b871f2e: 21300000
+    - b90a85dcb3e0a84439d074692bddc5f0: 21300000
+    - 7b3db7fc1d97ae848b9c7cdb045145d5: 21300000
+    - 8e8f92dd0ba4318478c1ff994ce604ff: 21300000
+    - d0a806ddd3eaaa3459209ab365ff3993: 21300000
+    - 38d2a04e40c738441b1944b963f4cf0a: 21300000
+    - ec57b55ec08f75244972cf791d6ff3e4: 21300000
+    - f678a86f76ef6fa48873f0f7ca888d17: 21300000
+    - c9c78c6f9b258e94e961f9c63cb7b815: 21300000
+    - 7c055d7f19e5f58449c03f4f53d12b3d: 21300000
+    - 6a6fbfafb57414a4caa5a37c14435550: 21300000
+    - d9af1bff1580c7144823147b873695d4: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 31546440fb796ae469f2fe25226f74aa, type: 3}
+  - {fileID: 21300000, guid: 0fd624617d0cd284ea8c9815b883e16f, type: 3}
+  - {fileID: 21300000, guid: 2ccfd881c56ee9340a77f625aa296e3e, type: 3}
+  - {fileID: 21300000, guid: 6a82aaa157991a64eb9663828ae8e8a9, type: 3}
+  - {fileID: 21300000, guid: dc82bba1f6b706e4cae38259344a08f8, type: 3}
+  - {fileID: 21300000, guid: dec931b16cdfdd9408361ef44d355dd4, type: 3}
+  - {fileID: 21300000, guid: 0c4fc8c1078d5d7439390277cac23d0a, type: 3}
+  - {fileID: 21300000, guid: 8a2dcad190928fc4bbebb569df682a4a, type: 3}
+  - {fileID: 21300000, guid: 98e38c120d9823c4ead41420883945c3, type: 3}
+  - {fileID: 21300000, guid: f6d52e123a0f3194dade6d4921830545, type: 3}
+  - {fileID: 21300000, guid: 16d764324d60b0349a0bac13917de968, type: 3}
+  - {fileID: 21300000, guid: 61d16342d43baa543af628d705352798, type: 3}
+  - {fileID: 21300000, guid: 9e0d6d72bd92b954cb35668f92bf6398, type: 3}
+  - {fileID: 21300000, guid: 010a6e5305fa7004f89c5d317b7b47d4, type: 3}
+  - {fileID: 21300000, guid: 5078d2f3cd4724d4f87e32f52d0a3dc7, type: 3}
+  - {fileID: 21300000, guid: 11612c94cc2d70f498f60d704a4498e7, type: 3}
+  - {fileID: 21300000, guid: 8cf319a4e46dd7244af0c9758a079370, type: 3}
+  - {fileID: 21300000, guid: 7181f1b48a99701488314dc4fa0d9285, type: 3}
+  - {fileID: 21300000, guid: 8f001bd400dc63641a198154e30f5735, type: 3}
+  - {fileID: 21300000, guid: 642e635687374444aa42d74e967c4c7e, type: 3}
+  - {fileID: 21300000, guid: b3064cc66c9babe4381e97556070f262, type: 3}
+  - {fileID: 21300000, guid: c9e378e695515694ba48e9d18ce4749d, type: 3}
+  - {fileID: 21300000, guid: fa64f9074f7e6934885c23f3843ce417, type: 3}
+  - {fileID: 21300000, guid: bde8203770e60704c847a946ae6a280e, type: 3}
+  - {fileID: 21300000, guid: 16f08537e20d1e943a7849bfea6c6e41, type: 3}
+  - {fileID: 21300000, guid: fa186257838b63843b49a2715a8a1d25, type: 3}
+  - {fileID: 21300000, guid: cb2d822819b8ccd479917dff9bfc7d8b, type: 3}
+  - {fileID: 21300000, guid: 2015da58b9bbbec408374f688d296d27, type: 3}
+  - {fileID: 21300000, guid: 131dcfb8e2a15ad47aa4eaf749a4bb03, type: 3}
+  - {fileID: 21300000, guid: 2522d9c898807274e8d2a360a0049864, type: 3}
+  - {fileID: 21300000, guid: 581c2b09c36410947b0916d8cd10d7cc, type: 3}
+  - {fileID: 21300000, guid: aae0d319a27909d4d969b2ea1f43f00e, type: 3}
+  - {fileID: 21300000, guid: b7081dca86c13f54380bdd5a8ebe9f46, type: 3}
+  - {fileID: 21300000, guid: 5b56d9fa0e8bd6e409ed188db38a692c, type: 3}
+  - {fileID: 21300000, guid: cc970a8b97506c64bb7ee739d168bc2e, type: 3}
+  - {fileID: 21300000, guid: 38a66d2c3db67394ca7a1cda0a60a738, type: 3}
+  - {fileID: 21300000, guid: 279573acd417f3a41924740de3e170a1, type: 3}
+  - {fileID: 21300000, guid: 260b64cc6365c384d9bac4e89b871f2e, type: 3}
+  - {fileID: 21300000, guid: b90a85dcb3e0a84439d074692bddc5f0, type: 3}
+  - {fileID: 21300000, guid: 7b3db7fc1d97ae848b9c7cdb045145d5, type: 3}
+  - {fileID: 21300000, guid: 8e8f92dd0ba4318478c1ff994ce604ff, type: 3}
+  - {fileID: 21300000, guid: d0a806ddd3eaaa3459209ab365ff3993, type: 3}
+  - {fileID: 21300000, guid: 38d2a04e40c738441b1944b963f4cf0a, type: 3}
+  - {fileID: 21300000, guid: ec57b55ec08f75244972cf791d6ff3e4, type: 3}
+  - {fileID: 21300000, guid: f678a86f76ef6fa48873f0f7ca888d17, type: 3}
+  - {fileID: 21300000, guid: c9c78c6f9b258e94e961f9c63cb7b815, type: 3}
+  - {fileID: 21300000, guid: 7c055d7f19e5f58449c03f4f53d12b3d, type: 3}
+  - {fileID: 21300000, guid: 6a6fbfafb57414a4caa5a37c14435550, type: 3}
+  - {fileID: 21300000, guid: d9af1bff1580c7144823147b873695d4, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - btn_disabled_square
+  - mon2sprite
+  - icon_list
+  - header_grey
+  - icon_star
+  - sword4S
+  - hp_left
+  - hp_right
+  - icon_shield
+  - btn_green_square_off
+  - attackIcon
+  - scroll_grey
+  - window_small_top_grey
+  - Handle_Plain
+  - mon4sprite
+  - hp_top
+  - defaultPlayerS1
+  - radio_green_off
+  - defaultPlayerS2
+  - defaultPlayerS3
+  - foot2S
+  - btn_red_square_off
+  - hp_circle
+  - icon_skull
+  - f
+  - scroll_red
+  - MinimapMask02
+  - icon_close
+  - sword5S
+  - MinimapMask01
+  - mon1sprite
+  - shield2S
+  - sword1S
+  - AllAxis_Outline
+  - mon3sprite
+  - hp_inner_black
+  - sword2S
+  - shield3S
+  - foot4S
+  - foot5S
+  - shield1S
+  - btn_red_square_on
+  - hp_inner
+  - sword6S
+  - foot3S
+  - MinimapRound01
+  - sword3S
+  - icon_arrow_up
+  - foot1S
+  m_RenderDataMap: {}
+  m_Tag: New Sprite Atlas
+  m_IsVariant: 0

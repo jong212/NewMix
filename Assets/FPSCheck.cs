@@ -26,6 +26,10 @@ public class FPSCheck : MonoBehaviour
         float ms = deltaTime * 1000f;
         float fps = 1.0f / deltaTime;
         string text = string.Format("{0:0.} FPS ({1:0.0} ms)", fps, ms);
+        if(((int)fps) < 100)
+        {
+            Debug.Log(((int)fps).ToString());// TEMP 
+        }
 
         GUI.Label(rect, text, style);
     }

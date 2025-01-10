@@ -21,23 +21,13 @@ public class ResourcesManager : MonoBehaviour
 
 	#endregion
 
-	[Header("------ Resource Banks -----")]
-	public ResourceBank ingredientBank;
-
 	[Header("------ UI Prefabs -----")]
     public BarUI barUIPrefab;
     public ItemCompleteWorldUI cookCompleteSuccessUI;
     public ItemCompleteWorldUI burnFoodUI;
-    public FoodOrderItemUI foodOrderUIPrefab;
     public FoodOrderIngredientUI ingredientUIPrefab;
 	public WorldIngredientItemUI worldIngredientItemUIPrefab;
 	public WorldIngredientContainerUI worldIngredientContainerUIPrefab;
     public WorldNickname worldNicknamePrefab;
 
-	private void Start()
-	{
-		IngredientGraph.Prepare();
-		AssemblyMap.Prepare();
-        ProcessGraph.Prepare();
-	}
 }

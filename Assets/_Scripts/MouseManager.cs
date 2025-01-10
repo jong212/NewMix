@@ -34,7 +34,7 @@ public class MouseManager : MonoBehaviour
             {
                 // 몬스터를 클릭한 경우
                 Transform monsterTransform = hit.transform;
-                Debug.Log("몬스터 클릭됨: " + monsterTransform.name);
+             //   Debug.Log("몬스터 클릭됨: " + monsterTransform.name);
 
                 // 이벤트 발생
                 OnMonsterClicked?.Invoke(monsterTransform);

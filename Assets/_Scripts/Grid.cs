@@ -19,7 +19,6 @@ public class Grid : MonoBehaviour
         // nodeRadius가 0 이하로 설정되지 않도록 확인
         if (nodeRadius <= 0)
         {
-            Debug.LogWarning("nodeRadius가 0 이하로 설정되어 있습니다. 기본값 0.5로 변경합니다.");
             nodeRadius = 0.5f;
         }
 
@@ -30,7 +29,7 @@ public class Grid : MonoBehaviour
         // gridSizeX와 gridSizeY가 양수인지 확인
         if (gridSizeX <= 0 || gridSizeY <= 0)
         {
-            Debug.LogError("gridSizeX 또는 gridSizeY가 0 이하입니다. gridWorldSize와 nodeRadius를 확인하세요.");
+            //Debug.LogError("gridSizeX 또는 gridSizeY가 0 이하입니다. gridWorldSize와 nodeRadius를 확인하세요.");
             return;
         }
 
@@ -62,7 +61,7 @@ public class Grid : MonoBehaviour
     {
         if (grid == null)
         {
-            Debug.LogError("Grid가 초기화되지 않았습니다.");
+           // Debug.LogError("Grid가 초기화되지 않았습니다.");
             return null;
         }
 

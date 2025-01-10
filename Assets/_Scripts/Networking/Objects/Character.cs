@@ -299,7 +299,7 @@ public class Character : NetworkBehaviour
         Def = userData.Def;
         CurExp = userData.CurExp;
         LvPoint = userData.LvUpPoint;
-        Debug.Log($"플레이어 오브젝트에 스텟 적용 Level: {Level}, Attack: {Attack}, Health: {Health}");
+        //Debug.Log($"플레이어 오브젝트에 스텟 적용 Level: {Level}, Attack: {Attack}, Health: {Health}");
     }
     public void InitItem() 
     {
@@ -466,12 +466,12 @@ public class Character : NetworkBehaviour
             }
             else
             {
-                Debug.LogWarning("Pathfinding.target에 Entity 컴포넌트가 없습니다.");
+               // Debug.LogWarning("Pathfinding.target에 Entity 컴포넌트가 없습니다.");
             }
         }
         else
         {
-              Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
+              //Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
         }
     }
     // Attack Mechanism

@@ -267,14 +267,14 @@ public class InventoryManager : MonoBehaviour
     // 단일 클릭 처리 메서드
     private void OnSingleClick(int slotID)
     {
-        Debug.Log($"Slot {slotID} Single Clicked");
+        //Debug.Log($"Slot {slotID} Single Clicked");
         ShowTooltip(slotID);
     }
 
     // 더블 클릭 처리 메서드
     private void OnDoubleClick(int slotID)
     {
-        Debug.Log($"Slot {slotID} Double Clicked");
+       // Debug.Log($"Slot {slotID} Double Clicked");
         EquipItem(slotID);
     }
 

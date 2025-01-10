@@ -84,7 +84,7 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
         }
         else
         {
-            Debug.LogWarning(result.ShutdownReason);
+           // Debug.LogWarning(result.ShutdownReason);
             DisconnectUI.OnShutdown(result.ShutdownReason);
         }
     }
@@ -101,7 +101,7 @@ public class Matchmaker : MonoBehaviour, INetworkRunnerCallbacks
 */		}
 		else
 		{
-            Debug.LogWarning(shutdownReason);
+           // Debug.LogWarning(shutdownReason);
             DisconnectUI.OnShutdown(shutdownReason);
 		}
 	}

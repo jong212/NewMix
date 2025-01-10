@@ -56,11 +56,12 @@ public class LoginSceneManager : MonoBehaviour
             /* ================================================================================
              * StartGoogleLogin(); // PC 테스트는 CustomLogin 함수 사용하고 모바일은 StartGoogleLogin
              * ================================================================================*/
-            Debug.Log("초기화 성공 : " + bro.StatusCode);
+            StartGoogleLogin();
+            //Debug.Log("초기화 성공 : " + bro.StatusCode);
         }
         else
         {
-             Debug.LogError("초기화 실패 : " + bro);
+             //Debug.LogError("초기화 실패 : " + bro);
         }
     }
     private void Update()

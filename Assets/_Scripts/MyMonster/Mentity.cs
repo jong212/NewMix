@@ -73,7 +73,7 @@ public class Mentity : MycoreNetwork
             if (Time.time - _lastAttackTime < _attackCooldown)
             {
                 _noAttack = true;
-                Debug.Log("쿨타임 중입니다. 다음 공격까지 대기하세요.");
+             //   Debug.Log("쿨타임 중입니다. 다음 공격까지 대기하세요.");
                 return; // 쿨타임이 끝나지 않았으므로 공격 실행하지 않음
             }
             _noAttack = false;
@@ -85,12 +85,12 @@ public class Mentity : MycoreNetwork
             }
            else
             {
-                Debug.LogWarning("Pathfinding.target에 Entity 컴포넌트가 없습니다.");
+               // Debug.LogWarning("Pathfinding.target에 Entity 컴포넌트가 없습니다.");
             }
         }
         else
         {
-            Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
+           // Debug.Log("Pathfinding.target이 설정되지 않았습니다.");
         }
     }
     public void AttackRpc(Enemy targetMonster, float finalAtk)

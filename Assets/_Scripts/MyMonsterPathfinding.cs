@@ -15,7 +15,7 @@ public class MyMonsterPathfinding : MonoBehaviour
         {
             if (_target == value)
             {
-                 Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
+                // Debug.Log("타겟이 동일하여 변경되지 않음: " + _target?.name);
                 return;
             }
 
@@ -61,7 +61,7 @@ public class MyMonsterPathfinding : MonoBehaviour
         }
         else
         {
-             Debug.LogError("MouseManager를 찾을 수 없습니다.");
+             //Debug.LogError("MouseManager를 찾을 수 없습니다.");
         }
     }
 
@@ -74,12 +74,12 @@ public class MyMonsterPathfinding : MonoBehaviour
     }
     void HandleTargetDestroyed()
     {
-        Debug.Log("타겟 몬스터가 파괴되었습니다.");
+        //Debug.Log("타겟 몬스터가 파괴되었습니다.");
         target = null; // 타겟을 null로 설정
     }
     void SetTarget(Transform monsterTransform)
     {
-        Debug.Log("Montest");
+        //D/ebug.Log("Montest");
 
         target = monsterTransform;
     }
@@ -109,7 +109,7 @@ public class MyMonsterPathfinding : MonoBehaviour
 
         if (startNode == null || targetNode == null)
         {
-             Debug.LogError("시작 노드 또는 목표 노드가 null입니다.");
+           //  Debug.LogError("시작 노드 또는 목표 노드가 null입니다.");
             OnPathUpdated?.Invoke(null);
             return;
         }

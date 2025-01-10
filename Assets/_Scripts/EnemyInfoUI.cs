@@ -29,12 +29,4 @@ public class EnemyInfoUI : MonoBehaviour
     }
 
     public Transform ObjRef;
-    private void Awake()
-    {
-        if(Slider == null || Level == null  )
-        {
-            Debug.LogError("EnemyINfoUI noref");
-        }
-    }
-    
 }

@@ -217,16 +217,13 @@ public class MonsterInventoryManager : MonoBehaviour
             Power.text = component?.Str.ToString();
             Def.text = component?.Def.ToString();
             Hp.text = component?.Hp.ToString();
-        } else
-        {
-            Debug.Log("?D?D");
-        }
+        } 
     }
 
     // 더블 클릭 처리 메서드
     private void OnDoubleClick(int slotID)
     {
-        Debug.Log($"Slot {slotID} Double Clicked");
+        //Debug.Log($"Slot {slotID} Double Clicked");
         EquipItem(slotID);
     }
 

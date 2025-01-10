@@ -26,12 +26,9 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
        
         (string labelName, string prefabName) = StaticManager.DataSetManager.CharacterDefaultSettings(); 
         if(string.IsNullOrEmpty(labelName) || string.IsNullOrEmpty(prefabName)){
-            Debug.LogWarning("[플레이어 스포너에서 스폰할 때 플레이어의 캐릭터 어드레서블 라벨 혹은 프리팹 이름 값을 불러오지 못함]");
+            //Debug.LogWarning("[플레이어 스포너에서 스폰할 때 플레이어의 캐릭터 어드레서블 라벨 혹은 프리팹 이름 값을 불러오지 못함]");
             yield break;
-        } else
-        {
-           Debug.Log($"[5 PlayerSpawner : 플레이어 에게 적용할 어드레서블 레이블,프리팹이름 값 정상적으로 가져옴 {labelName}, {prefabName} ]");
-        }
+        } 
         // 로드 완료 여부를 추적하는 변수들
         bool isInventoryLoaded = false;
         bool isPlayerPrefabLoaded = false;
@@ -101,7 +98,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
         }
         else
         {
-           Debug.LogWarning("Unable to spawn player");
+           //Debug.LogWarning("Unable to spawn player");
         }
     }
 
@@ -111,7 +108,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     {
         if (runner.IsSharedModeMasterClient)
         {
-            Debug.Log($"Master client received player info: {player}");
+           // Debug.Log($"Master client received player info: {player}");
             PlayerSpawner instance = FindObjectOfType<PlayerSpawner>();
             if (instance != null)
             {
@@ -128,7 +125,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     {
         if (Runner.IsSharedModeMasterClient)
         {
-            Debug.Log("Master client handling player left: " + player);
+            //Debug.Log("Master client handling player left: " + player);
             OnPlayerLeft?.Invoke(player);
             // Remove player from any tracked lists or states if necessary
         }

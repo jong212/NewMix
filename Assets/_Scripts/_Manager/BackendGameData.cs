@@ -591,7 +591,7 @@ public class BackendGameData
         param.Add("Level", 1);
         param.Add("Money", 10000);
         param.Add("ChrType", chrIdx ?? userData.ChrType);
-        param.Add("LastMap", "A");
+        param.Add("LastMap", "초보사냥터");
         param.Add("SetPlayerItems", new List<int> { 1,7,0,4});
         param.Add("Atk", 10);
         param.Add("Def", 10);

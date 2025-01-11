@@ -197,6 +197,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cf62a00096464145b01c2ac389602b0
+    m_Address: Assets/_AssetsFolder/_Ingame_MyMonster/mon4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MyMonster
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a7448a8fab4d0794d85c624338214606, type: 2}
   m_SchemaSet:

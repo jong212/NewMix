@@ -8,6 +8,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 using static Character;
+using UnityEngine.TextCore.Text;
 
 public class Mentity : MycoreNetwork
 {
@@ -80,6 +81,10 @@ public class Mentity : MycoreNetwork
             Enemy targetMonster = MyMonsterMovement.Pathfinding.target.GetComponent<Enemy>();
             if (targetMonster != null)
             {
+                if (_mai.stateMachine.currentState != _mai.attackState)
+                {
+                    _mai.stateMachine.ChangeState(_mai.attackState);
+                }
                 _lastAttackTime = Time.time;
                 AttackRpc(targetMonster, Atk);
             }
@@ -178,10 +183,26 @@ public class Mentity : MycoreNetwork
             if (capsuleCollider != null)
             {
                 capsuleCollider.isTrigger = false;
+                capsuleCollider.gameObject.layer = LayerMask.NameToLayer("MyMonster");
+                IgnoreCollision("Player", "MyMonster", true);
                 // 추가적인 Collider 설정이 필요하면 여기에 작성
             }
         }
+
         
+    }
+    public void IgnoreCollision(string layer1, string layer2, bool ignore)
+    {
+        int layer1Index = LayerMask.NameToLayer(layer1);
+        int layer2Index = LayerMask.NameToLayer(layer2);
+
+        if (layer1Index == -1 || layer2Index == -1)
+        {
+            Debug.LogError("Invalid layer name provided.");
+            return;
+        }
+
+        Physics.IgnoreLayerCollision(layer1Index, layer2Index, ignore);
     }
     protected override void OnNicknameChanged()
     {

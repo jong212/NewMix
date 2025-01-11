@@ -28,9 +28,9 @@ public class MMoveState : MyMonsterGroundedState
     }
     public override void FixedUpdate()
     {
-        if (_enemy._player.currentState == Character.chrState.AttackStop)
+     /*   if (_enemy._player.currentState == Character.chrState.AttackStop)
         {
             enemyBase.stateMachine.ChangeState(enemyBase.idleState);
-        }
+        }*/
     }
 }

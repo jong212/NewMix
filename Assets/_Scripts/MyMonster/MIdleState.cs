@@ -30,14 +30,14 @@ public class MIdleState : MyMonsterGroundedState
     {
          if (_enemy._player != null && _enemy._player.PlayerMovement.path != null )
         {
-          if (_enemy._player.currentState == Character.chrState.TargetMove)
+         /* if (_enemy._player.currentState == Character.chrState.TargetMove)
             {
                 enemyBase.stateMachine.ChangeState(enemyBase.moveState);
             } else if (_enemy._player.currentState == Character.chrState.Attack && !_enemy._noAttack)
             {
                 enemyBase.stateMachine.ChangeState(enemyBase.attackState);
 
-            }
+            }*/
             /*else if (_enemy._player.currentState == Character.chrState.Attack && _enemy.CheckAgroDistance() && !_enemy.IsAttack)
             {
                 enemyBase.stateMachine.ChangeState(enemyBase.attackState);

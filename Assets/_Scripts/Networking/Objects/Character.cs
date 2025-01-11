@@ -7,6 +7,7 @@ using System;
 using Random = UnityEngine.Random;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class Character : NetworkBehaviour
 {
@@ -151,6 +152,8 @@ public class Character : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
+            StaticManager.UI.MapName.text =  SceneManager.GetActiveScene().name;
+
             StaticManager.UI.MainUI.MonUIList[0].resetObject();
             StaticManager.UI.MainUI.MonUIList[1].resetObject();
             StaticManager.UI.MainUI.MonUIList[2].resetObject();

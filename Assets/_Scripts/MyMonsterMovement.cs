@@ -16,7 +16,7 @@ public class MyMonsterMovement : NetworkBehaviour
     //  Private Field //
     private Vector3 currentWaypoint;
     private Grid grid;
-
+    
 
     //  Getter Setter TO DO 변수 용도 각각 메모하기
     public MyMonsterPathfinding Pathfinding => pathfinding;
@@ -73,65 +73,85 @@ public class MyMonsterMovement : NetworkBehaviour
     public void Movement()
     {
         if (Pathfinding.target == null) return;
+
         if (path != null && path.Count > 0)
         {
-            //최종 목적지 위치값을 path[path.Count-1].worldPosition 으로 구하고 플레이어의 현 위치를 빼면 거리가 나오는데 1 미만인 경우에는 공격로직 타도록했음
-            if (Vector3.Distance(simpleKCC.transform.position, path[path.Count-1].worldPosition) < 3f) 
+            // 최종 목적지와의 거리 확인 (공격 로직)
+            if (Vector3.Distance(simpleKCC.transform.position, path[path.Count - 1].worldPosition) < 3f)
             {
-                    simpleKCC.Move(Vector3.zero);
-                       character.PerformAttack();
-                    return; 
+                simpleKCC.Move(Vector3.zero);
+
+                if (character._mai.stateMachine.currentState != character._mai.idleState)
+                {
+                    character._mai.stateMachine.ChangeState(character._mai.idleState);
+                }
+
+                character.PerformAttack();
+                return;
             }
 
-            // 아래 코드는 다음과 같이 비유할 수 있다.
-            // 강남역에 가기 위해 역삼 선릉 강남중 첫 정거장(currentWaypoint)인 역삼에 도착하면(0.1f)
-            // 그 다음 목적지는 선릉이 되는데 그 역삼에서 선릉으로 바꿔주는 로직이 아래와 같은 것이다.
+            if (character._mai.stateMachine.currentState != character._mai.moveState)
+            {
+                character._mai.stateMachine.ChangeState(character._mai.moveState);
+            }
 
-            // 아래 로직을 않았을 때 작성하지 않고 Pahtfinder 스크립트의 Update문의 Pathfind 함수를 1초로 하면 플레이어가 currentWaypoint에 도착시 다음 도착지점이 있음에도 불구하고 도차간 지점에서 더이상 변경사항이 없기 때문에  제자리에서 도는 문제가 발생한다
-            // 
-            //Debug.Log(path.Count + "거리 개수");
+            // 웨이포인트 도착 시 다음 웨이포인트로 전환
             if (Vector3.Distance(simpleKCC.transform.position, currentWaypoint) < 0.1f)
             {
                 int tempIdx = 0;
-                foreach(Node worldPosition in path)
+                foreach (Node worldPosition in path)
                 {
-                    if(worldPosition.worldPosition == currentWaypoint)
+                    if (worldPosition.worldPosition == currentWaypoint)
                     {
                         if (tempIdx + 1 >= path.Count)
                         {
-                            //Debug.Log("다음 인덱스가 범위를 초과합니다. 루프를 종료합니다.");
                             break; // 범위를 초과하므로 루프 종료
                         }
+
                         currentWaypoint = path[tempIdx + 1].worldPosition;
                         break; // 웨이포인트를 찾았으므로 루프 종료
                     }
                     tempIdx++;
                 }
             }
-            Vector3 direction = currentWaypoint - simpleKCC.transform.position; // 이동 방향 계산 (y-성분 제거)
-            direction = Vector3.ProjectOnPlane(direction, Vector3.up);          // 수평 평면으로 투영
+
+            // 이동 방향 계산
+            Vector3 direction = currentWaypoint - simpleKCC.transform.position;
+            direction = Vector3.ProjectOnPlane(direction, Vector3.up); // y-성분 제거 (수평 평면 투영)
 
             if (direction.magnitude > 0f)
+            {
                 direction = direction.normalized;
-            else
-                direction = Vector3.zero;                                       // 이동 방향이 없을 경우
-           
-            Vector3 velocity = direction * speed;   // Runner.DeltaTime을 곱지 않음  // 이동 벡터 계산 (Simple KCC.Move는 속도 벡터를 필요로 함)
-            simpleKCC.Move(velocity);               // Simple KCC.Move 호출 (단일 벡터)
-            if (direction != Vector3.zero)          // 회전 로직: 입력 권한이 있는 클라이언트에서만 회전 처리
-            { 
-                // 목표 회전 각도 계산
-                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-
-                // 현재 회전 각도 추출
-                float currentYAngle = simpleKCC.transform.eulerAngles.y;
-
-                // 회전 각도 보간 (부드러운 회전)
-                float newYAngle = Mathf.MoveTowardsAngle(currentYAngle, targetAngle, rotationSpeed * Runner.DeltaTime);
-
-                // Simple KCC를 통한 회전 적용
-                simpleKCC.SetLookRotation(0, newYAngle);
             }
+            else
+            {
+                direction = Vector3.zero;
+            }
+
+            // 부드러운 속도 보간
+            Vector3 currentVelocity = simpleKCC.RealVelocity; // SimpleKCC에서 현재 속도를 가져온다고 가정
+            Vector3 targetVelocity = direction * StaticManager.Instance.UniquePlayer.FinalMoveSpeed;
+
+            // Lerp로 부드럽게 속도 변경
+            Vector3 smoothedVelocity = Vector3.Lerp(currentVelocity, targetVelocity, Time.deltaTime * 5f); // 5f는 감속 강도
+
+            // Simple KCC 이동 호출
+            simpleKCC.Move(smoothedVelocity);
+
+            // 회전 처리 (부드러운 회전)
+            if (direction != Vector3.zero)
+            {
+                // 현재 방향과 목표 방향 계산
+                Quaternion currentRotation = simpleKCC.transform.rotation;
+                Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+
+                // 부드럽게 회전 (Slerp 사용)
+                Quaternion smoothedRotation = Quaternion.Slerp(currentRotation, targetRotation, Time.deltaTime * 5f);
+
+                // 회전 적용
+                simpleKCC.SetLookRotation(smoothedRotation);
+            }
+
         }
     }
 

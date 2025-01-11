@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private MainUI _mainUI;
     [SerializeField] private CopyPosition _miniMap;
     [SerializeField] private Transform _miniMapParents;
+    [SerializeField] private Text _mapName;
     [Header("------ UI Prefabs -----")]
     [SerializeField] private WorldNickname _worldNicknameUI;
 
@@ -65,6 +66,7 @@ public class UIManager : MonoBehaviour
     public MonsterInventoryManager MonsterInventoryManagerUI { get => _monsterInvenManager; }
     public CopyPosition MiniMap { get => _miniMap; }
     public Transform MiniMapParents { get => _miniMapParents; }
+    public Text MapName { get => _mapName; }
     private void Awake()
     {
         if(AlertUI == null || ConfirmUI == null || MainUI == null || ContentsInventoryUI == null || WorldNickNameUI == null || EnemyInfoUI == null)

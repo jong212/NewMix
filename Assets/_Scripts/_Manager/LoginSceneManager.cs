@@ -3,12 +3,14 @@ using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 
 public class LoginSceneManager : MonoBehaviour
 {
     private static LoginSceneManager _instance;
+    public Text text;
     public static LoginSceneManager Instance
     {
         get
@@ -57,6 +59,12 @@ public class LoginSceneManager : MonoBehaviour
              * StartGoogleLogin(); // PC 테스트는 CustomLogin 함수 사용하고 모바일은 StartGoogleLogin
              * ================================================================================*/
             StartGoogleLogin();
+
+            Backend.Utils.GetGoogleHash();
+
+            //example
+            string googlehash = Backend.Utils.GetGoogleHash();
+            Debug.Log(googlehash);
             //Debug.Log("초기화 성공 : " + bro.StatusCode);
         }
         else
@@ -67,7 +75,11 @@ public class LoginSceneManager : MonoBehaviour
     private void Update()
     {
    
-        
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            CustomLogin("test123", "123");
+
+        }
     }
     public void testbuttonA()
     {

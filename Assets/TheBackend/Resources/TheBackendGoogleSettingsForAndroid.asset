@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: -1198741809, guid: 121945df52b96c740902ea051a2895ed, type: 3}
   m_Name: TheBackendGoogleSettingsForAndroid
   m_EditorClassIdentifier: 
-  webClientID: 649683278765-fjfd09si6ld1o6d9v89mj7u7apeeh4d2.apps.googleusercontent.com
+  webClientID: 649683278765-b5hu2eepjv7ls7i8mgh8dc21a5f11coa.apps.googleusercontent.com
   androidSDKVersion: 2.2.0

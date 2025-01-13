@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 94b466ca57349f543acf1e50c196809d
   m_SerializeEntries:
   - m_GUID: 4a9627b58795ce940a971986ff1b8356
-    m_Address: Assets/Prefabs/Networked/defaultPlayer.prefab
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayer.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - player
@@ -108,7 +108,7 @@ MonoBehaviour:
     - player
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ba25938999ade04438d6dbec40a78447
-    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayer 1.prefab
+    m_Address: Assets/_AssetsFolder/_AddressCharacterModel/defaultPlayer1.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - player

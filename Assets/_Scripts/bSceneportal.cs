@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum EselectMapName { A, B }
+public enum EselectMapName { 초보사냥터, 중급사냥터 }
 public class bSceneportal : MonoBehaviour
 {
     [SerializeField] LayerMask _targetLayerMask;

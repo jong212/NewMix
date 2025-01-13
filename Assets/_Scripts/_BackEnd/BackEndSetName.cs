@@ -53,9 +53,21 @@ public class BackEndSetName : BaseUI
         Backend.BMember.CreateNickname(nickname, (callback) =>
         {
              Debug.Log("닉네임 설정 완료");
-            int chrIndex = LoginSceneManager.Instance.Selecter.selectedCharacter;
+
+            int tempCharacterIdx = 0;
+            /*int chrIndex = LoginSceneManager.Instance.Selecter.selectedCharacter;*/
+            foreach (var charList in LoginSceneManager.Instance.Selecter.characters)
+            {
+                if(charList.activeSelf)
+                {
+                    if(charList.TryGetComponent(out Idx idx)){
+                        tempCharacterIdx = idx.Charidx;
+                    }
+                    break;
+                }
+            }
             BackendGameData.Instance.SetNickname(nickname);
-            BackendGameData.Instance.GameDataInsert(chrIndex);
+            BackendGameData.Instance.GameDataInsert(tempCharacterIdx);
             LoginSceneManager.Instance.SetWaitRoom();
         });
         gameObject.SetActive(false);

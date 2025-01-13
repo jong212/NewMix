@@ -5301,7 +5301,7 @@ MonoBehaviour:
   _mon1ExpBar: {fileID: 0}
   _mon1Hp: {fileID: 6527405912509837940}
   _mon1Mp: {fileID: 7966278466967058281}
-  _mon1ProfileImage: {fileID: 27512375761423889}
+  _mon1ProfileImage: {fileID: 6258399557896872109}
 --- !u!1 &3212907706267106197
 GameObject:
   m_ObjectHideFlags: 0

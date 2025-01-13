@@ -629,7 +629,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fb1eb559a6495b54c9128a623b05088d, type: 2}
+  - {fileID: 2100000, guid: 15ce2f94ae8b17a47a1f8c2d15d5ad52, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1067,7 +1067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ff032d6fd30fc46ab0be24b47caa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 4.98
+  radius: 4.89
   layer:
     serializedVersion: 2
     m_Bits: 8
@@ -1214,7 +1214,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 2284463257
+  SortKey: 174078274
   ObjectInterest: 1
   Flags: 526593
   NestedObjects: []

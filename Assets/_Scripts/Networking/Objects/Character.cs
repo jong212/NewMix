@@ -491,7 +491,8 @@ public class Character : NetworkBehaviour
         }
         else if (targetMonster.NetworkedHealth - finalAtk <= 0)
         {
-
+            CurrentHp = FinalHP;
+            InitHpUpdate();
             AddExp((int)targetMonster.Exp);
             targetMonster.DealDamageRpc(finalAtk);
             _playerMovement.path.Clear();

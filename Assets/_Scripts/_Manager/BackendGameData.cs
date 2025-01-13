@@ -597,8 +597,9 @@ public class BackendGameData
         param.Add("Def", 10);
         param.Add("Hp", 100);
         param.Add("Inventory", inventoryJson); // Add inventory JSON to database
-        param.Add("mymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
-        param.Add("SetMymon1", new List<int> {1,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+        param.Add("mymon1", new List<int> {4,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+        param.Add("mymon2", new List<int> {4,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
+        param.Add("SetMymon1", new List<int> {4,1,10,1,100,3 }); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
         param.Add("LvPoint", 10); // 몬스터 지급 ==>> 몬스터아이디, 레벨, 공격력,방어력,체력,공격범위
 
         lvParam.Add("currentExp", 0);

@@ -64,7 +64,7 @@ SpriteAtlas:
     - 61d16342d43baa543af628d705352798: 21300000
     - 9e0d6d72bd92b954cb35668f92bf6398: 21300000
     - 010a6e5305fa7004f89c5d317b7b47d4: 21300000
-    - 5078d2f3cd4724d4f87e32f52d0a3dc7: 21300000
+    - 267e9c24b65bc1343be0499274207fba: 21300000
     - 11612c94cc2d70f498f60d704a4498e7: 21300000
     - 8cf319a4e46dd7244af0c9758a079370: 21300000
     - 7181f1b48a99701488314dc4fa0d9285: 21300000
@@ -84,7 +84,6 @@ SpriteAtlas:
     - aae0d319a27909d4d969b2ea1f43f00e: 21300000
     - b7081dca86c13f54380bdd5a8ebe9f46: 21300000
     - 5b56d9fa0e8bd6e409ed188db38a692c: 21300000
-    - cc970a8b97506c64bb7ee739d168bc2e: 21300000
     - 38a66d2c3db67394ca7a1cda0a60a738: 21300000
     - 279573acd417f3a41924740de3e170a1: 21300000
     - 260b64cc6365c384d9bac4e89b871f2e: 21300000
@@ -94,6 +93,7 @@ SpriteAtlas:
     - d0a806ddd3eaaa3459209ab365ff3993: 21300000
     - 38d2a04e40c738441b1944b963f4cf0a: 21300000
     - ec57b55ec08f75244972cf791d6ff3e4: 21300000
+    - 1acce19eb9aecee4b8eec56e49dbd598: 21300000
     - f678a86f76ef6fa48873f0f7ca888d17: 21300000
     - c9c78c6f9b258e94e961f9c63cb7b815: 21300000
     - 7c055d7f19e5f58449c03f4f53d12b3d: 21300000
@@ -115,7 +115,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 61d16342d43baa543af628d705352798, type: 3}
   - {fileID: 21300000, guid: 9e0d6d72bd92b954cb35668f92bf6398, type: 3}
   - {fileID: 21300000, guid: 010a6e5305fa7004f89c5d317b7b47d4, type: 3}
-  - {fileID: 21300000, guid: 5078d2f3cd4724d4f87e32f52d0a3dc7, type: 3}
+  - {fileID: 21300000, guid: 267e9c24b65bc1343be0499274207fba, type: 3}
   - {fileID: 21300000, guid: 11612c94cc2d70f498f60d704a4498e7, type: 3}
   - {fileID: 21300000, guid: 8cf319a4e46dd7244af0c9758a079370, type: 3}
   - {fileID: 21300000, guid: 7181f1b48a99701488314dc4fa0d9285, type: 3}
@@ -135,7 +135,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: aae0d319a27909d4d969b2ea1f43f00e, type: 3}
   - {fileID: 21300000, guid: b7081dca86c13f54380bdd5a8ebe9f46, type: 3}
   - {fileID: 21300000, guid: 5b56d9fa0e8bd6e409ed188db38a692c, type: 3}
-  - {fileID: 21300000, guid: cc970a8b97506c64bb7ee739d168bc2e, type: 3}
   - {fileID: 21300000, guid: 38a66d2c3db67394ca7a1cda0a60a738, type: 3}
   - {fileID: 21300000, guid: 279573acd417f3a41924740de3e170a1, type: 3}
   - {fileID: 21300000, guid: 260b64cc6365c384d9bac4e89b871f2e, type: 3}
@@ -145,6 +144,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d0a806ddd3eaaa3459209ab365ff3993, type: 3}
   - {fileID: 21300000, guid: 38d2a04e40c738441b1944b963f4cf0a, type: 3}
   - {fileID: 21300000, guid: ec57b55ec08f75244972cf791d6ff3e4, type: 3}
+  - {fileID: 21300000, guid: 1acce19eb9aecee4b8eec56e49dbd598, type: 3}
   - {fileID: 21300000, guid: f678a86f76ef6fa48873f0f7ca888d17, type: 3}
   - {fileID: 21300000, guid: c9c78c6f9b258e94e961f9c63cb7b815, type: 3}
   - {fileID: 21300000, guid: 7c055d7f19e5f58449c03f4f53d12b3d, type: 3}
@@ -169,8 +169,8 @@ SpriteAtlas:
   - hp_top
   - defaultPlayerS1
   - radio_green_off
-  - defaultPlayerS2
   - defaultPlayerS3
+  - defaultPlayerS2
   - foot2S
   - btn_red_square_off
   - hp_circle
@@ -185,7 +185,6 @@ SpriteAtlas:
   - shield2S
   - sword1S
   - AllAxis_Outline
-  - mon3sprite
   - hp_inner_black
   - sword2S
   - shield3S
@@ -195,6 +194,7 @@ SpriteAtlas:
   - btn_red_square_on
   - hp_inner
   - sword6S
+  - mon3sprite
   - foot3S
   - MinimapRound01
   - sword3S

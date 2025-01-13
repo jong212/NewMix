@@ -39,7 +39,7 @@ public class AudioManager : MonoBehaviour
 
     void Init()
     {
-        // 배경음 초기화
+      // 배경음 초기화
         GameObject bgmObject = new GameObject("BgmPlayer");
         bgmObject.transform.parent = transform;
         bgmPlayer = bgmObject.AddComponent<AudioSource>();

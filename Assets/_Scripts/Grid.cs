@@ -108,21 +108,21 @@ public class Grid : MonoBehaviour
     }
 
     // TEMP 테스트 끝나면 주석처리 하기
-    /*void OnDrawGizmos()
+    void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+        //Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
         if (grid != null)
         {
             foreach (Node n in grid)
             {
-                Gizmos.color = (n.walkable) ? Color.white : Color.red;
+               // Gizmos.color = (n.walkable) ? Color.white : Color.red;
                 if (path != null && path.Contains(n))
                 {
                     Gizmos.color = Color.black; // 경로 상의 노드는 검은색
                 }
-                *//*Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f)); 씬 그리드 원래코드인데 아래 코드 이상한면 이걸로 사용*//*
-                Gizmos.DrawCube(new Vector3(n.worldPosition.x, transform.position.y, n.worldPosition.z), Vector3.one * (nodeDiameter - 0.05f));
+                //Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f)); 씬 그리드 원래코드인데 아래 코드 이상한면 이걸로 사용
+               // Gizmos.DrawCube(new Vector3(n.worldPosition.x, transform.position.y, n.worldPosition.z), Vector3.one * (nodeDiameter - 0.05f));
 
             }
 
@@ -136,5 +136,5 @@ public class Grid : MonoBehaviour
                 }
             }
         }
-    }*/
+    }
 }

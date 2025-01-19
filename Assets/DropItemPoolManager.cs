@@ -75,10 +75,15 @@ public class DropItemPoolManager : MonoBehaviour
         float acceleration = 8f; // 가속도 (속도가 증가하는 비율)
         float deceleration = 1f; // 감속도 (속도가 감소하는 비율)
         float distance = Vector3.Distance(instantiatedObject.gameObject.transform.position, _uniquePlayer.transform.position);
-
+        bool nullbreak = default;
         // Y축을 제외한 거리 계산
         while (distance > 0.3f)
         {
+            if (instantiatedObject == null)
+            {
+                nullbreak = true;
+                break;
+            }
             // 목표 지점 계산
             Vector3 targetPosition = _uniquePlayer.transform.position;
             targetPosition.y = instantiatedObject.gameObject.transform.position.y; // Y축 고정
@@ -106,7 +111,7 @@ public class DropItemPoolManager : MonoBehaviour
             // 다음 프레임까지 기다림
             yield return null;
         }
-
+        if (nullbreak == true) yield break;
         // 플레이어와의 거리가 거의 0에 가까워지면 무기 습득 처리
         Matchmaker.Instance.Runner.Despawn(instantiatedObject);
     }

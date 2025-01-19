@@ -12,7 +12,10 @@ public class DamageTextPoolManager : MonoBehaviour
     }
     public void ShowDamage(NetworkObject trs, string damage)
     {
-
+        if(!trs.gameObject.activeSelf)
+        {
+            return;
+        }
         GameObject obj = _worldCanvas.GetPoolObject(PoolObjectType.AttackViewText);
 
             obj.transform.position = trs.gameObject.transform.position;

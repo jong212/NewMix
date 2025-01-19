@@ -169,9 +169,9 @@ SpriteAtlas:
   - hp_top
   - defaultPlayerS1
   - radio_green_off
-  - defaultPlayerS3
-  - mon1sprite
   - defaultPlayerS2
+  - mon1sprite
+  - defaultPlayerS3
   - foot2S
   - btn_red_square_off
   - hp_circle

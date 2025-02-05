@@ -11,6 +11,7 @@ public class LoginSceneManager : MonoBehaviour
 {
     private static LoginSceneManager _instance;
     public Text text;
+    public InputField t;
     public static LoginSceneManager Instance
     {
         get
@@ -75,11 +76,11 @@ public class LoginSceneManager : MonoBehaviour
     private void Update()
     {
    
-        if(Input.GetKeyDown(KeyCode.Space))
+/*        if(Input.GetKeyDown(KeyCode.Space))
         {
             CustomLogin("test123", "123");
 
-        }
+        }*/
     }
     public void testbuttonA()
     {
@@ -87,7 +88,19 @@ public class LoginSceneManager : MonoBehaviour
     }
     public void testbuttonB()
     {
-        CustomLogin("test456", "456");
+        /*CustomLogin("test456", "456");*/
+        GetGoogleHash();
+
+    }
+    public void GetGoogleHash()
+    {
+        string googlehashkey = Backend.Utils.GetGoogleHash();
+        if(!string.IsNullOrEmpty(googlehashkey))
+        {
+            Debug.Log(googlehashkey);
+            if(t != null) 
+                t.text = googlehashkey;
+        }
     }
     public void CustomLogin(string id, string pw)
     {
